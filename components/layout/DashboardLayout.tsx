@@ -14,14 +14,11 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-[#0a0a0a] text-white">
-      {/* 1. SIDEBAR */}
       <Sidebar 
         isCollapsed={isSidebarCollapsed} 
         toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} 
       />
 
-      {/* 2. MAIN CONTENT */}
-      {/* Logic Margin: Kalau collapsed (kecil) margin kiri 20 (80px), kalau normal margin kiri 72 (288px) */}
       <main 
         className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? "md:ml-20" : "md:ml-72"

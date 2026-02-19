@@ -63,7 +63,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
           <div className={`relative rounded-full overflow-hidden border border-neutral-700 shadow-lg transition-all duration-300 ${isCollapsed ? "w-10 h-10 ring-0" : "w-30 h-30 ring-4 ring-neutral-900"
             }`}>
             <img
-              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+              src="/assets/profile.png"
               alt="User"
               className="w-full h-full object-cover bg-neutral-800"
             />
@@ -83,8 +83,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
         {/* Info Text & Button */}
         <div className={`flex flex-col items-center w-full transition-all duration-300 ${isCollapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100 h-auto"
           }`}>
-          <h3 className="text-white font-semibold text-base tracking-tight">Dev Name</h3>
-          <p className="text-neutral-500 text-xs mb-4 font-medium">Full Stack Engineer</p>
+          <h3 className="text-white font-semibold text-base tracking-tight">Leo Satria Anugrah</h3>
+          <p className="text-neutral-500 text-xs mb-4 font-medium">Web Developer</p>
 
           {/* Button yang lebih 'Professional' (Dark Theme Friendly) */}
           <button className="group w-full py-2 px-3 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 hover:border-neutral-600 text-neutral-200 text-xs font-medium rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-95">
@@ -95,7 +95,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
       </div>
 
       {/* 3. Navigation Links */}
-      <div className="flex-1 overflow-y-auto py-6 px-3 space-y-1 custom-scrollbar no-scrollbar">
+      <div className="flex-1 overflow-y-auto px-3 space-y-1 custom-scrollbar no-scrollbar">
         {!isCollapsed && (
           <p className="text-xs font-semibold text-neutral-500 px-4 mb-2 uppercase tracking-wider whitespace-nowrap">Menu</p>
         )}
