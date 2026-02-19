@@ -1,65 +1,110 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "framer-motion";
+import { ArrowUpRight, Github, Linkedin, Twitter, MapPin } from "lucide-react";
+import Link from "next/link";
+
+// Komponen Card Wrapper (Glassmorphism)
+const BentoCard = ({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay }}
+    className={`bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 overflow-hidden relative hover:border-neutral-700 transition-colors ${className}`}
+  >
+    {children}
+  </motion.div>
+);
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="space-y-6"> {/* Kurangi gap karena sudah ada navbar */}
+
+      {/* Hapus Header lama, ganti dengan Greeting simple atau langsung Grid */}
+      <div className="mb-4">
+        <h2 className="text-2xl font-bold">Overview</h2>
+      </div>
+
+      {/* BENTO GRID LAYOUT */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[180px]">
+
+        {/* 1. Bio Utama (Large) */}
+        <BentoCard className="col-span-1 md:col-span-2 lg:col-span-2 row-span-2 flex flex-col justify-between group">
+          <div>
+            <div className="flex justify-between items-start">
+              <span className="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded-full border border-green-500/20">
+                AVAILABLE FOR WORK
+              </span>
+              <ArrowUpRight className="text-neutral-600 group-hover:text-white transition-colors" />
+            </div>
+            <h3 className="text-4xl font-bold mt-4 leading-tight">
+              I build <span className="text-blue-500">accessible</span> pixels & digital experiences.
+            </h3>
+          </div>
+          <p className="text-neutral-400 text-sm mt-4">
+            Halo! Saya Developer yang fokus pada React, Next.js, dan UI Design. Mengubah ide kompleks menjadi interface yang simpel.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        </BentoCard>
+
+        {/* 2. Project Highlight (Image Background) */}
+        <BentoCard className="col-span-1 md:col-span-1 lg:col-span-1 row-span-2 relative group p-0" delay={0.1}>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
+          {/* Ganti dengan gambar project Anda */}
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-500 group-hover:scale-110" />
+          <div className="absolute bottom-6 left-6 z-20">
+            <h4 className="font-bold text-white text-lg">E-Commerce App</h4>
+            <p className="text-neutral-300 text-xs">Next.js + Stripe</p>
+          </div>
+        </BentoCard>
+
+        {/* 3. Tech Stack (Marquee Style) */}
+        <BentoCard className="col-span-1 md:col-span-1 row-span-1 flex flex-col justify-center items-center gap-4" delay={0.2}>
+          <h4 className="text-neutral-500 text-xs font-bold tracking-widest uppercase">Tech Stack</h4>
+          <div className="flex gap-4 text-neutral-300">
+            <span className="font-mono text-xl font-bold">React</span>
+            <span className="font-mono text-xl font-bold">TS</span>
+            <span className="font-mono text-xl font-bold">Next</span>
+          </div>
+        </BentoCard>
+
+        {/* 4. Map / Location */}
+        <BentoCard className="col-span-1 row-span-1 flex flex-col justify-center items-center bg-blue-600 border-none" delay={0.3}>
+          <MapPin className="text-white mb-2" size={32} />
+          <h4 className="text-white font-bold text-lg">Jakarta, ID</h4>
+          <p className="text-blue-200 text-xs">WIB (GMT+7)</p>
+        </BentoCard>
+
+        {/* 5. Social Links (Small Grid inside) */}
+        <BentoCard className="col-span-1 row-span-1 p-4" delay={0.4}>
+          <div className="h-full flex flex-col justify-between">
+            <h4 className="text-neutral-400 text-sm font-medium">Connect</h4>
+            <div className="flex gap-3 mt-2">
+              <Link href="#" className="p-3 bg-neutral-800 rounded-full hover:bg-white hover:text-black transition-colors"><Github size={20} /></Link>
+              <Link href="#" className="p-3 bg-neutral-800 rounded-full hover:bg-[#0077b5] hover:text-white transition-colors"><Linkedin size={20} /></Link>
+              <Link href="#" className="p-3 bg-neutral-800 rounded-full hover:bg-[#1DA1F2] hover:text-white transition-colors"><Twitter size={20} /></Link>
+            </div>
+          </div>
+        </BentoCard>
+
+        {/* 6. Stats / Numbers */}
+        <BentoCard className="col-span-1 md:col-span-2 row-span-1 flex items-center justify-around" delay={0.5}>
+          <div className="text-center">
+            <h3 className="text-3xl font-bold text-white">3+</h3>
+            <p className="text-neutral-500 text-xs uppercase tracking-wider">Years Exp</p>
+          </div>
+          <div className="w-px h-10 bg-neutral-800" />
+          <div className="text-center">
+            <h3 className="text-3xl font-bold text-white">20+</h3>
+            <p className="text-neutral-500 text-xs uppercase tracking-wider">Projects</p>
+          </div>
+          <div className="w-px h-10 bg-neutral-800" />
+          <div className="text-center">
+            <h3 className="text-3xl font-bold text-white">100%</h3>
+            <p className="text-neutral-500 text-xs uppercase tracking-wider">Satisfaction</p>
+          </div>
+        </BentoCard>
+
+      </div>
     </div>
   );
 }
