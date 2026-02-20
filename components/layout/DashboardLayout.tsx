@@ -11,12 +11,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-white dark:bg-[#0a0a0a] text-neutral-900 dark:text-white transition-colors duration-200">
       <Sidebar
         isCollapsed={isSidebarCollapsed}
         toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        isMobileOpen={isMobileOpen}
+        closeMobile={() => setIsMobileOpen(false)}
       />
 
       <main
@@ -24,9 +27,10 @@ export default function DashboardLayout({
           isSidebarCollapsed ? "md:ml-20" : "md:ml-72"
         }`}
       >
-        <Navbar />
+        {/* Pass openMobile ke Navbar agar tombol hamburger bisa buka drawer */}
+        <Navbar openMobile={() => setIsMobileOpen(true)} />
 
-        <div className="p-4 rounded-xl md:p-6 w-full max-w-9xl mx-auto">
+        <div className="p-4 md:p-8 w-full max-w-7xl mx-auto">
           {children}
         </div>
       </main>

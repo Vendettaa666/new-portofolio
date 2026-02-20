@@ -1,12 +1,22 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-// import { ThemeDebug } from "@/components/layout/ThemeDebug";
 
+// 1. Font Default
 const inter = Inter({ subsets: ["latin"] });
+
+// 2. Font Khusus (Bento/Dashboard)
+const jakarta = Plus_Jakarta_Sans({ 
+  subsets: ["latin"],
+  variable: "--font-jakarta", 
+});
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+});
 
 export const metadata: Metadata = {
   title: "My Portfolio",
@@ -20,10 +30,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      {/* Gunakan inter.className sebagai font bawaan.
+        Lalu sisipkan variabel jakarta dan jetbrains agar bisa dipakai di div tertentu saja.
+      */}
+      <body className={`${inter.className} ${jakarta.variable} ${jetbrainsMono.variable}`}>
         <ThemeProvider>
           <DashboardLayout>{children}</DashboardLayout>
-          {/* <ThemeDebug /> */}
         </ThemeProvider>
       </body>
     </html>

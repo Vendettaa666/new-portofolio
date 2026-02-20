@@ -21,3 +21,11 @@ body {
     @apply bg-neutral-400 dark:bg-neutral-700;
   }
 }
+
+@theme {
+  /* Jadikan Jakarta Sans sebagai font default (font-sans) */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  
+  /* Jadikan JetBrains Mono sebagai font untuk class 'font-mono' */
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+}

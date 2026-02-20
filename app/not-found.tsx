@@ -42,7 +42,7 @@ export default function NotFound() {
       <div className="flex gap-4">
         <button 
           onClick={() => window.history.back()}
-          className="px-6 py-3 rounded-xl border border-neutral-800 text-neutral-300 hover:bg-neutral-800 hover:text-white transition flex items-center gap-2"
+          className="px-6 py-3 rounded-xl border border-neutral-800 text-black dark:text-white hover:bg-neutral-800 hover:text-white transition flex items-center gap-2"
         >
           <ArrowLeft size={18} />
           Go Back
