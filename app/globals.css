@@ -28,4 +28,30 @@ body {
   
   /* Jadikan JetBrains Mono sebagai font untuk class 'font-mono' */
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+
+  /* 1. Daftarkan warna 'primary' ke Tailwind v4 */
+  --color-primary: var(--theme-primary);
+}
+
+/* 2. Set warna default (misalnya Emerald) saat web pertama kali dibuka */
+:root {
+  --theme-primary: #10b981; /* Warna setara emerald-500 */
+}
+
+/* 3. Buat variasi warnanya menggunakan data attribute */
+:root[data-primary="blue"] {
+  --theme-primary: #3b82f6; /* Warna setara blue-500 */
+}
+
+:root[data-primary="violet"] {
+  --theme-primary: #8b5cf6; /* Warna setara violet-500 */
+}
+
+:root[data-primary="rose"] {
+  --theme-primary: #f43f5e; /* Warna setara rose-500 */
+}
+
+:root[data-primary="amber"] {
+  --theme-primary: #f59e0b; /* Warna setara amber-500 */
+
 }

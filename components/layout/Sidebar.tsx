@@ -1,8 +1,16 @@
 "use client";
 
 import {
-  Home, User, Layers, Code, Mail,
-  Download, ChevronLeft, ChevronRight, Copyright, X
+  Home,
+  User,
+  Layers,
+  Code,
+  Mail,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+  Copyright,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -22,7 +30,12 @@ interface SidebarProps {
   closeMobile: () => void;
 }
 
-export default function Sidebar({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile }: SidebarProps) {
+export default function Sidebar({
+  isCollapsed,
+  toggleSidebar,
+  isMobileOpen,
+  closeMobile,
+}: SidebarProps) {
   const pathname = usePathname();
 
   const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
@@ -55,48 +68,65 @@ export default function Sidebar({ isCollapsed, toggleSidebar, isMobileOpen, clos
       )}
 
       {/* Profile & CV Section */}
-      <div className={`flex flex-col items-center transition-all duration-300 ease-in-out ${
-        (!mobile && isCollapsed)
-          ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
-          : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
-      }`}>
-
+      <div
+        className={`flex flex-col items-center transition-all duration-300 ease-in-out ${
+          !mobile && isCollapsed
+            ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
+            : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
+        }`}
+      >
         {/* Profile Image */}
-        <div className={`relative transition-all duration-300 ${(!mobile && isCollapsed) ? "mb-0" : "mb-4"}`}>
-          <div className={`relative rounded-full overflow-hidden border transition-all duration-300
+        <div
+          className={`relative transition-all duration-300 ${!mobile && isCollapsed ? "mb-0" : "mb-4"}`}
+        >
+          <div
+            className={`relative rounded-full overflow-hidden border transition-all duration-300
             border-neutral-300 dark:border-neutral-700 shadow-lg
-            ${(!mobile && isCollapsed) ? "w-10 h-10" : "w-24 h-24 ring-4 ring-neutral-200 dark:ring-neutral-900"}`}>
+            ${!mobile && isCollapsed ? "w-10 h-10" : "w-24 h-24 ring-4 ring-neutral-200 dark:ring-neutral-900"}`}
+          >
             <img
               src="/assets/profile.png"
               alt="User"
               className="w-full h-full object-cover bg-neutral-200 dark:bg-neutral-800"
             />
           </div>
-
           {(mobile || !isCollapsed) && (
             <div className="absolute bottom-0 right-0 bg-white dark:bg-neutral-900 p-1 rounded-full shadow-md">
-              <div className="flex items-center gap-1 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-[9px] font-medium text-green-500 leading-none">Open</span>
+              <div className="flex items-center gap-1 bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+                <span className="text-[9px] font-medium text-primary leading-none">
+                  Open
+                </span>
               </div>
             </div>
           )}
         </div>
 
         {/* Info Text & Button */}
-        <div className={`flex flex-col items-center w-full transition-all duration-300 ${
-          (!mobile && isCollapsed) ? "opacity-0 h-0 overflow-hidden" : "opacity-100 h-auto"
-        }`}>
+        <div
+          className={`flex flex-col items-center w-full transition-all duration-300 ${
+            !mobile && isCollapsed
+              ? "opacity-0 h-0 overflow-hidden"
+              : "opacity-100 h-auto"
+          }`}
+        >
           <h3 className="font-semibold text-base tracking-tight text-neutral-900 dark:text-white">
             Leo Satria Anugrah
           </h3>
-          <p className="text-xs mb-4 font-medium text-neutral-500 dark:text-neutral-400">Web Developer</p>
+          <p className="text-xs mb-4 font-medium text-neutral-500 dark:text-neutral-400">
+            Web Developer
+          </p>
 
-          <button className="group w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-xs font-medium
+          <button
+            className="group w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-xs font-medium
             bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700
             border border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-600
-            text-neutral-700 dark:text-neutral-200 shadow-sm hover:shadow-md">
-            <Download size={14} className="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
+            text-neutral-700 dark:text-neutral-200 shadow-sm hover:shadow-md"
+          >
+            <Download
+              size={14}
+              className="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors"
+            />
             <span>Resume</span>
           </button>
         </div>
@@ -125,7 +155,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar, isMobileOpen, clos
                     : "gap-3 px-4 py-3 w-full rounded-xl"
                 } ${
                   isActive
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
+                    ? "bg-primary text-white shadow-lg shadow-primary/25"
                     : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
                 }`}
                 title={collapsed ? item.label : ""}
@@ -133,11 +163,15 @@ export default function Sidebar({ isCollapsed, toggleSidebar, isMobileOpen, clos
                 <item.icon
                   size={20}
                   className={`transition-colors duration-200 shrink-0 ${
-                    isActive ? "text-white" : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white"
+                    isActive
+                      ? "text-white"
+                      : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white"
                   }`}
                 />
                 {!collapsed && (
-                  <span className="font-medium text-sm whitespace-nowrap overflow-hidden">{item.label}</span>
+                  <span className="font-medium text-sm whitespace-nowrap overflow-hidden">
+                    {item.label}
+                  </span>
                 )}
                 {isActive && !collapsed && (
                   <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
@@ -149,8 +183,10 @@ export default function Sidebar({ isCollapsed, toggleSidebar, isMobileOpen, clos
       </div>
 
       {/* Footer */}
-      <div className={`p-4 border-t border-neutral-200 dark:border-neutral-800 ${(!mobile && isCollapsed) ? "flex justify-center" : ""}`}>
-        {(!mobile && isCollapsed) ? (
+      <div
+        className={`p-4 border-t border-neutral-200 dark:border-neutral-800 ${!mobile && isCollapsed ? "flex justify-center" : ""}`}
+      >
+        {!mobile && isCollapsed ? (
           <div className="w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900 text-neutral-400 dark:text-neutral-500">
             <Copyright size={16} />
           </div>
@@ -159,7 +195,9 @@ export default function Sidebar({ isCollapsed, toggleSidebar, isMobileOpen, clos
             <p className="text-xs font-medium flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Copyright size={12} /> 2024 Dev Name
             </p>
-            <p className="text-[10px] text-neutral-400 dark:text-neutral-600">Built with Next.js & Tailwind</p>
+            <p className="text-[10px] text-neutral-400 dark:text-neutral-600">
+              Built with Next.js & Tailwind
+            </p>
           </div>
         )}
       </div>
@@ -181,7 +219,9 @@ export default function Sidebar({ isCollapsed, toggleSidebar, isMobileOpen, clos
       {/* ── MOBILE OVERLAY ── */}
       <div
         className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
-          isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          isMobileOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
         }`}
         onClick={closeMobile}
       />

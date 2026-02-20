@@ -2,6 +2,7 @@
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { ThemeToggle } from "../ui/ThemeToggle";
+import ColorSwitcher from "../ui/ColorSwitcher";
 
 interface NavbarProps {
   openMobile: () => void;
@@ -38,6 +39,7 @@ export default function Navbar({ openMobile }: NavbarProps) {
 
         {/* KANAN: Actions */}
         <div className="flex items-center gap-3">
+          <ColorSwitcher />
           <ThemeToggle />
           <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"></div>
         </div>
