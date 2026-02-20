@@ -1,108 +1,102 @@
 "use client";
 
+import HeroCard from "@/components/portofolio/HeroCard"; // Sesuaikan path jika berbeda
 import { motion } from "framer-motion";
-import { ArrowUpRight, Github, Linkedin, Twitter, MapPin } from "lucide-react";
+import { Github, Linkedin, Twitter, MapPin, Code2, Settings2, Users } from "lucide-react";
 import Link from "next/link";
 
-// Komponen Card Wrapper (Glassmorphism)
-const BentoCard = ({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => (
+// Dark theme Bento Card - Clean Edition
+const BentoCard = ({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay }}
-    className={`bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 overflow-hidden relative hover:border-neutral-700 transition-colors ${className}`}
+    className={`bg-neutral-50 dark:bg-neutral-900/40 border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 relative hover:border-neutral-300 dark:hover:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800/40 transition-all duration-300 shadow-sm ${className}`}
   >
     {children}
   </motion.div>
 );
 
+// Project card data (Warna disesuaikan agar tidak norak)
+const projectCards = [
+  {
+    icon: <Code2 className="h-5 w-5 text-blue-400" />,
+    iconBg: "bg-blue-500/10",
+    title: "AI-Powered Web Apps",
+    desc: "Integrating LLMs into frontend workflows.",
+    badge: "ACTIVE",
+    badgeClass: "text-blue-400 border-blue-500/20 bg-blue-500/10",
+  },
+  {
+    icon: <Settings2 className="h-5 w-5 text-green-400" />,
+    iconBg: "bg-green-500/10",
+    title: "Automation Systems",
+    desc: "Connecting APIs and background tasks.",
+    badge: "ACTIVE",
+    badgeClass: "text-green-400 border-green-500/20 bg-green-500/10",
+  },
+  {
+    icon: <Users className="h-5 w-5 text-purple-400" />,
+    iconBg: "bg-purple-500/10",
+    title: "Collaboration",
+    desc: "Open to technical partnership roles.",
+    badge: "AVAILABLE",
+    badgeClass: "text-neutral-400 border-neutral-700 bg-neutral-800",
+  },
+];
+
 export default function Home() {
   return (
-    <div className="space-y-6"> {/* Kurangi gap karena sudah ada navbar */}
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] space-y-6 p-4 md:p-6 lg:p-8">
 
-      {/* Hapus Header lama, ganti dengan Greeting simple atau langsung Grid */}
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold">Overview</h2>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
 
-      {/* BENTO GRID LAYOUT */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[180px]">
+        {/* ── ROW 1 ── */}
 
-        {/* 1. Bio Utama (Large) */}
-        <BentoCard className="col-span-1 md:col-span-2 lg:col-span-2 row-span-2 flex flex-col justify-between group">
-          <div>
-            <div className="flex justify-between items-start">
-              <span className="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded-full border border-green-500/20">
-                AVAILABLE FOR WORK
+        {/* 1. Hero Card — spans 3 cols */}
+        <div className="lg:col-span-3">
+          <div className="mb-2 px-2">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-white tracking-tight">Overview</h2>
+          </div>
+          <HeroCard />
+        </div>
+
+        {/* 2. Project Cards Column — 1 col, spans 3 rows */}
+        <div className="flex flex-col gap-4 lg:row-span-3">
+          {projectCards.map((card, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 * (i + 1) }}
+              className="flex items-start gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 p-5 shadow-sm hover:border-neutral-300 dark:hover:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800/40 transition-all duration-300"
+            >
+              {/* Icon */}
+              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${card.iconBg}`}>
+                {card.icon}
+              </div>
+              {/* Text */}
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm font-semibold text-neutral-900 dark:text-white leading-snug">{card.title}</h4>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">{card.desc}</p>
+              </div>
+              {/* Badge */}
+              <span className={`shrink-0 self-start rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-wide ${card.badgeClass}`}>
+                {card.badge}
               </span>
-              <ArrowUpRight className="text-neutral-600 group-hover:text-white transition-colors" />
-            </div>
-            <h3 className="text-4xl font-bold mt-4 leading-tight">
-              I build <span className="text-blue-500">accessible</span> pixels & digital experiences.
-            </h3>
-          </div>
-          <p className="text-neutral-400 text-sm mt-4">
-            Halo! Saya Developer yang fokus pada React, Next.js, dan UI Design. Mengubah ide kompleks menjadi interface yang simpel.
-          </p>
-        </BentoCard>
+            </motion.div>
+          ))}
+        </div>
 
-        {/* 2. Project Highlight (Image Background) */}
-        <BentoCard className="col-span-1 md:col-span-1 lg:col-span-1 row-span-2 relative group p-0" delay={0.1}>
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
-          {/* Ganti dengan gambar project Anda */}
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-500 group-hover:scale-110" />
-          <div className="absolute bottom-6 left-6 z-20">
-            <h4 className="font-bold text-white text-lg">E-Commerce App</h4>
-            <p className="text-neutral-300 text-xs">Next.js + Stripe</p>
-          </div>
-        </BentoCard>
 
-        {/* 3. Tech Stack (Marquee Style) */}
-        <BentoCard className="col-span-1 md:col-span-1 row-span-1 flex flex-col justify-center items-center gap-4" delay={0.2}>
-          <h4 className="text-neutral-500 text-xs font-bold tracking-widest uppercase">Tech Stack</h4>
-          <div className="flex gap-4 text-neutral-300">
-            <span className="font-mono text-xl font-bold">React</span>
-            <span className="font-mono text-xl font-bold">TS</span>
-            <span className="font-mono text-xl font-bold">Next</span>
-          </div>
-        </BentoCard>
-
-        {/* 4. Map / Location */}
-        <BentoCard className="col-span-1 row-span-1 flex flex-col justify-center items-center bg-blue-600 border-none" delay={0.3}>
-          <MapPin className="text-white mb-2" size={32} />
-          <h4 className="text-white font-bold text-lg">Jakarta, ID</h4>
-          <p className="text-blue-200 text-xs">WIB (GMT+7)</p>
-        </BentoCard>
-
-        {/* 5. Social Links (Small Grid inside) */}
-        <BentoCard className="col-span-1 row-span-1 p-4" delay={0.4}>
-          <div className="h-full flex flex-col justify-between">
-            <h4 className="text-neutral-400 text-sm font-medium">Connect</h4>
-            <div className="flex gap-3 mt-2">
-              <Link href="#" className="p-3 bg-neutral-800 rounded-full hover:bg-white hover:text-black transition-colors"><Github size={20} /></Link>
-              <Link href="#" className="p-3 bg-neutral-800 rounded-full hover:bg-[#0077b5] hover:text-white transition-colors"><Linkedin size={20} /></Link>
-              <Link href="#" className="p-3 bg-neutral-800 rounded-full hover:bg-[#1DA1F2] hover:text-white transition-colors"><Twitter size={20} /></Link>
-            </div>
-          </div>
-        </BentoCard>
-
-        {/* 6. Stats / Numbers */}
-        <BentoCard className="col-span-1 md:col-span-2 row-span-1 flex items-center justify-around" delay={0.5}>
-          <div className="text-center">
-            <h3 className="text-3xl font-bold text-white">3+</h3>
-            <p className="text-neutral-500 text-xs uppercase tracking-wider">Years Exp</p>
-          </div>
-          <div className="w-px h-10 bg-neutral-800" />
-          <div className="text-center">
-            <h3 className="text-3xl font-bold text-white">20+</h3>
-            <p className="text-neutral-500 text-xs uppercase tracking-wider">Projects</p>
-          </div>
-          <div className="w-px h-10 bg-neutral-800" />
-          <div className="text-center">
-            <h3 className="text-3xl font-bold text-white">100%</h3>
-            <p className="text-neutral-500 text-xs uppercase tracking-wider">Satisfaction</p>
-          </div>
-        </BentoCard>
 
       </div>
     </div>

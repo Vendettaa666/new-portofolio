@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Github } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,7 @@ export default function Navbar() {
   return (
     // HAPUS 'fixed' ganti dengan 'sticky'
     // HAPUS padding kiri manual jika ada
-    <nav className="sticky top-0 z-40 w-full border-b border-neutral-800 bg-[#0a0a0a]/80 backdrop-blur-xl">
+    <nav className="sticky top-0 z-40 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between px-6 md:px-8"> 
         {/* px-6 atau px-8 memberikan jarak nafas agar tulisan tidak mepet kiri */}
 
@@ -24,16 +25,17 @@ export default function Navbar() {
           </button>
 
           <div className="flex items-center text-sm font-medium">
-            <span className="text-neutral-500">Portfolio</span>
-            <span className="mx-2 text-neutral-700">/</span>
-            <span className="text-white font-semibold">{formattedTitle}</span>
+            <span className="text-neutral-500 dark:text-neutral-400">Portfolio</span>
+            <span className="mx-2 text-neutral-700 dark:text-neutral-600">/</span>
+            <span className="text-neutral-900 dark:text-white font-semibold">{formattedTitle}</span>
           </div>
         </div>
 
         {/* KANAN: Actions */}
         <div className="flex items-center gap-4">
+            <ThemeToggle />
             {/* Contoh konten kanan */}
-            <div className="w-8 h-8 rounded-full bg-neutral-800 border border-neutral-700"></div>
+            <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"></div>
         </div>
       </div>
     </nav>

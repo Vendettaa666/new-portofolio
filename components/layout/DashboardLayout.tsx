@@ -1,5 +1,5 @@
 // components/DashboardLayout.tsx
-"use client"; // Wajib ada karena pakai useState
+"use client";
 
 import { useState } from "react";
 import Sidebar from "@/components/layout/Sidebar";
@@ -13,13 +13,14 @@ export default function DashboardLayout({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0a] text-white">
-      <Sidebar 
-        isCollapsed={isSidebarCollapsed} 
-        toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} 
+    // ✅ Ganti bg-[#0a0a0a] text-white → pakai dark: prefix
+    <div className="flex min-h-screen bg-white dark:bg-[#0a0a0a] text-neutral-900 dark:text-white transition-colors duration-200">
+      <Sidebar
+        isCollapsed={isSidebarCollapsed}
+        toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
 
-      <main 
+      <main
         className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? "md:ml-20" : "md:ml-72"
         }`}
