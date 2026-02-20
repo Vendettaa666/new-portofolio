@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
+import { ThemeToggle } from "../ui/ThemeToggle";
 
 interface NavbarProps {
   openMobile: () => void;

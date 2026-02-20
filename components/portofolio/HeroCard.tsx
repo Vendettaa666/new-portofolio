@@ -12,7 +12,7 @@ import {
   Settings2,
   Users,
 } from "lucide-react";
-import HeaderStatus from "@/components/layout/HeaderStatus";
+import HeaderStatus from "@/components/ui/HeaderStatus";
 
 const projectCards = [
   {
@@ -65,7 +65,7 @@ export default function HeroCard() {
             {/* Text Content */}
             <div className="flex flex-1 flex-col gap-5">
               {/* Status Badge */}
-              <div className="w-fit flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-500 shadow-[0_0_10px_rgba(16,185,129,0.2),inset_0_0_8px_rgba(16,185,129,0.1)]">
+              <div className="w-fit flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-500 shadow-[0_0_10px_rgba(16,185,129,0.2),inset_0_0_3px_rgba(16,185,129,0.1)]">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -85,9 +85,7 @@ export default function HeroCard() {
 
               {/* Description */}
               <p className="max-w-md text-sm leading-relaxed transition-colors duration-200 text-neutral-600 dark:text-neutral-400">
-                Seorang Software Engineer dan kreator konten coding yang berdedikasi
-                untuk membangun solusi digital yang berdampak. Spesialis dalam
-                pengembangan platform web yang skalabel menggunakan tech stack modern.
+                🚀 Pengembang otodidak yang antusias dengan Laravel, Flutter, dan teknologi baru. 🎸 Musik memicu kreativitas saya, terutama genre gelap & atmosferik seperti NU metal & DSBM. ☕ Saya paling produktif ditemani es kopi dan musik keras saat coding. 🤝 Selalu terbuka untuk kolaborasi, belajar, dan menghadapi tantangan baru!
               </p>
 
               {/* Location & Work Type */}
@@ -118,7 +116,16 @@ export default function HeroCard() {
             {/* Terminal Visual */}
             <div className="relative hidden h-64 w-64 shrink-0 md:block lg:h-72 lg:w-72">
               <div className="absolute inset-0 rounded-3xl bg-blue-500/5 border border-blue-500/10" />
-              <div className="absolute inset-4 flex items-center justify-center">
+              <motion.div animate={{ 
+                  y: [0, -3, 0], // Bergerak ke atas 10px lalu kembali
+                  rotate: [0, 3, 0] // Rotasi sedikit agar lebih natural
+                }}
+                transition={{ 
+                  duration: 4, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="absolute inset-4 flex items-center justify-center">
                 <div className="w-full rounded-2xl p-5 shadow-2xl transition-all duration-200 border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-[#0a0a0a]">
                   <div className="mb-4 flex gap-2">
                     <div className="h-3 w-3 rounded-full bg-red-500/80" />
@@ -142,15 +149,38 @@ export default function HeroCard() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Floating icons */}
-              <div className="absolute -right-3 -top-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl transition-all duration-200 border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+             {/* Floating icons */}
+              <motion.div 
+                animate={{ 
+                  y: [0, -10, 0], // Bergerak ke atas 10px lalu kembali
+                  rotate: [0, 5, 0] // Rotasi sedikit agar lebih natural
+                }}
+                transition={{ 
+                  duration: 4, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="absolute -right-3 -top-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900"
+              >
                 <Sparkles className="h-5 w-5 text-yellow-400" />
-              </div>
-              <div className="absolute -bottom-3 -left-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl transition-all duration-200 border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+              </motion.div>
+
+              <motion.div 
+                animate={{ 
+                  y: [0, 10, 0], // Bergerak ke bawah 10px lalu kembali (berlawanan dengan icon atas)
+                  rotate: [0, -5, 0] 
+                }}
+                transition={{ 
+                  duration: 5, // Durasinya dibedakan sedikit agar gerakannya tidak barengan
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="absolute -bottom-3 -left-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900"
+              >
                 <Cpu className="h-5 w-5 text-blue-400" />
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
