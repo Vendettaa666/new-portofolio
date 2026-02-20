@@ -13,7 +13,6 @@ export default function DashboardLayout({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    // ✅ Ganti bg-[#0a0a0a] text-white → pakai dark: prefix
     <div className="flex min-h-screen bg-white dark:bg-[#0a0a0a] text-neutral-900 dark:text-white transition-colors duration-200">
       <Sidebar
         isCollapsed={isSidebarCollapsed}
@@ -27,7 +26,7 @@ export default function DashboardLayout({
       >
         <Navbar />
 
-        <div className="p-4 md:p-8 w-full max-w-7xl mx-auto">
+        <div className="p-4 rounded-xl md:p-6 w-full max-w-9xl mx-auto">
           {children}
         </div>
       </main>

@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  Home, User, Briefcase, Code, Mail, Layers,
-  Download, Settings, LogOut, ChevronLeft, ChevronRight, Copyright
+  Home, User, Layers, Code, Mail,
+  Download, ChevronLeft, ChevronRight, Copyright
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -34,11 +34,12 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
       {/* TOGGLE BUTTON */}
       <button
         onClick={toggleSidebar}
-        className="absolute -right-3 top-10 z-50 p-1 rounded-full shadow-xl transition-colors
+        className="absolute -right-3 top-10 z-50 p-1 rounded-full shadow-xl transition-all duration-200
           bg-neutral-200 dark:bg-neutral-800
           border border-neutral-300 dark:border-neutral-700
           text-neutral-700 dark:text-white
-          hover:bg-neutral-300 dark:hover:bg-neutral-700"
+          hover:bg-neutral-300 dark:hover:bg-neutral-700
+          hover:scale-110 active:scale-95"
       >
         {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
@@ -47,7 +48,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
       <div className={`flex flex-col items-center transition-all duration-300 ease-in-out ${
         isCollapsed
           ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
-          : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-neutral-100 dark:bg-neutral-900/40 border border-neutral-200 dark:border-neutral-800"
+          : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
       }`}>
 
         {/* Profile Image */}
@@ -63,8 +64,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
           </div>
 
           {!isCollapsed && (
-            <div className="absolute bottom-0 right-0 bg-white dark:bg-neutral-900 p-1 rounded-full">
-              <div className="flex items-center gap-1 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full">
+            <div className="absolute bottom-0 right-0 bg-white dark:bg-neutral-900 p-1 rounded-full shadow-md">
+              <div className="flex items-center gap-1 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full backdrop-blur-sm">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
                 <span className="text-[9px] font-medium text-green-500 leading-none">Open</span>
               </div>
@@ -79,13 +80,15 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
           <h3 className="font-semibold text-base tracking-tight text-neutral-900 dark:text-white">
             Leo Satria Anugrah
           </h3>
-          <p className="text-xs mb-4 font-medium text-neutral-500">Web Developer</p>
+          <p className="text-xs mb-4 font-medium text-neutral-500 dark:text-neutral-400">Web Developer</p>
 
           <button className="group w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-xs font-medium
             bg-neutral-200 dark:bg-neutral-800
             hover:bg-neutral-300 dark:hover:bg-neutral-700
             border border-neutral-300 dark:border-neutral-700
-            text-neutral-700 dark:text-neutral-200">
+            hover:border-neutral-400 dark:hover:border-neutral-600
+            text-neutral-700 dark:text-neutral-200
+            shadow-sm hover:shadow-md">
             <Download size={14} className="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
             <span>Resume</span>
           </button>
@@ -93,9 +96,9 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
       </div>
 
       {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-3 space-y-1 custom-scrollbar no-scrollbar">
+      <div className="flex-1 overflow-y-auto px-3 space-y-1 custom-scrollbar">
         {!isCollapsed && (
-          <p className="text-xs font-semibold px-4 mb-2 uppercase tracking-wider whitespace-nowrap text-neutral-500">
+          <p className="text-xs font-semibold px-4 mb-2 uppercase tracking-wider whitespace-nowrap text-neutral-400 dark:text-neutral-500">
             Menu
           </p>
         )}
@@ -107,7 +110,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`group flex items-center relative transition-all duration-300 ${
+                className={`group flex items-center relative transition-all duration-200 ${
                   isCollapsed
                     ? "justify-center w-12 h-12 rounded-xl"
                     : "gap-3 px-4 py-3 w-full rounded-xl"
@@ -120,7 +123,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
               >
                 <item.icon
                   size={20}
-                  className={`transition-colors duration-300 shrink-0 ${
+                  className={`transition-colors duration-200 shrink-0 ${
                     isActive
                       ? "text-white"
                       : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white"
@@ -139,13 +142,13 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
       </div>
 
       {/* Footer */}
-      <div className={`p-4 border-t transition-all duration-300 border-neutral-200 dark:border-neutral-800 ${isCollapsed ? "flex justify-center" : ""}`}>
+      <div className={`p-4 border-t transition-all duration-200 border-neutral-200 dark:border-neutral-800 ${isCollapsed ? "flex justify-center" : ""}`}>
         {isCollapsed ? (
-          <div className="w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900 text-neutral-400" title="© 2024 Dev Name">
+          <div className="w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900 text-neutral-400 dark:text-neutral-500" title="© 2024 Dev Name">
             <Copyright size={16} />
           </div>
         ) : (
-          <div className="flex flex-col gap-0.5 animate-in fade-in duration-300">
+          <div className="flex flex-col gap-0.5">
             <p className="text-xs font-medium flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Copyright size={12} /> 2024 Dev Name
             </p>
