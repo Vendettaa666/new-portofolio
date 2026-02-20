@@ -33,7 +33,8 @@ export default function RootLayout({
       {/* Gunakan inter.className sebagai font bawaan.
         Lalu sisipkan variabel jakarta dan jetbrains agar bisa dipakai di div tertentu saja.
       */}
-      <body className={`${inter.className} ${jakarta.variable} ${jetbrainsMono.variable}`}>
+      <body className={`${inter.className} ${jakarta.variable} ${jetbrainsMono.variable} overflow-x-hidden` 
+    }>
         <ThemeProvider>
           <DashboardLayout>{children}</DashboardLayout>
         </ThemeProvider>
