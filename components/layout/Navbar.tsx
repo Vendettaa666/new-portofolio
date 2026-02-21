@@ -38,7 +38,7 @@ export default function Navbar({ openMobile }: NavbarProps) {
         </div>
 
         {/* KANAN: Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 flex-wrap justify-end">
           <ColorSwitcher />
           <ThemeToggle />
           <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"></div>

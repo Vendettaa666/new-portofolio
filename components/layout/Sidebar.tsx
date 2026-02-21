@@ -30,15 +30,22 @@ interface SidebarProps {
   closeMobile: () => void;
 }
 
-export default function Sidebar({
+interface SidebarContentProps {
+  mobile?: boolean;
+  pathname: string;
+  isCollapsed: boolean;
+  toggleSidebar: () => void;
+  closeMobile: () => void;
+}
+
+function SidebarContent({
+  mobile = false,
+  pathname,
   isCollapsed,
   toggleSidebar,
-  isMobileOpen,
   closeMobile,
-}: SidebarProps) {
-  const pathname = usePathname();
-
-  const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
+}: SidebarContentProps) {
+  return (
     <>
       {/* Close button - mobile only */}
       {mobile && (
@@ -69,11 +76,10 @@ export default function Sidebar({
 
       {/* Profile & CV Section */}
       <div
-        className={`flex flex-col items-center transition-all duration-300 ease-in-out ${
-          !mobile && isCollapsed
+        className={`flex flex-col items-center transition-all duration-300 ease-in-out ${!mobile && isCollapsed
             ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
             : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
-        }`}
+          }`}
       >
         {/* Profile Image */}
         <div
@@ -104,11 +110,10 @@ export default function Sidebar({
 
         {/* Info Text & Button */}
         <div
-          className={`flex flex-col items-center w-full transition-all duration-300 ${
-            !mobile && isCollapsed
+          className={`flex flex-col items-center w-full transition-all duration-300 ${!mobile && isCollapsed
               ? "opacity-0 h-0 overflow-hidden"
               : "opacity-100 h-auto"
-          }`}
+            }`}
         >
           <h3 className="font-semibold text-base tracking-tight text-neutral-900 dark:text-white">
             Leo Satria Anugrah
@@ -149,24 +154,21 @@ export default function Sidebar({
                 key={item.href}
                 href={item.href}
                 onClick={mobile ? closeMobile : undefined}
-                className={`group flex items-center relative transition-all duration-200 ${
-                  collapsed
+                className={`group flex items-center relative transition-all duration-200 ${collapsed
                     ? "justify-center w-12 h-12 rounded-xl"
                     : "gap-3 px-4 py-3 w-full rounded-xl"
-                } ${
-                  isActive
+                  } ${isActive
                     ? "bg-primary text-white shadow-lg shadow-primary/25"
                     : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
-                }`}
+                  }`}
                 title={collapsed ? item.label : ""}
               >
                 <item.icon
                   size={20}
-                  className={`transition-colors duration-200 shrink-0 ${
-                    isActive
+                  className={`transition-colors duration-200 shrink-0 ${isActive
                       ? "text-white"
                       : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white"
-                  }`}
+                    }`}
                 />
                 {!collapsed && (
                   <span className="font-medium text-sm whitespace-nowrap overflow-hidden">
@@ -203,6 +205,15 @@ export default function Sidebar({
       </div>
     </>
   );
+}
+
+export default function Sidebar({
+  isCollapsed,
+  toggleSidebar,
+  isMobileOpen,
+  closeMobile,
+}: SidebarProps) {
+  const pathname = usePathname();
 
   return (
     <>
@@ -213,16 +224,21 @@ export default function Sidebar({
           border-r border-neutral-200 dark:border-neutral-800
           ${isCollapsed ? "w-20" : "w-72"}`}
       >
-        <SidebarContent mobile={false} />
+        <SidebarContent
+          mobile={false}
+          pathname={pathname}
+          isCollapsed={isCollapsed}
+          toggleSidebar={toggleSidebar}
+          closeMobile={closeMobile}
+        />
       </aside>
 
       {/* ── MOBILE OVERLAY ── */}
       <div
-        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
-          isMobileOpen
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isMobileOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
-        }`}
+          }`}
         onClick={closeMobile}
       />
 
@@ -235,7 +251,13 @@ export default function Sidebar({
           md:hidden
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <SidebarContent mobile={true} />
+        <SidebarContent
+          mobile={true}
+          pathname={pathname}
+          isCollapsed={isCollapsed}
+          toggleSidebar={toggleSidebar}
+          closeMobile={closeMobile}
+        />
       </aside>
     </>
   );
