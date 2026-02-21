@@ -1,4 +1,3 @@
-// components/DashboardLayout.tsx
 "use client";
 
 import { useState } from "react";
@@ -14,7 +13,8 @@ export default function DashboardLayout({
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-white dark:bg-[#0a0a0a] text-neutral-900 dark:text-white transition-colors duration-200 overflow-x-hidden">
+    // overflow-x-hidden dihapus di sini agar sticky bisa berfungsi
+    <div className="flex min-h-screen bg-white dark:bg-[#0a0a0a] text-neutral-900 dark:text-white transition-colors duration-200">
       <Sidebar
         isCollapsed={isSidebarCollapsed}
         toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -27,7 +27,6 @@ export default function DashboardLayout({
           isSidebarCollapsed ? "md:ml-20" : "md:ml-72"
         }`}
       >
-        {/* Pass openMobile ke Navbar agar tombol hamburger bisa buka drawer */}
         <Navbar openMobile={() => setIsMobileOpen(true)} />
 
         <div className="p-4 md:p-8 w-full max-w-7xl mx-auto">

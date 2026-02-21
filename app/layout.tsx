@@ -30,9 +30,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* Gunakan inter.className sebagai font bawaan.
-        Lalu sisipkan variabel jakarta dan jetbrains agar bisa dipakai di div tertentu saja.
-      */}
       <body className={`${inter.className} ${jakarta.variable} ${jetbrainsMono.variable} overflow-x-hidden` 
     }>
         <ThemeProvider>
