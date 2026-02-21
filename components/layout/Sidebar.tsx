@@ -77,8 +77,8 @@ function SidebarContent({
       {/* Profile & CV Section */}
       <div
         className={`flex flex-col items-center transition-all duration-300 ease-in-out ${!mobile && isCollapsed
-            ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
-            : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
+          ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
+          : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
           }`}
       >
         {/* Profile Image */}
@@ -111,8 +111,8 @@ function SidebarContent({
         {/* Info Text & Button */}
         <div
           className={`flex flex-col items-center w-full transition-all duration-300 ${!mobile && isCollapsed
-              ? "opacity-0 h-0 overflow-hidden"
-              : "opacity-100 h-auto"
+            ? "opacity-0 h-0 overflow-hidden"
+            : "opacity-100 h-auto"
             }`}
         >
           <h3 className="font-semibold text-base tracking-tight text-neutral-900 dark:text-white">
@@ -123,14 +123,13 @@ function SidebarContent({
           </p>
 
           <button
-            className="group w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-xs font-medium
-            bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700
-            border border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-600
-            text-neutral-700 dark:text-neutral-200 shadow-sm hover:shadow-md"
+            className="group w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-xs font-medium shadow-sm hover:shadow-md
+          bg-neutral-200 dark:bg-neutral-800  border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200  hover:bg-primary dark:hover:bg-primary hover:border-primary dark:hover:border-primary hover:text-white dark:hover:text-white"
           >
             <Download
               size={14}
-              className="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors"
+              // Ikon juga ikut berubah jadi putih saat tombol di-hover
+              className="text-neutral-500 dark:text-neutral-400 group-hover:text-white dark:group-hover:text-white transition-colors"
             />
             <span>Download CV</span>
           </button>
@@ -155,8 +154,8 @@ function SidebarContent({
                 href={item.href}
                 onClick={mobile ? closeMobile : undefined}
                 className={`group flex items-center relative transition-all duration-200 ${collapsed
-                    ? "justify-center w-12 h-12 rounded-xl"
-                    : "gap-3 px-4 py-3 w-full rounded-xl"
+                  ? "justify-center w-12 h-12 rounded-xl"
+                  : "gap-3 px-4 py-3 w-full rounded-xl"
                   } ${isActive
                     ? "bg-primary text-white shadow-lg shadow-primary/25"
                     : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
@@ -166,8 +165,8 @@ function SidebarContent({
                 <item.icon
                   size={20}
                   className={`transition-colors duration-200 shrink-0 ${isActive
-                      ? "text-white"
-                      : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white"
+                    ? "text-white"
+                    : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white"
                     }`}
                 />
                 {!collapsed && (
@@ -236,8 +235,8 @@ export default function Sidebar({
       {/* ── MOBILE OVERLAY ── */}
       <div
         className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isMobileOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
           }`}
         onClick={closeMobile}
       />

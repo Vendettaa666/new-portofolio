@@ -23,21 +23,22 @@ export default function SkillsSection() {
       transition={{ duration: 0.5, delay: 0.2 }}
       className="rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40"
     >
-      <h2 className="text-xl font-bold mb-6 text-neutral-900 dark:text-white">
-        💪 Keahlian
+      <h2 className="text-lg md:text-xl font-semibold tracking-tight mb-6 text-neutral-900 dark:text-neutral-100">
+        Keahlian
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
         {skills.map((skill, index) => (
-          <div key={index}>
-            <div className="flex justify-between mb-2">
-              <span className="text-sm font-semibold text-neutral-900 dark:text-white">
+          <div key={index} className="group">
+            <div className="flex justify-between items-center mb-2.5">
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {skill.name}
               </span>
-              <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+              <span className="text-xs font-mono font-medium text-neutral-500 dark:text-neutral-400">
                 {skill.level}%
               </span>
             </div>
-            <div className="h-2 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+            <div className="h-1.5 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${skill.level}%` }}

@@ -7,7 +7,7 @@ import { CareerSection, EducationSection } from "@/components/portofolio/CareerE
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen max-w-4xl mx-auto flex flex-col gap-8 md:gap-12 p-4 md:p-6 lg:p-8 lg:py-12 transition-colors duration-200">
+    <div className="min-h-screen max-w-9xl mx-auto flex flex-col gap-8 md:gap-12 p-4 md:p-6 lg:p-8 lg:py-12 transition-colors duration-200">
       
       {/* Header Halaman */}
       <motion.div
