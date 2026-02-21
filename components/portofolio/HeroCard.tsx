@@ -45,11 +45,10 @@ export default function HeroCard() {
   return (
     // HAPUS md:grid-cols-2 di sini agar tablet tetap 1 kolom
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
-      
       {/* Kolom Kiri: Header Status & Hero Card utama */}
       <div className="lg:col-span-3 flex flex-col h-full gap-4 md:gap-6">
         <HeaderStatus />
-        
+
         <div className="relative flex-1 overflow-hidden rounded-3xl shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40">
           {/* Subtle dot pattern */}
           <div
@@ -85,7 +84,12 @@ export default function HeroCard() {
 
               {/* Description */}
               <p className="max-w-md text-sm leading-relaxed transition-colors duration-200 text-neutral-600 dark:text-neutral-400">
-                🚀 Pengembang otodidak yang antusias dengan Laravel, Flutter, dan teknologi baru. 🎸 Musik memicu kreativitas saya, terutama genre gelap & atmosferik seperti NU metal & DSBM. ☕ Saya paling produktif ditemani es kopi dan musik keras saat coding. 🤝 Selalu terbuka untuk kolaborasi, belajar, dan menghadapi tantangan baru!
+                🚀 Pengembang otodidak yang antusias dengan Laravel, Flutter,
+                dan teknologi baru. 🎸 Musik memicu kreativitas saya, terutama
+                genre gelap & atmosferik seperti NU metal & DSBM. ☕ Saya paling
+                produktif ditemani es kopi dan musik keras saat coding. 🤝
+                Selalu terbuka untuk kolaborasi, belajar, dan menghadapi
+                tantangan baru!
               </p>
 
               {/* Location & Work Type */}
@@ -102,12 +106,15 @@ export default function HeroCard() {
 
               {/* Buttons */}
               <div className="flex flex-wrap gap-3 pt-2">
-                <button className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold shadow-lg active:scale-95 transition-all duration-200 bg-neutral-900 dark:bg-white text-white dark:text-black hover:bg-neutral-800 dark:hover:bg-neutral-200">
+                {/* Tombol 1: Primary Solid */}
+                <button className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold shadow-lg active:scale-95 transition-all duration-200 bg-primary text-white hover:bg-primary/90 dark:hover:bg-primary/80">
                   Lihat Proyek
                   <ArrowRight className="h-4 w-4" />
                 </button>
-                <button className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold active:scale-95 transition-all duration-200 border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white hover:bg-neutral-200 dark:hover:bg-neutral-700/80">
-                  <MessageCircle className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+
+                {/* Tombol 2: Primary Tinted / Outline */}
+                <button className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold active:scale-95 transition-all duration-200 border border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 dark:border-primary/40 dark:bg-transparent dark:text-white dark:hover:bg-primary/20">
+                  <MessageCircle className="h-4 w-4 text-primary dark:text-white" />
                   Ruang Obrolan
                 </button>
               </div>
@@ -116,16 +123,18 @@ export default function HeroCard() {
             {/* Terminal Visual */}
             <div className="relative hidden h-64 w-64 shrink-0 md:block lg:h-72 lg:w-72">
               <div className="absolute inset-0 rounded-3xl bg-blue-500/5 border border-blue-500/10" />
-              <motion.div animate={{ 
+              <motion.div
+                animate={{
                   y: [0, -3, 0], // Bergerak ke atas 10px lalu kembali
-                  rotate: [0, 3, 0] // Rotasi sedikit agar lebih natural
+                  rotate: [0, 3, 0], // Rotasi sedikit agar lebih natural
                 }}
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
-                className="absolute inset-4 flex items-center justify-center">
+                className="absolute inset-4 flex items-center justify-center"
+              >
                 <div className="w-full rounded-2xl p-5 shadow-2xl transition-all duration-200 border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-[#0a0a0a]">
                   <div className="mb-4 flex gap-2">
                     <div className="h-3 w-3 rounded-full bg-red-500/80" />
@@ -138,44 +147,51 @@ export default function HeroCard() {
                       <span>~/ vendettaa.dev</span>
                     </div>
                     <div className="mt-1 text-neutral-500">
-                      <span className="text-green-400">{">"}</span> building amazing things...
+                      <span className="text-green-400">{">"}</span> building
+                      amazing things...
                     </div>
                     <div className="flex gap-2 mt-2 transition-colors duration-200 text-neutral-600 dark:text-neutral-400">
                       <span className="text-purple-400">const</span>
-                      <span className="text-neutral-900 dark:text-white">passion</span>
+                      <span className="text-neutral-900 dark:text-white">
+                        passion
+                      </span>
                       <span className="text-pink-400">=</span>
-                      <span className="text-yellow-500 dark:text-yellow-300">{"'code'"}</span>
-                      <span className="text-neutral-400 dark:text-neutral-500">;</span>
+                      <span className="text-yellow-500 dark:text-yellow-300">
+                        {"'code'"}
+                      </span>
+                      <span className="text-neutral-400 dark:text-neutral-500">
+                        ;
+                      </span>
                     </div>
                   </div>
                 </div>
               </motion.div>
 
-             {/* Floating icons */}
-              <motion.div 
-                animate={{ 
+              {/* Floating icons */}
+              <motion.div
+                animate={{
                   y: [0, -10, 0], // Bergerak ke atas 10px lalu kembali
-                  rotate: [0, 5, 0] // Rotasi sedikit agar lebih natural
+                  rotate: [0, 5, 0], // Rotasi sedikit agar lebih natural
                 }}
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
                 className="absolute -right-3 -top-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900"
               >
                 <Sparkles className="h-5 w-5 text-yellow-400" />
               </motion.div>
 
-              <motion.div 
-                animate={{ 
+              <motion.div
+                animate={{
                   y: [0, 10, 0], // Bergerak ke bawah 10px lalu kembali (berlawanan dengan icon atas)
-                  rotate: [0, -5, 0] 
+                  rotate: [0, -5, 0],
                 }}
-                transition={{ 
+                transition={{
                   duration: 5, // Durasinya dibedakan sedikit agar gerakannya tidak barengan
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
                 className="absolute -bottom-3 -left-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900"
               >
@@ -198,10 +214,14 @@ export default function HeroCard() {
           >
             {/* Container Icon & Badge */}
             <div className="flex items-center justify-between">
-              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${card.iconBg}`}>
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${card.iconBg}`}
+              >
                 {card.icon}
               </div>
-              <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-wide transition-colors duration-200 ${card.badgeClass}`}>
+              <span
+                className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-wide transition-colors duration-200 ${card.badgeClass}`}
+              >
                 {card.badge}
               </span>
             </div>
