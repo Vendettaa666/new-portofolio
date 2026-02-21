@@ -132,7 +132,7 @@ function SidebarContent({
               size={14}
               className="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors"
             />
-            <span>Resume</span>
+            <span>Download CV</span>
           </button>
         </div>
       </div>
