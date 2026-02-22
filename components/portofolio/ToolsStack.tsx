@@ -27,10 +27,135 @@ import {
   SiDocker,
   SiNpm,
   SiGithub,
+  SiComposer,
+  SiAlpinedotjs,
+  SiInertia,
+  SiCanva,
+  SiFigma,
+  SiDart,
+  SiFlutter,
+  SiLivewire,
+  SiPostman,
 } from "react-icons/si";
+import { VscCode } from "react-icons/vsc";
 
 export default function ToolStack() {
   const tools = [
+    {
+      icon: <VscCode className="w-full h-full" />,
+      color: "#007ACC",
+      label: "VS Code",
+    },
+    {
+      icon: <SiReact className="w-full h-full" />,
+      color: "#61DAFB",
+      label: "React.js",
+    },
+    {
+      icon: <SiNextdotjs className="w-full h-full" />,
+      color: "#000000",
+      label: "Next.js",
+    },
+    {
+      icon: <SiTailwindcss className="w-full h-full" />,
+      color: "#06B6D4",
+      label: "Tailwind CSS",
+    },
+    {
+      icon: <SiBootstrap className="w-full h-full" />,
+      color: "#7952B3",
+      label: "Bootstrap",
+    },
+    {
+      icon: <SiJavascript className="w-full h-full" />,
+      color: "#F7DF1E",
+      label: "JavaScript",
+    },
+    {
+      icon: <SiNodedotjs className="w-full h-full" />,
+      color: "#339933",
+      label: "Node.js",
+    },
+    {
+      icon: <SiGithub className="w-full h-full" />,
+      color: "#181717",
+      label: "GitHub",
+    },
+    {
+      icon: <SiInertia className="w-full h-full" />,
+      color: "#9553E9",
+      label: "Inertia.js",
+    },
+    {
+      icon: <SiCanva className="w-full h-full" />,
+      color: "#00C4CC",
+      label: "Canva",
+    },
+    {
+      icon: <SiFigma className="w-full h-full" />,
+      color: "#F24E1E",
+      label: "Figma",
+    },
+    {
+      icon: <SiMysql className="w-full h-full" />,
+      color: "#4479A1",
+      label: "MySQL",
+    },
+    {
+      icon: <SiDart className="w-full h-full" />,
+      color: "#0175C2",
+      label: "Dart",
+    },
+    {
+      icon: <SiLaravel className="w-full h-full" />,
+      color: "#FF2D20",
+      label: "Laravel",
+    },
+    {
+      icon: <SiFlutter className="w-full h-full" />,
+      color: "#02569B",
+      label: "Flutter",
+    },
+    {
+      icon: <SiAlpinedotjs className="w-full h-full" />,
+      color: "#8BC0D0",
+      label: "Alpine.js",
+    },
+    {
+      icon: <SiPhp className="w-full h-full" />,
+      color: "#777BB4",
+      label: "PHP",
+    },
+    {
+      icon: <SiLivewire className="w-full h-full" />,
+      color: "#4E56A6",
+      label: "Livewire",
+    },
+    {
+      icon: <SiPostman className="w-full h-full" />,
+      color: "#FF6C37",
+      label: "Postman",
+    },
+    {
+      icon: <SiVite className="w-full h-full" />,
+      color: "#646CFF",
+      label: "Vite",
+    },
+    {
+      icon: <SiTypescript className="w-full h-full" />,
+      color: "#3178C6",
+      label: "TypeScript",
+    },
+    {
+      icon: <SiComposer className="w-full h-full" />,
+      color: "#885630",
+      label: "Composer",
+    },
+    {
+      icon: <SiNpm className="w-full h-full" />,
+      color: "#CB3837",
+      label: "NPM",
+    },
     {
       icon: <SiHtml5 className="w-full h-full" />,
       color: "#E34F26",
@@ -40,41 +165,6 @@ export default function ToolStack() {
       icon: <SiCss3 className="w-full h-full" />,
       color: "#1572B6",
       label: "CSS3",
-    },
-    {
-      icon: <SiBootstrap className="w-full h-full" />,
-      color: "#7952B3",
-      label: "Bootstrap",
-    },
-    {
-      icon: <SiTailwindcss className="w-full h-full" />,
-      color: "#06B6D4",
-      label: "Tailwind",
-    },
-    {
-      icon: <SiJavascript className="w-full h-full" />,
-      color: "#F7DF1E",
-      label: "JavaScript",
-    },
-    {
-      icon: <SiTypescript className="w-full h-full" />,
-      color: "#3178C6",
-      label: "TypeScript",
-    },
-    {
-      icon: <SiReact className="w-full h-full" />,
-      color: "#61DAFB",
-      label: "React",
-    },
-    {
-      icon: <SiVite className="w-full h-full" />,
-      color: "#646CFF",
-      label: "Vite",
-    },
-    {
-      icon: <SiNextdotjs className="w-full h-full" />,
-      color: "#000000",
-      label: "Next.js",
     },
     {
       icon: <SiPrisma className="w-full h-full" />,
@@ -92,44 +182,14 @@ export default function ToolStack() {
       label: "Supabase",
     },
     {
-      icon: <SiNodedotjs className="w-full h-full" />,
-      color: "#339933",
-      label: "Node.js",
-    },
-    {
-      icon: <SiPhp className="w-full h-full" />,
-      color: "#777BB4",
-      label: "PHP",
-    },
-    {
-      icon: <SiLaravel className="w-full h-full" />,
-      color: "#FF2D20",
-      label: "Laravel",
-    },
-    {
       icon: <SiPostgresql className="w-full h-full" />,
       color: "#336791",
       label: "PostgreSQL",
     },
     {
-      icon: <SiMysql className="w-full h-full" />,
-      color: "#4479A1",
-      label: "MySQL",
-    },
-    {
       icon: <SiDocker className="w-full h-full" />,
       color: "#2496ED",
       label: "Docker",
-    },
-    {
-      icon: <SiNpm className="w-full h-full" />,
-      color: "#CB3837",
-      label: "NPM",
-    },
-    {
-      icon: <SiGithub className="w-full h-full" />,
-      color: "#181717",
-      label: "GitHub",
     },
   ];
 

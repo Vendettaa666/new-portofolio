@@ -24,7 +24,7 @@ export default function DashboardLayout({
 
       <main
         className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
-          isSidebarCollapsed ? "md:ml-20" : "md:ml-70"
+          isSidebarCollapsed ? "md:ml-20" : "md:ml-72"
         }`}
       >
         <Navbar openMobile={() => setIsMobileOpen(true)} />

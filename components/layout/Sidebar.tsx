@@ -78,7 +78,9 @@ function SidebarContent({
       <div
         className={`flex flex-col items-center transition-all duration-300 ease-in-out ${!mobile && isCollapsed
           ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
-          : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
+          : mobile
+            ? "mx-3 mt-16 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
+            : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
           }`}
       >
         {/* Profile Image */}
@@ -137,14 +139,14 @@ function SidebarContent({
       </div>
 
       {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-3 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto px-3 space-y-1 custom-scrollbar">
         {(mobile || !isCollapsed) && (
           <p className="text-xs font-semibold px-4 mb-2 uppercase tracking-wider whitespace-nowrap text-neutral-400 dark:text-neutral-500">
             Menu
           </p>
         )}
 
-        <nav className="flex flex-col gap-1.5 space-y-2 items-center">
+        <nav className="flex flex-col gap-1.5 items-center">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const collapsed = !mobile && isCollapsed;
@@ -154,7 +156,7 @@ function SidebarContent({
                 href={item.href}
                 onClick={mobile ? closeMobile : undefined}
                 className={`group flex items-center relative transition-all duration-200 ${collapsed
-                  ? "justify-center w-8 h-8 rounded-xl"
+                  ? "justify-center w-12 h-12 rounded-xl"
                   : "gap-3 px-4 py-3 w-full rounded-xl"
                   } ${isActive
                     ? "bg-primary text-white shadow-lg shadow-primary/25"
@@ -221,7 +223,7 @@ export default function Sidebar({
         className={`hidden md:flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out
           bg-white dark:bg-[#0a0a0a]
           border-r border-neutral-200 dark:border-neutral-800
-          ${isCollapsed ? "w-20" : "w-70"}`}
+          ${isCollapsed ? "w-20" : "w-72"}`}
       >
         <SidebarContent
           mobile={false}
@@ -243,7 +245,7 @@ export default function Sidebar({
 
       {/* ── MOBILE DRAWER (slide from left) ── */}
       <aside
-        className={`fixed top-0 left-0 h-full w-7 2 z-50 flex flex-col
+        className={`fixed top-0 left-0 h-full w-72 z-50 flex flex-col
           bg-white dark:bg-[#0a0a0a]
           border-r border-neutral-200 dark:border-neutral-800
           transition-transform duration-300 ease-in-out
@@ -253,7 +255,7 @@ export default function Sidebar({
         <SidebarContent
           mobile={true}
           pathname={pathname}
-          isCollapsed={isCollapsed}
+          isCollapsed={false}
           toggleSidebar={toggleSidebar}
           closeMobile={closeMobile}
         />
