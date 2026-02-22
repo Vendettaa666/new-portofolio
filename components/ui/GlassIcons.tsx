@@ -1,7 +1,21 @@
-// components/GlassIcons.jsx (atau .tsx)
+// components/GlassIcons.tsx
 import React from 'react';
 
-const gradientMapping = {
+// Menambahkan interface untuk mencegah error build di Vercel
+interface GlassIconItem {
+  icon: React.ReactNode;
+  color: string;
+  label: string;
+  customClass?: string;
+}
+
+interface GlassIconsProps {
+  items: GlassIconItem[];
+  className?: string; // Tanda tanya (?) membuatnya menjadi opsional
+}
+
+// Tambahkan Record<string, string> untuk TypeScript
+const gradientMapping: Record<string, string> = {
   blue: 'linear-gradient(hsl(223, 90%, 50%), hsl(208, 90%, 50%))',
   purple: 'linear-gradient(hsl(283, 90%, 50%), hsl(268, 90%, 50%))',
   red: 'linear-gradient(hsl(3, 90%, 50%), hsl(348, 90%, 50%))',
@@ -10,8 +24,8 @@ const gradientMapping = {
   green: 'linear-gradient(hsl(123, 90%, 40%), hsl(108, 90%, 40%))'
 };
 
-const GlassIcons = ({ items, className }) => {
-  const getBackgroundStyle = color => {
+const GlassIcons = ({ items, className }: GlassIconsProps) => {
+  const getBackgroundStyle = (color: string) => {
     if (gradientMapping[color]) {
       return { background: gradientMapping[color] };
     }
@@ -19,14 +33,12 @@ const GlassIcons = ({ items, className }) => {
   };
 
   return (
-    // DIUBAH: Gap (jarak antar ikon) diperkecil lagi
     <div className={`flex flex-wrap justify-center gap-[1em] md:gap-[1.25em] mx-auto py-[1.5em] max-w-5xl overflow-visible ${className || ''}`}>
       {items.map((item, index) => (
         <button
           key={index}
           type="button"
           aria-label={item.label}
-          // DIUBAH: Ukuran box utama diperkecil drastis ke 2.5em (mobile) & 3em (desktop)
           className={`relative bg-transparent outline-none border-none cursor-pointer w-[2.5em] h-[2.5em] md:w-[3em] md:h-[3em] mb-3 [perspective:24em] [transform-style:preserve-3d] [-webkit-tap-highlight-color:transparent] group ${
             item.customClass || ''
           }`}
@@ -40,15 +52,12 @@ const GlassIcons = ({ items, className }) => {
             }}
           ></span>
 
-          {/* Efek Kaca Depan */}
+          {/* Efek Kaca Depan (Border menyesuaikan Light/Dark Mode) */}
           <span
-            className="absolute top-0 left-0 w-full h-full rounded-[0.75em] bg-[hsla(0,0%,100%,0.15)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.83,0,0.17,1)] origin-[80%_50%] flex backdrop-blur-[0.75em] [-webkit-backdrop-filter:blur(0.75em)] [-moz-backdrop-filter:blur(0.75em)] [will-change:transform] transform group-hover:[transform:translate3d(0,0,1em)]"
-            style={{
-              boxShadow: '0 0 0 0.1em hsla(0, 0%, 100%, 0.3) inset'
-            }}
+            className="absolute top-0 left-0 w-full h-full rounded-[0.75em] bg-[hsla(0,0%,100%,0.15)] transition-[opacity,transform,box-shadow] duration-300 ease-[cubic-bezier(0.83,0,0.17,1)] origin-[80%_50%] flex backdrop-blur-[0.75em] [-webkit-backdrop-filter:blur(0.75em)] [-moz-backdrop-filter:blur(0.75em)] [will-change:transform] transform group-hover:[transform:translate3d(0,0,1em)] shadow-[inset_0_0_0_0.1em_rgba(0,0,0,0.15)] dark:shadow-[inset_0_0_0_0.1em_rgba(255,255,255,0.3)]"
           >
-            {/* DIUBAH: Ukuran ikon SVG di dalam diperkecil agar proporsional */}
-            <span className="m-auto w-[1.2em] h-[1.2em] md:w-[1.4em] md:h-[1.4em] flex items-center justify-center text-dark dark:text-white" aria-hidden="true">
+            {/* Mengganti text-dark menjadi text-neutral-900 karena text-dark bukan class standar Tailwind */}
+            <span className="m-auto w-[1.2em] h-[1.2em] md:w-[1.4em] md:h-[1.4em] flex items-center justify-center text-neutral-900 dark:text-white" aria-hidden="true">
               {item.icon}
             </span>
           </span>
