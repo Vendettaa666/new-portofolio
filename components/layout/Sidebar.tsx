@@ -144,7 +144,7 @@ function SidebarContent({
           </p>
         )}
 
-        <nav className="flex flex-col gap-1.5 items-center">
+        <nav className="flex flex-col gap-1.5 space-y-2 items-center">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const collapsed = !mobile && isCollapsed;
@@ -154,7 +154,7 @@ function SidebarContent({
                 href={item.href}
                 onClick={mobile ? closeMobile : undefined}
                 className={`group flex items-center relative transition-all duration-200 ${collapsed
-                  ? "justify-center w-12 h-12 rounded-xl"
+                  ? "justify-center w-8 h-8 rounded-xl"
                   : "gap-3 px-4 py-3 w-full rounded-xl"
                   } ${isActive
                     ? "bg-primary text-white shadow-lg shadow-primary/25"
@@ -221,7 +221,7 @@ export default function Sidebar({
         className={`hidden md:flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out
           bg-white dark:bg-[#0a0a0a]
           border-r border-neutral-200 dark:border-neutral-800
-          ${isCollapsed ? "w-20" : "w-72"}`}
+          ${isCollapsed ? "w-20" : "w-70"}`}
       >
         <SidebarContent
           mobile={false}
@@ -243,7 +243,7 @@ export default function Sidebar({
 
       {/* ── MOBILE DRAWER (slide from left) ── */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 z-50 flex flex-col
+        className={`fixed top-0 left-0 h-full w-7 2 z-50 flex flex-col
           bg-white dark:bg-[#0a0a0a]
           border-r border-neutral-200 dark:border-neutral-800
           transition-transform duration-300 ease-in-out
