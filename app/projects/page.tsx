@@ -123,7 +123,7 @@ export default function ProjectsPage() {
     const totalProjects = listProyek.length;
     const uniqueTools = new Set(listProyek.flatMap((p) => p.tools)).size;
     const latestYear = Math.max(...listProyek.map((p) => parseInt(p.year)));
-    
+
     return {
       totalProjects,
       uniqueTools,
@@ -133,7 +133,6 @@ export default function ProjectsPage() {
 
   return (
     <div className="min-h-screen max-w-9xl mx-auto flex flex-col gap-10 p-4 md:p-6 lg:p-8 transition-colors duration-200">
-      
       {/* Enhanced Header Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -148,17 +147,19 @@ export default function ProjectsPage() {
               My Projects
             </h1>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
-              Explore my collection of web development projects, from full-stack applications to modern frontend solutions
+              Explore my collection of web development projects, from full-stack
+              applications to modern frontend solutions
             </p>
           </div>
         </div>
 
         {/* Stats Bar - Horizontal Layout */}
-        <div className="flex flex-wrap items-center gap-6 p-6 rounded-2xl border transition-all duration-200
+        <div
+          className="flex flex-wrap items-center gap-6 p-6 rounded-2xl border transition-all duration-200
           bg-gradient-to-r from-neutral-50 via-white to-neutral-50 dark:from-neutral-900/40 dark:via-neutral-900/20 dark:to-neutral-900/40
           border-neutral-200 dark:border-neutral-800
-          shadow-sm hover:shadow-md">
-          
+          shadow-sm hover:shadow-md"
+        >
           {/* Total Projects */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -167,7 +168,10 @@ export default function ProjectsPage() {
             className="flex items-center gap-3"
           >
             <div className="p-2.5 rounded-xl bg-blue-500/10">
-              <Briefcase size={20} className="text-blue-600 dark:text-blue-400" />
+              <Briefcase
+                size={20}
+                className="text-blue-600 dark:text-blue-400"
+              />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -190,7 +194,10 @@ export default function ProjectsPage() {
             className="flex items-center gap-3"
           >
             <div className="p-2.5 rounded-xl bg-purple-500/10">
-              <Code2 size={20} className="text-purple-600 dark:text-purple-400" />
+              <Code2
+                size={20}
+                className="text-purple-600 dark:text-purple-400"
+              />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -213,7 +220,10 @@ export default function ProjectsPage() {
             className="flex items-center gap-3"
           >
             <div className="p-2.5 rounded-xl bg-green-500/10">
-              <Calendar size={20} className="text-green-600 dark:text-green-400" />
+              <Calendar
+                size={20}
+                className="text-green-600 dark:text-green-400"
+              />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -230,95 +240,101 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {listProyek.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 + index * 0.05 }}
-            className="w-full h-full"
+          <GlareHover
+            width="100%"
+            height="100%"
+            background="transparent"
+            borderRadius="1.5rem"
+            className="flex flex-col"
           >
-            <GlareHover
-              width="100%"
-              height="100%"
-              background="transparent"
-              borderRadius="1.5rem"
-              className="flex flex-col"
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 + index * 0.05 }}
+              className="w-full h-full"
             >
-              <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300">
-                {/* IMAGE CONTAINER */}
-                <div className="relative h-52 overflow-hidden bg-neutral-900">
-                  <img
-                    src={typeof project.gambar === 'string' ? project.gambar : project.gambar.src}
-                    alt={project.nama}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  {/* OVERLAY */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-10">
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 bg-white text-neutral-900 px-6 py-3 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-primary hover:text-white shadow-xl"
-                    >
-                      <Eye size={18} />
-                      View Project
-                    </a>
-                  </div>
-                  {/* GitHub Badge */}
-                  {project.github !== "#" && (
-                    <div className="absolute top-4 right-4 z-20">
+              <div className="relative w-full h-full overflow-hidden rounded-[1.5rem]">
+                <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300">
+                  {/* IMAGE CONTAINER */}
+                  <div className="relative h-52 overflow-hidden bg-neutral-900">
+                    <img
+                      src={
+                        typeof project.gambar === "string"
+                          ? project.gambar
+                          : project.gambar.src
+                      }
+                      alt={project.nama}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    {/* OVERLAY */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-10">
                       <a
-                        href={project.github}
+                        href={project.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2.5 bg-black/60 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white hover:text-black transition-all shadow-lg"
+                        className="flex items-center gap-2 bg-white text-neutral-900 px-6 py-3 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-primary hover:text-white shadow-xl"
                       >
-                        <Github size={18} />
+                        <Eye size={18} />
+                        View Project
                       </a>
                     </div>
-                  )}
-                </div>
-
-                {/* CONTENT AREA */}
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex-grow space-y-4">
-                    <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary dark:group-hover:text-primary transition-colors line-clamp-2">
-                      {project.nama}
-                    </h3>
-
-                    <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed line-clamp-2">
-                      {project.desk}
-                    </p>
-
-                    {/* Tools - Show All */}
-                    <div className="flex flex-wrap gap-2">
-                      {project.tools.map((tag, i) => (
-                        <span
-                          key={i}
-                          className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1.5 rounded-lg
-                            bg-primary/10 text-primary dark:text-primary
-                            border border-primary/20
-                            hover:bg-primary/20 transition-colors"
+                    {/* GitHub Badge */}
+                    {project.github !== "#" && (
+                      <div className="absolute top-4 right-4 z-20">
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2.5 bg-black/60 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white hover:text-black transition-all shadow-lg"
                         >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                          <Github size={18} />
+                        </a>
+                      </div>
+                    )}
                   </div>
 
-                  {/* BOTTOM STATS */}
-                  <div className="pt-4 mt-4 border-t border-neutral-200 dark:border-neutral-800/50 flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                      {project.role}
-                    </span>
-                    <span className="text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 px-3 py-1.5 rounded-full">
-                      {project.year}
-                    </span>
+                  {/* CONTENT AREA */}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex-grow space-y-4">
+                      <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors line-clamp-2">
+                        {project.nama}
+                      </h3>
+
+                      <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed line-clamp-2">
+                        {project.desk}
+                      </p>
+
+                      {/* Tools - Show All */}
+                      <div className="flex flex-wrap gap-2">
+                        {project.tools.map((tag, i) => (
+                          <span
+                            key={i}
+                            className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1.5 rounded-lg
+                              bg-primary/10 text-primary
+                              border border-primary/20
+                              hover:bg-primary/20 transition-colors"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* BOTTOM STATS */}
+                    <div className="pt-4 mt-4 border-t border-neutral-200 dark:border-neutral-800/50 flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        {project.role}
+                      </span>
+                      <span className="text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 px-3 py-1.5 rounded-full">
+                        {project.year}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </GlareHover>
-          </motion.div>
+            </motion.div>
+          </GlareHover>
         ))}
       </div>
     </div>
