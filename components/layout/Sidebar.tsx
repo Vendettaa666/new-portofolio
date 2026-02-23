@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Copyright,
   X,
+  Trophy,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,7 +20,7 @@ const navItems = [
   { icon: Home, label: "Home", href: "/" },
   { icon: User, label: "About", href: "/about" },
   { icon: Layers, label: "Projects", href: "/projects" },
-  { icon: Code, label: "Stack", href: "/stack" },
+  { icon: Trophy, label: "Achivement", href: "/achivement" },
   { icon: Mail, label: "Contact", href: "/contact" },
 ];
 

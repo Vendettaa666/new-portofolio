@@ -241,6 +241,7 @@ export default function ProjectsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {listProyek.map((project, index) => (
           <GlareHover
+            key={project.id}
             width="100%"
             height="100%"
             background="transparent"
@@ -248,7 +249,6 @@ export default function ProjectsPage() {
             className="flex flex-col"
           >
             <motion.div
-              key={project.id}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 + index * 0.05 }}

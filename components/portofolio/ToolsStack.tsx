@@ -36,6 +36,9 @@ import {
   SiFlutter,
   SiLivewire,
   SiPostman,
+  SiLaragon,
+  SiFilament,
+  
 } from "react-icons/si";
 import { VscCode } from "react-icons/vsc";
 
@@ -191,6 +194,17 @@ export default function ToolStack() {
       color: "#2496ED",
       label: "Docker",
     },
+    {
+      icon: <SiLaragon className="w-full h-full" />,
+      color: "#2496ED",
+      label: "Laragon",
+    },
+    {
+      icon: <SiFilament className="w-full h-full" />,
+      color: "#2496ED",
+      label: "Filament",
+    },
+
   ];
 
   return (
