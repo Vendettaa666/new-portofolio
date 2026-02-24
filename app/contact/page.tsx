@@ -111,7 +111,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto flex flex-col gap-10 p-4 md:p-6 lg:p-8 transition-colors duration-200">
+    <div className="min-h-screen max-w-9xl mx-auto flex flex-col gap-10 p-4 md:p-6 lg:p-8 transition-colors duration-200">
       
       {/* Enhanced Header Section */}
       <motion.div

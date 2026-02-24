@@ -80,71 +80,84 @@ function SidebarContent({
         className={`flex flex-col items-center transition-all duration-300 ease-in-out ${!mobile && isCollapsed
           ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
           : mobile
-            ? "mx-3 mt-16 mb-6 p-5 rounded-2xl shadow-sm bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700"
-            : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700"
+            ? "mx-3 mt-16 mb-6"
+            : "mx-3 mt-4 mb-6"
           }`}
       >
-        {/* Profile Image */}
-        <div
-          className={`relative transition-all duration-300 ${!mobile && isCollapsed ? "mb-0" : "mb-4"}`}
-        >
-          <div
-            className={`relative rounded-full overflow-hidden border transition-all duration-300
-            border-neutral-300 dark:border-neutral-700 shadow-lg
-            ${!mobile && isCollapsed ? "w-10 h-10" : "w-24 h-24 ring-4 ring-neutral-200 dark:ring-neutral-900"}`}
-          >
-            <img
-              src="/assets/profile.png"
-              alt="User"
-              className="w-full h-full object-cover bg-neutral-200 dark:bg-neutral-800"
-            />
-          </div>
-          {(mobile || !isCollapsed) && (
-            <div className="absolute bottom-0 right-0 bg-white dark:bg-neutral-800 p-1 rounded-full shadow-md">
-              <div className="flex items-center gap-1 bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
-                <span className="text-[9px] font-medium text-primary leading-none">
-                  Open
-                </span>
+        {/* Profile Card with Gradient Background */}
+        {(mobile || !isCollapsed) && (
+          <div className="w-full relative overflow-hidden rounded-2xl p-6 shadow-lg bg-gradient-to-br from-primary/10 via-primary/5 to-transparent dark:from-primary/20 dark:via-primary/10 dark:to-transparent border border-primary/20 dark:border-primary/30">
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
+            
+            <div className="relative z-10 flex flex-col items-center">
+              {/* Profile Image with Enhanced Styling */}
+              <div className="relative mb-4">
+                <div className="relative w-24 h-24 rounded-2xl overflow-hidden border-2 border-white dark:border-neutral-700 shadow-xl ring-4 ring-primary/10 dark:ring-primary/20">
+                  <img
+                    src="/assets/profile.png"
+                    alt="Leo Satria Anugrah"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Status Badge */}
+                <div className="absolute -bottom-1 -right-1 bg-white dark:bg-neutral-800 p-1.5 rounded-xl shadow-lg border border-neutral-200 dark:border-neutral-700">
+                  <div className="flex items-center gap-1.5 bg-green-500/10 border border-green-500/20 px-2 py-1 rounded-lg">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <span className="text-[9px] font-bold text-green-600 dark:text-green-400 leading-none uppercase tracking-wide">
+                      Open
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              {/* Name & Title */}
+              <div className="text-center mb-4">
+                <h3 className="font-bold text-lg tracking-tight text-neutral-900 dark:text-white mb-1">
+                  Leo Satria Anugrah
+                </h3>
+                <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400 flex items-center justify-center gap-1">
+                  <span className="w-1 h-1 rounded-full bg-primary"></span>
+                  Web Developer
+                  <span className="w-1 h-1 rounded-full bg-primary"></span>
+                </p>
+              </div>
+
+              {/* Download CV Button */}
+              <button className="group w-full py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-sm font-semibold shadow-md hover:shadow-xl bg-primary hover:bg-primary/90 text-white border border-primary/20">
+                <Download size={16} className="transition-transform group-hover:translate-y-0.5" />
+                <span>Download CV</span>
+              </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Info Text & Button */}
-        <div
-          className={`flex flex-col items-center w-full transition-all duration-300 ${!mobile && isCollapsed
-            ? "opacity-0 h-0 overflow-hidden"
-            : "opacity-100 h-auto"
-            }`}
-        >
-          <h3 className="font-semibold text-base tracking-tight text-neutral-900 dark:text-white">
-            Leo Satria Anugrah
-          </h3>
-          <p className="text-xs mb-4 font-medium text-neutral-500 dark:text-neutral-400">
-            Web Developer
-          </p>
-
-          <button
-            className="group w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-xs font-medium shadow-sm hover:shadow-md
-          bg-neutral-200 dark:bg-neutral-800  border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200  hover:bg-primary dark:hover:bg-primary hover:border-primary dark:hover:border-primary hover:text-white dark:hover:text-white"
-          >
-            <Download
-              size={14}
-              // Ikon juga ikut berubah jadi putih saat tombol di-hover
-              className="text-neutral-500 dark:text-neutral-400 group-hover:text-white dark:group-hover:text-white transition-colors"
-            />
-            <span>Download CV</span>
-          </button>
-        </div>
+        {/* Collapsed State - Just Avatar */}
+        {!mobile && isCollapsed && (
+          <div className="relative">
+            <div className="relative w-12 h-12 rounded-xl overflow-hidden border-2 border-primary/30 shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
+              <img
+                src="/assets/profile.png"
+                alt="User"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-white dark:border-neutral-800 animate-pulse"></div>
+          </div>
+        )}
       </div>
 
       {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-3 space-y-1 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto px-3 space-y-2 custom-scrollbar">
         {(mobile || !isCollapsed) && (
-          <p className="text-xs font-semibold px-4 mb-2 uppercase tracking-wider whitespace-nowrap text-neutral-400 dark:text-neutral-500">
-            Menu
-          </p>
+          <div className="flex items-center gap-2 px-3 mb-3">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent"></div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 dark:text-neutral-500">
+              Navigation
+            </p>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent"></div>
+          </div>
         )}
 
         <nav className="flex flex-col gap-1.5 items-center">
@@ -160,25 +173,37 @@ function SidebarContent({
                   ? "justify-center w-12 h-12 rounded-xl"
                   : "gap-3 px-4 py-3 w-full rounded-xl"
                   } ${isActive
-                    ? "bg-primary text-white shadow-lg shadow-primary/25"
-                    : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
+                    ? "bg-gradient-to-r from-primary to-primary/90 text-white shadow-lg shadow-primary/25 scale-[1.02]"
+                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700/50 hover:text-neutral-900 dark:hover:text-white hover:scale-[1.01]"
                   }`}
                 title={collapsed ? item.label : ""}
               >
-                <item.icon
-                  size={20}
-                  className={`transition-colors duration-200 shrink-0 ${isActive
-                    ? "text-white"
-                    : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white"
-                    }`}
-                />
+                {/* Icon with background */}
+                <div className={`flex items-center justify-center transition-all duration-200 ${
+                  collapsed ? "" : "w-8 h-8 rounded-lg"
+                } ${
+                  isActive 
+                    ? "bg-white/20" 
+                    : "bg-transparent group-hover:bg-neutral-200 dark:group-hover:bg-neutral-600/30"
+                }`}>
+                  <item.icon
+                    size={18}
+                    className={`transition-all duration-200 ${isActive
+                      ? "text-white"
+                      : "text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white"
+                      }`}
+                  />
+                </div>
+                
                 {!collapsed && (
-                  <span className="font-medium text-sm whitespace-nowrap overflow-hidden">
-                    {item.label}
-                  </span>
-                )}
-                {isActive && !collapsed && (
-                  <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  <>
+                    <span className="font-semibold text-sm whitespace-nowrap overflow-hidden flex-1">
+                      {item.label}
+                    </span>
+                    {isActive && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                    )}
+                  </>
                 )}
               </Link>
             );
@@ -187,20 +212,21 @@ function SidebarContent({
       </div>
 
       {/* Footer */}
-      <div
-        className={`p-4 border-t border-neutral-200 dark:border-neutral-800 ${!mobile && isCollapsed ? "flex justify-center" : ""}`}
-      >
+      <div className={`p-4 border-t border-neutral-200 dark:border-neutral-700 ${!mobile && isCollapsed ? "flex justify-center" : ""}`}>
         {!mobile && isCollapsed ? (
-          <div className="w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900 text-neutral-400 dark:text-neutral-500">
-            <Copyright size={16} />
+          <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors cursor-pointer">
+            <Copyright size={18} />
           </div>
         ) : (
-          <div className="flex flex-col gap-0.5">
-            <p className="text-xs font-medium flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-              <Copyright size={12} /> 2024 Dev Name
-            </p>
-            <p className="text-[10px] text-neutral-400 dark:text-neutral-600">
-              Built with Next.js & Tailwind
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white text-[10px] font-bold">
+                LS
+              </div>
+              <span>Leo Satria</span>
+            </div>
+            <p className="text-[10px] text-neutral-500 dark:text-neutral-500 flex items-center gap-1">
+              <Copyright size={10} /> 2024 • Built with Next.js
             </p>
           </div>
         )}

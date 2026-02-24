@@ -79,7 +79,7 @@ export default function AchievementPage() {
   }, [searchQuery, selectedCategories]);
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto flex flex-col gap-6 md:gap-8 p-4 md:p-6 lg:p-8 lg:py-12 transition-colors duration-200">
+    <div className="min-h-screen max-w-9xl mx-auto flex flex-col gap-6 md:gap-8 p-4 md:p-6 lg:p-8 lg:py-12 transition-colors duration-200">
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
