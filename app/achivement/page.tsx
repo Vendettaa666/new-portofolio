@@ -242,7 +242,7 @@ export default function AchievementPage() {
                   onClick={() => setSelectedCert(cert)}
                 >
                   <GlareHover width="100%" height="100%" background="transparent" borderRadius="1.5rem">
-                    <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group">
+                    <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-300 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group">
 
                       <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-neutral-900 flex-shrink-0">
                         <img

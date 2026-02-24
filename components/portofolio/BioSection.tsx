@@ -28,8 +28,7 @@ export default function BioSection() {
         <hr className="mb-6 border-t border-dashed border-neutral-300 dark:border-neutral-700" />
         <div className="space-y-4 text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
           <p>
-            Saya Leo Satria Anugrah, seorang Software Engineer yang berdedikasi untuk membangun solusi digital yang berdampak. 
-            Saya spesialis dalam pengembangan platform web dan aplikasi menggunakan tech stack modern, termasuk Next.js, TypeScript, dan ekosistem React.
+            Saya adalah siswa di SMKN 1 Lumajang. Saya berusia 18 tahun dan memilih jurusan Rekayasa Perangkat Lunak karena sesuai dengan minat saya untuk menjadi full-stack programmer. Saat ini saya sedang magang di NUSANTARATAMA.COM
           </p>
           <p>
             Fokus utama saya adalah merancang arsitektur perangkat lunak yang tidak hanya berfungsi tetapi juga terstruktur dengan baik, 

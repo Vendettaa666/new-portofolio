@@ -292,8 +292,8 @@ export default function ContactPage() {
                 : "bg-primary hover:bg-primary/90 active:scale-95"
               }
               text-white
-              shadow-lg shadow-primary/25
-              hover:shadow-xl hover:shadow-primary/30`}
+               shadow-primary/25
+              hover:shadow-primary/30`}
           >
             {isSubmitting ? (
               <>

@@ -255,7 +255,7 @@ export default function ProjectsPage() {
               className="w-full h-full"
             >
               <div className="relative w-full h-full overflow-hidden rounded-[1.5rem]">
-                <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-300">
+                <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-300 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-300">
                   {/* IMAGE CONTAINER */}
                   <div className="relative h-52 overflow-hidden bg-neutral-900">
                     <img
