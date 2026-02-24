@@ -8,20 +8,19 @@ import GlareHover from "@/components/ui/GlareHover";
 export const listSertifikat = [
   {
     id: 1,
-    kode: "196/EKS/HCLGA/ATI/VIII/2025",
+    kode: "002/NT/PKL/XII/2025",
     gambar: "/assets/sertifikat/sertifikat-1.jpg",
-    judul: "Backend Developer Internship - Parto.id",
-    penerbit: "Affan Technology Indonesia",
+    judul: "Praktek Kerja Lapangan",
+    penerbit: "CV NUSANTARA TAMA",
     tanggal: "JULY 2025",
     link: "#",
-    tipe: ["Profesional"],
+    tipe: ["Pendidikan", "Profesional"],
     kategori: ["Backend"],
   },
 ];
 
 const categories = [
-  "Frontend", "Backend", "Mobile", "Cloud Computing",
-  "General", "Freelance", "Development Tools", "Algorithm", "AI", "Organization",
+  "Frontend", "Backend", "Fullstack", "Mobile", "Cloud Computing", "Pendidikan", "Profesional",
 ];
 
 export default function AchievementPage() {
@@ -117,7 +116,7 @@ export default function AchievementPage() {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300 transition-colors"
               >
                 <X size={16} />
               </button>
@@ -329,7 +328,7 @@ export default function AchievementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-5xl bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+              className="relative w-full max-w-5xl bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
             >
               <button
                 onClick={() => setSelectedCert(null)}
@@ -338,27 +337,27 @@ export default function AchievementPage() {
                 <X size={24} />
               </button>
               <div className="flex flex-col md:flex-row h-full max-h-[90vh] overflow-y-auto md:overflow-hidden">
-                <div className="flex-[2] bg-black flex items-center justify-center p-2 min-h-[300px]">
+                <div className="flex-[2] bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center p-2 min-h-[300px]">
                   <img
                     src={typeof selectedCert.gambar === "string" ? selectedCert.gambar : (selectedCert.gambar as any)?.src}
                     alt={selectedCert.judul}
                     className="max-h-full w-auto object-contain"
                   />
                 </div>
-                <div className="flex-1 p-6 md:p-8 flex flex-col justify-between bg-neutral-950">
+                <div className="flex-1 p-6 md:p-8 flex flex-col justify-between bg-white dark:bg-neutral-900">
                   <div>
                     <div className="flex items-center gap-2 text-blue-400 mb-4">
                       <ShieldCheck size={20} />
                       <span className="text-xs font-bold uppercase tracking-widest">Verified Achievement</span>
                     </div>
                     <p className="text-neutral-500 text-sm mb-2">{selectedCert.kode}</p>
-                    <h2 className="text-2xl font-bold text-white mb-4">{selectedCert.judul}</h2>
+                    <h2 className="text-2xl font-bold text-neutral-500 dark:text-white mb-4">{selectedCert.judul}</h2>
                     <div className="space-y-4">
-                      <div className="flex items-center gap-3 text-neutral-400">
+                      <div className="flex items-center gap-3 text-neutral-400 dark:text-neutral-300">
                         <Award className="text-blue-500" size={18} />
                         <span>Penerbit: <strong>{selectedCert.penerbit}</strong></span>
                       </div>
-                      <div className="flex items-center gap-3 text-neutral-400">
+                      <div className="flex items-center gap-3 text-neutral-400 dark:text-neutral-300">
                         <Calendar className="text-neutral-500" size={18} />
                         <span>Diterbitkan: {selectedCert.tanggal}</span>
                       </div>
@@ -369,7 +368,7 @@ export default function AchievementPage() {
                       href={selectedCert.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-semibold transition-all shadow-lg shadow-blue-600/20"
+                      className="flex items-center justify-center gap-2 w-full bg-primary hover:bg-primary/80 text-white py-4 rounded-xl font-semibold transition-all shadow-lg shadow-primary/20"
                     >
                       <ExternalLink size={18} />
                       Verifikasi Keaslian
