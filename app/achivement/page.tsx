@@ -149,7 +149,7 @@ export default function AchievementPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute top-full mt-2 left-0 w-full bg-white dark:bg-[#111] border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-xl z-20 overflow-hidden"
+                  className="absolute top-full mt-2 left-0 w-full bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-xl z-20 overflow-hidden"
                 >
                   {/* Search inside dropdown */}
                   <div className="p-3 border-b border-neutral-200 dark:border-neutral-800 relative">
@@ -242,7 +242,7 @@ export default function AchievementPage() {
                   onClick={() => setSelectedCert(cert)}
                 >
                   <GlareHover width="100%" height="100%" background="transparent" borderRadius="1.5rem">
-                    <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-300 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group">
+                    <div className="relative h-full flex flex-col bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-[1.5rem] overflow-hidden group">
 
                       <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-neutral-900 flex-shrink-0">
                         <img
@@ -328,7 +328,7 @@ export default function AchievementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-5xl bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+              className="relative w-full max-w-5xl bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-2xl border border-neutral-200 dark:border-neutral-700"
             >
               <button
                 onClick={() => setSelectedCert(null)}
@@ -344,7 +344,7 @@ export default function AchievementPage() {
                     className="max-h-full w-auto object-contain"
                   />
                 </div>
-                <div className="flex-1 p-6 md:p-8 flex flex-col justify-between bg-white dark:bg-neutral-900">
+                <div className="flex-1 p-6 md:p-8 flex flex-col justify-between bg-white dark:bg-neutral-800">
                   <div>
                     <div className="flex items-center gap-2 text-blue-400 mb-4">
                       <ShieldCheck size={20} />

@@ -80,8 +80,8 @@ function SidebarContent({
         className={`flex flex-col items-center transition-all duration-300 ease-in-out ${!mobile && isCollapsed
           ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
           : mobile
-            ? "mx-3 mt-16 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
-            : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900/40 dark:to-neutral-900/20 border border-neutral-200 dark:border-neutral-800"
+            ? "mx-3 mt-16 mb-6 p-5 rounded-2xl shadow-sm bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700"
+            : "mx-3 mt-4 mb-6 p-5 rounded-2xl shadow-sm bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700"
           }`}
       >
         {/* Profile Image */}
@@ -100,7 +100,7 @@ function SidebarContent({
             />
           </div>
           {(mobile || !isCollapsed) && (
-            <div className="absolute bottom-0 right-0 bg-white dark:bg-neutral-900 p-1 rounded-full shadow-md">
+            <div className="absolute bottom-0 right-0 bg-white dark:bg-neutral-800 p-1 rounded-full shadow-md">
               <div className="flex items-center gap-1 bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
                 <span className="text-[9px] font-medium text-primary leading-none">
@@ -222,8 +222,8 @@ export default function Sidebar({
       {/* ── DESKTOP SIDEBAR ── */}
       <aside
         className={`hidden md:flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out
-          bg-white dark:bg-[#0a0a0a]
-          border-r border-neutral-200 dark:border-neutral-800
+          bg-white dark:bg-neutral-800
+          border-r border-neutral-200 dark:border-neutral-700
           ${isCollapsed ? "w-20" : "w-72"}`}
       >
         <SidebarContent
@@ -247,8 +247,8 @@ export default function Sidebar({
       {/* ── MOBILE DRAWER (slide from left) ── */}
       <aside
         className={`fixed top-0 left-0 h-full w-72 z-50 flex flex-col
-          bg-white dark:bg-[#0a0a0a]
-          border-r border-neutral-200 dark:border-neutral-800
+          bg-white dark:bg-neutral-800
+          border-r border-neutral-200 dark:border-neutral-700
           transition-transform duration-300 ease-in-out
           md:hidden
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}`}

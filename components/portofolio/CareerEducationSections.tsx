@@ -24,7 +24,7 @@ export function CareerSection() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40"
+      className="rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50"
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
@@ -35,8 +35,8 @@ export function CareerSection() {
       
       <div className="flex flex-col gap-4">
         {careers.length === 0 ? (
-          <div className="w-full rounded-2xl border-2 border-dashed border-neutral-200 dark:border-neutral-800 p-8 flex flex-col items-center justify-center text-center bg-white/50 dark:bg-[#121212]/50">
-            <div className="h-12 w-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-3">
+          <div className="w-full rounded-2xl border-2 border-dashed border-neutral-200 dark:border-neutral-700 p-8 flex flex-col items-center justify-center text-center bg-neutral-50 dark:bg-neutral-800/30">
+            <div className="h-12 w-12 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center mb-3">
               <Briefcase className="h-6 w-6 text-neutral-400 dark:text-neutral-500" />
             </div>
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
@@ -62,7 +62,7 @@ export function EducationSection() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40"
+      className="rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50"
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-500">

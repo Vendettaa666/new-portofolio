@@ -17,9 +17,9 @@ export default function ExperienceAccordion({ item, index }: { item: any; index:
     >
       <SpotlightCard 
         spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
-        className="w-full group flex flex-col sm:flex-row gap-4 sm:gap-5 rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 !bg-neutral-50 dark:!bg-[#121212] border !border-neutral-200 hover:!border-neutral-300 dark:!border-neutral-800 dark:hover:!border-neutral-700" 
+        className="w-full group flex flex-col sm:flex-row gap-4 sm:gap-5 rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 !bg-white dark:!bg-neutral-800/50 border !border-neutral-200 hover:!border-neutral-300 dark:!border-neutral-700 dark:hover:!border-neutral-600" 
       > 
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl !bg-white dark:!bg-neutral-900 border !border-neutral-200 dark:!border-neutral-800 shadow-sm z-10 relative transition-all duration-300 overflow-hidden group-hover:!border-neutral-300 dark:group-hover:!border-neutral-700">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl !bg-white dark:!bg-neutral-800 border !border-neutral-200 dark:!border-neutral-700 shadow-sm z-10 relative transition-all duration-300 overflow-hidden group-hover:!border-neutral-300 dark:group-hover:!border-neutral-600">
           {typeof item.logoIcon === "string" ? (
             <img 
               src={item.logoIcon} 

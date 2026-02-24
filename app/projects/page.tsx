@@ -156,8 +156,8 @@ export default function ProjectsPage() {
         {/* Stats Bar - Horizontal Layout */}
         <div
           className="flex flex-wrap items-center gap-6 p-6 rounded-2xl border transition-all duration-200
-          bg-gradient-to-r from-neutral-50 via-white to-neutral-50 dark:from-neutral-900/40 dark:via-neutral-900/20 dark:to-neutral-900/40
-          border-neutral-200 dark:border-neutral-800
+          bg-white dark:bg-neutral-800/50
+          border-neutral-200 dark:border-neutral-700
           shadow-sm hover:shadow-md"
         >
           {/* Total Projects */}
@@ -255,7 +255,7 @@ export default function ProjectsPage() {
               className="w-full h-full"
             >
               <div className="relative w-full h-full overflow-hidden rounded-[1.5rem]">
-                <div className="relative h-full flex flex-col bg-white dark:bg-[#111] border border-neutral-300 dark:border-neutral-800 rounded-[1.5rem] overflow-hidden group hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-300">
+                <div className="relative h-full flex flex-col bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-[1.5rem] overflow-hidden group hover:border-neutral-300 dark:hover:border-neutral-600 transition-all duration-300">
                   {/* IMAGE CONTAINER */}
                   <div className="relative h-52 overflow-hidden bg-neutral-900">
                     <img

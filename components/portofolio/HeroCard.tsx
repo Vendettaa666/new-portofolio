@@ -49,7 +49,7 @@ export default function HeroCard() {
       <div className="lg:col-span-3 flex flex-col h-full gap-4 md:gap-6">
         <HeaderStatus />
 
-        <div className="relative flex-1 overflow-hidden rounded-3xl shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40">
+        <div className="relative flex-1 overflow-hidden rounded-3xl shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50">
           {/* Subtle dot pattern */}
           <div
             className="absolute inset-0 opacity-[0.08] dark:opacity-[0.15]"
@@ -135,7 +135,7 @@ export default function HeroCard() {
                 }}
                 className="absolute inset-4 flex items-center justify-center"
               >
-                <div className="w-full rounded-2xl p-5 shadow-2xl transition-all duration-200 border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-[#0a0a0a]">
+                <div className="w-full rounded-2xl p-5 shadow-2xl transition-all duration-200 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
                   <div className="mb-4 flex gap-2">
                     <div className="h-3 w-3 rounded-full bg-red-500/80" />
                     <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
@@ -178,7 +178,7 @@ export default function HeroCard() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute -right-3 -top-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900"
+                className="absolute -right-3 -top-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800"
               >
                 <Sparkles className="h-5 w-5 text-yellow-400" />
               </motion.div>
@@ -193,7 +193,7 @@ export default function HeroCard() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute -bottom-3 -left-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900"
+                className="absolute -bottom-3 -left-3 flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800"
               >
                 <Cpu className="h-5 w-5 text-blue-400" />
               </motion.div>
@@ -210,7 +210,7 @@ export default function HeroCard() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.1 * (i + 1) }}
-            className="flex flex-1 flex-col justify-center gap-3 rounded-3xl p-5 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 hover:border-neutral-300 dark:hover:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800/40 hover:shadow-md"
+            className="flex flex-1 flex-col justify-center gap-3 rounded-3xl p-5 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 hover:border-neutral-300 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:shadow-md"
           >
             {/* Container Icon & Badge */}
             <div className="flex items-center justify-between">

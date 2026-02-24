@@ -184,8 +184,8 @@ export default function ContactPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
         className="p-8 rounded-2xl border transition-all duration-200
-          bg-white dark:bg-neutral-900/40
-          border-neutral-200 dark:border-neutral-800"
+          bg-white dark:bg-neutral-800/50
+          border-neutral-200 dark:border-neutral-700"
       >
         <h2 className="text-2xl font-bold mb-6 text-neutral-900 dark:text-white">
           Send Me a Message

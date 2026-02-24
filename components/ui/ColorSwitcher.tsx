@@ -72,7 +72,7 @@ export default function ColorSwitcher() {
         // PERBAIKAN: Mengganti 'flex' menjadi 'grid grid-cols-3' agar menyusun ke bawah
         className={`absolute top-full mt-2 left-0 sm:left-auto sm:right-0 z-[100] p-3 
         grid grid-cols-3 gap-2.5 w-max
-        bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 
+        bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 
         rounded-xl shadow-xl backdrop-blur-md transition-all duration-200 origin-top-left sm:origin-top-right
         ${isOpen ? "opacity-100 scale-100 visible pointer-events-auto" : "opacity-0 scale-95 invisible pointer-events-none"}`}
       >

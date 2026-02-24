@@ -32,7 +32,7 @@ export default function HeaderStatus() {
   }, []);
 
   return (
-    <div className="font-jetbrains w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs font-mono text-slate-400 tracking-wider ">
+    <div className="font-jetbrains w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs font-mono text-neutral-600 dark:text-neutral-400 tracking-wider ">
       
       {/* BAGIAN KIRI: Workspace & Indikator Online */}
       <div className="flex items-center gap-2 uppercase">
@@ -48,7 +48,7 @@ export default function HeaderStatus() {
       <div className="flex items-center gap-4 uppercase">
         <span>Lumajang, ID</span>
         {/* Titik pemisah kecil */}
-        <span className="w-1 h-1 rounded-full bg-slate-600"></span>
+        <span className="w-1 h-1 rounded-full bg-neutral-400 dark:bg-neutral-600"></span>
         {/* Mencegah error hydration dari Next.js saat merender jam di server vs client */}
         <span>{mounted ? time : "--:-- GMT+7"}</span>
       </div>
