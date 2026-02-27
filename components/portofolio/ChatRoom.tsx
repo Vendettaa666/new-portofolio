@@ -24,6 +24,11 @@ export default function ChatRoom() {
 
   // Check auth and fetch messages
   useEffect(() => {
+    // Clean up URL hash after OAuth redirect
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+
     // Check current session
     const checkUser = async () => {
       try {
@@ -121,7 +126,7 @@ export default function ChatRoom() {
       await supabase.auth.signInWithOAuth({
         provider: "github",
         options: { 
-          redirectTo: `${window.location.origin}/chat`
+          redirectTo: `${window.location.origin}/auth/callback`
         }
       });
     } catch (error) {
