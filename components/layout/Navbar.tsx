@@ -41,7 +41,13 @@ export default function Navbar({ openMobile }: NavbarProps) {
         <div className="flex items-center gap-2 flex-wrap justify-end">
           <ColorSwitcher />
           <ThemeToggle />
-          <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600"></div>
+          <div className="w-8 h-8 rounded-full border border-neutral-300 dark:border-neutral-600">
+            <img
+              src="/assets/profile.png"
+              alt="Leo Satria Anugrah"
+              className="w-full h-full object-cover rounded-full"
+            />
+          </div>
         </div>
       </div>
     </nav>
