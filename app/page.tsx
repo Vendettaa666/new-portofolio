@@ -1,6 +1,7 @@
 // app/page.tsx (atau file pages utama kamu)
 import HeroCard from "@/components/portofolio/HeroCard";
 import ToolStack from "@/components/portofolio/ToolsStack";
+import SpotifyDashboard from "@/components/portofolio/SpotifyDashboard";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       {/* Semua tampilan grid, status, info profil, dan project sudah masuk ke sini */}
       <HeroCard />
       <ToolStack />
+      <SpotifyDashboard />
     </div>
   );
 }
