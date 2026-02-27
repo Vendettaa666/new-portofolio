@@ -32,10 +32,19 @@ export default function ChatRoom() {
     // Check current session
     const checkUser = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user || null);
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('Session check:', { session, error });
+        
+        if (session?.user) {
+          console.log('User logged in:', session.user.email);
+          setUser(session.user);
+        } else {
+          console.log('No active session');
+          setUser(null);
+        }
       } catch (error) {
         console.error('Error checking user:', error);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -43,7 +52,8 @@ export default function ChatRoom() {
     checkUser();
 
     // Listen to auth changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session?.user?.email);
       setUser(session?.user || null);
     });
 
