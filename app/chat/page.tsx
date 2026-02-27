@@ -9,15 +9,15 @@ export default function ChatPage() {
   const [messageCount, setMessageCount] = useState(0);
 
   return (
-    <div className="min-h-screen max-w-9xl transition-colors duration-200">
-      <main className="max-w-9xl mx-auto p-4 md:p-6 lg:p-8">
+    <div className="h-screen flex flex-col max-w-9xl transition-colors duration-200 overflow-hidden">
+      <main className="flex flex-col h-full max-w-9xl mx-auto p-4 md:p-6 lg:p-8">
         
-        {/* Header Ruang Obrolan */}
+        {/* Header Ruang Obrolan - Fixed/Sticky */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8 space-y-4"
+          className="mb-6 space-y-4 flex-shrink-0"
         >
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20 shadow-lg">
@@ -94,12 +94,12 @@ export default function ChatPage() {
           </div>
         </motion.div>
 
-        {/* Komponen Utama Chat */}
+        {/* Komponen Utama Chat - Scrollable */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="relative"
+          className="relative flex-1 min-h-0"
         >
           <ChatRoom onMessageCountChange={setMessageCount} />
         </motion.section>

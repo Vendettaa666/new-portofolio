@@ -191,8 +191,8 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
 
   if (loading) {
     return (
-      <div className="flex flex-col rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden">
-        <div className="flex items-center justify-center h-[600px]">
+      <div className="flex flex-col h-full rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden">
+        <div className="flex items-center justify-center h-full">
           <div className="flex flex-col items-center gap-3">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
             <p className="text-sm text-neutral-600 dark:text-neutral-400">Memuat chat...</p>
@@ -203,7 +203,7 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
   }
 
   return (
-    <div className="flex flex-col rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden backdrop-blur-sm">
+    <div className="flex flex-col h-full rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden backdrop-blur-sm">
       
       {/* Header with user info */}
       {user && (
@@ -242,7 +242,7 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
       {/* Messages area */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto space-y-4 p-6 min-h-[500px] max-h-[600px] bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900/30 dark:to-neutral-800/50 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 dark:hover:scrollbar-thumb-neutral-600"
+        className="flex-1 overflow-y-auto space-y-4 p-6 bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900/30 dark:to-neutral-800/50 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 dark:hover:scrollbar-thumb-neutral-600"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-12">
