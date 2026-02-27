@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import ChatBubble from "@/components/ui/ChatBubble";
 import ChatInput from "@/components/ui/ChatInput";
 import { supabase } from "@/lib/supabase";
-import { FaGithub } from "react-icons/fa";
+// Ubah menjadi:
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import { LogOut, Loader2 } from "lucide-react";
 
 interface Message {
@@ -155,6 +156,19 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { 
+          redirectTo: window.location.href 
+        }
+      });
+    } catch (error) {
+      console.error('Error logging in with Google:', error);
+    }
+  };
+
   // Logout
   const handleLogout = async () => {
     try {
@@ -287,13 +301,23 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
               Masuk dengan akun GitHub Anda untuk mulai mengirim pesan dan bergabung dalam percakapan real-time
             </p>
           </div>
-          <button 
-            onClick={handleLogin}
-            className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-neutral-900 to-neutral-800 dark:from-white dark:to-neutral-100 text-white dark:text-neutral-900 font-bold rounded-xl hover:opacity-90 transition-all shadow-xl hover:shadow-2xl active:scale-95 border-2 border-neutral-800 dark:border-neutral-200"
-          >
-            <FaGithub size={22} />
-            Login dengan GitHub
-          </button>
+          {/* HAPUS tombol GitHub lama kamu, lalu GANTI dengan kode ini agar jadi 2 tombol sejajar */}
+          <div className="flex flex-col sm:flex-row w-full max-w-sm gap-4">
+            <button 
+              onClick={handleLogin}
+              className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold rounded-xl hover:opacity-90 transition-all shadow-xl active:scale-95"
+            >
+              <FaGithub size={22} />
+              GitHub
+            </button>
+            <button 
+              onClick={handleGoogleLogin}
+              className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white border-2 border-neutral-200 dark:border-neutral-700 font-bold rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all shadow-xl active:scale-95"
+            >
+              <FaGoogle size={22} className="text-red-500" />
+              Google
+            </button>
+          </div>
         </div>
       )}
     </div>
