@@ -4,9 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import ChatBubble from "@/components/ui/ChatBubble";
 import ChatInput from "@/components/ui/ChatInput";
 import { supabase } from "@/lib/supabase";
-// Ubah menjadi:
 import { FaGithub, FaGoogle } from "react-icons/fa";
-import { LogOut, Loader2 } from "lucide-react";
+import { LogOut, Loader2, MessageSquare } from "lucide-react";
 
 interface Message {
   id: string;
@@ -38,24 +37,23 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
   useEffect(() => {
     // Clean up URL hash after OAuth redirect
     if (window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname);
+      window.history.replaceState(null, "", window.location.pathname);
     }
 
     // Check current session
     const checkUser = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        console.log('Session check:', { session, error });
-        
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
         if (session?.user) {
-          console.log('User logged in:', session.user.email);
           setUser(session.user);
         } else {
-          console.log('No active session');
           setUser(null);
         }
       } catch (error) {
-        console.error('Error checking user:', error);
+        console.error("Error checking user:", error);
         setUser(null);
       } finally {
         setLoading(false);
@@ -64,10 +62,11 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
     checkUser();
 
     // Listen to auth changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event, session?.user?.email);
-      setUser(session?.user || null);
-    });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user || null);
+      }
+    );
 
     // Fetch messages
     const fetchMessages = async () => {
@@ -84,20 +83,20 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
             id: msg.id,
             avatar: msg.avatar_url,
             name: msg.username,
-            time: new Date(msg.created_at).toLocaleString('id-ID', { 
-              day: '2-digit', 
-              month: '2-digit', 
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
+            time: new Date(msg.created_at).toLocaleString("id-ID", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
             }),
             message: msg.content,
-            created_at: msg.created_at
+            created_at: msg.created_at,
           }));
           setMessages(formattedMessages);
         }
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        console.error("Error fetching messages:", error);
       }
     };
     fetchMessages();
@@ -114,15 +113,15 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
             id: newMsg.id,
             avatar: newMsg.avatar_url,
             name: newMsg.username,
-            time: new Date(newMsg.created_at).toLocaleString('id-ID', { 
-              day: '2-digit', 
-              month: '2-digit', 
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
+            time: new Date(newMsg.created_at).toLocaleString("id-ID", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
             }),
             message: newMsg.content,
-            created_at: newMsg.created_at
+            created_at: newMsg.created_at,
           };
           setMessages((prev) => [...prev, formattedMsg]);
         }
@@ -147,12 +146,12 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
     try {
       await supabase.auth.signInWithOAuth({
         provider: "github",
-        options: { 
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
     } catch (error) {
-      console.error('Error logging in:', error);
+      console.error("Error logging in:", error);
     }
   };
 
@@ -160,12 +159,12 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
     try {
       await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { 
-          redirectTo: window.location.href 
-        }
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
     } catch (error) {
-      console.error('Error logging in with Google:', error);
+      console.error("Error logging in with Google:", error);
     }
   };
 
@@ -174,7 +173,7 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
     try {
       await supabase.auth.signOut();
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error("Error logging out:", error);
     }
   };
 
@@ -183,33 +182,39 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
     if (!user || !text.trim()) return;
 
     try {
-      const displayName = user.user_metadata?.full_name || 
-                         user.user_metadata?.user_name || 
-                         user.email?.split('@')[0] || 
-                         'Anonymous';
-      const avatarUrl = user.user_metadata?.avatar_url || 
-                       `https://api.dicebear.com/7.x/avataaars/svg?seed=${displayName}`;
+      const displayName =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.user_name ||
+        user.email?.split("@")[0] ||
+        "Anonymous";
+      const avatarUrl =
+        user.user_metadata?.avatar_url ||
+        `https://api.dicebear.com/7.x/avataaars/svg?seed=${displayName}`;
 
-      const { error } = await supabase.from("messages").insert([{
-        username: displayName,
-        avatar_url: avatarUrl,
-        content: text,
-        user_id: user.id
-      }]);
+      const { error } = await supabase.from("messages").insert([
+        {
+          username: displayName,
+          avatar_url: avatarUrl,
+          content: text,
+          user_id: user.id,
+        },
+      ]);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
     }
   };
 
   if (loading) {
     return (
-      <div className="flex flex-col h-full rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden">
-        <div className="flex items-center justify-center h-full">
+      <div className="flex flex-col w-full h-full rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden">
+        <div className="flex items-center justify-center h-full py-20">
           <div className="flex flex-col items-center gap-3">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">Memuat chat...</p>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              Memuat chat...
+            </p>
           </div>
         </div>
       </div>
@@ -217,58 +222,62 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
   }
 
   return (
-    <div className="flex flex-col h-full rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden backdrop-blur-sm">
-      
+    <div className="flex flex-col w-full h-full rounded-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 shadow-xl overflow-hidden backdrop-blur-sm">
+
       {/* Header with user info */}
       {user && (
-        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 dark:from-primary/20 dark:via-primary/10 dark:to-primary/20 py-4 px-6 flex justify-between items-center border-b-2 border-neutral-200 dark:border-neutral-700">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-10 h-10 rounded-xl overflow-hidden border-2 border-white dark:border-neutral-600 shadow-md">
-                <img 
-                  src={user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} 
-                  alt="Avatar" 
+        <div className="flex-shrink-0 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 dark:from-primary/20 dark:via-primary/10 dark:to-primary/20 py-3 px-4 md:py-4 md:px-6 flex justify-between items-center border-b-2 border-neutral-200 dark:border-neutral-700">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <div className="relative flex-shrink-0">
+              <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl overflow-hidden border-2 border-white dark:border-neutral-600 shadow-md">
+                <img
+                  src={
+                    user.user_metadata?.avatar_url ||
+                    `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`
+                  }
+                  alt="Avatar"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-neutral-800 rounded-full"></div>
+              <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-neutral-800 rounded-full"></div>
             </div>
-            <div>
-              <p className="text-sm font-bold text-neutral-900 dark:text-white">
-                {user.user_metadata?.full_name || user.user_metadata?.user_name || user.email?.split('@')[0]}
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-neutral-900 dark:text-white truncate max-w-[150px] sm:max-w-xs">
+                {user.user_metadata?.full_name ||
+                  user.user_metadata?.user_name ||
+                  user.email?.split("@")[0]}
               </p>
               <p className="text-xs text-neutral-600 dark:text-neutral-400 flex items-center gap-1">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                Sedang Online
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse flex-shrink-0"></span>
+                <span className="hidden sm:inline">Sedang Online</span>
+                <span className="sm:hidden">Online</span>
               </p>
             </div>
           </div>
-          <button 
+          <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all border border-red-200 dark:border-red-900/50 hover:border-red-300 dark:hover:border-red-800"
+            className="flex-shrink-0 flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all border border-red-200 dark:border-red-900/50 hover:border-red-300 dark:hover:border-red-800 ml-2"
           >
             <LogOut size={14} />
-            Keluar
+            <span className="hidden sm:inline">Keluar</span>
           </button>
         </div>
       )}
 
       {/* Messages area */}
-      <div 
+      <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto space-y-4 p-6 bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900/30 dark:to-neutral-800/50 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 dark:hover:scrollbar-thumb-neutral-600"
+        className="flex-1 overflow-y-auto space-y-3 md:space-y-4 p-4 md:p-6 bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900/30 dark:to-neutral-800/50 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 dark:hover:scrollbar-thumb-neutral-600"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-12">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 flex items-center justify-center mb-4 border-2 border-primary/20 dark:border-primary/30">
-              <svg className="w-10 h-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 flex items-center justify-center mb-4 border-2 border-primary/20 dark:border-primary/30">
+              <MessageSquare className="w-8 h-8 md:w-10 md:h-10 text-primary" />
             </div>
-            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+            <h3 className="text-lg md:text-xl font-bold text-neutral-900 dark:text-white mb-2">
               Belum ada pesan
             </h3>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-sm">
+            <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 max-w-xs md:max-w-sm">
               Jadilah yang pertama untuk memulai percakapan! Kirim pesan dan mulai diskusi.
             </p>
           </div>
@@ -287,34 +296,34 @@ export default function ChatRoom({ onMessageCountChange }: ChatRoomProps) {
 
       {/* Input area or login prompt */}
       {user ? (
-        <ChatInput onSendMessage={handleNewMessage} />
+        <div className="flex-shrink-0">
+          <ChatInput onSendMessage={handleNewMessage} />
+        </div>
       ) : (
-        <div className="p-8 bg-gradient-to-br from-neutral-50 via-white to-neutral-50 dark:from-neutral-900/50 dark:via-neutral-800/50 dark:to-neutral-900/50 border-t-2 border-neutral-200 dark:border-neutral-700 flex flex-col items-center justify-center gap-6">
+        <div className="flex-shrink-0 p-6 md:p-8 bg-gradient-to-br from-neutral-50 via-white to-neutral-50 dark:from-neutral-900/50 dark:via-neutral-800/50 dark:to-neutral-900/50 border-t-2 border-neutral-200 dark:border-neutral-700 flex flex-col items-center justify-center gap-5 md:gap-6">
           <div className="text-center max-w-md">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 flex items-center justify-center border-2 border-primary/20 dark:border-primary/30">
-              <FaGithub className="w-8 h-8 text-primary" />
-            </div>
-            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-3">
+            
+            <h3 className="text-lg md:text-xl font-bold text-neutral-900 dark:text-white mb-2">
               Login untuk bergabung
             </h3>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              Masuk dengan akun GitHub Anda untuk mulai mengirim pesan dan bergabung dalam percakapan real-time
+            <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Masuk dengan akun GitHub atau Google untuk mulai mengirim pesan dan bergabung dalam percakapan real-time
             </p>
           </div>
-          {/* HAPUS tombol GitHub lama kamu, lalu GANTI dengan kode ini agar jadi 2 tombol sejajar */}
-          <div className="flex flex-col sm:flex-row w-full max-w-sm gap-4">
-            <button 
+
+          <div className="flex flex-col sm:flex-row w-full max-w-sm gap-3">
+            <button
               onClick={handleLogin}
-              className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold rounded-xl hover:opacity-90 transition-all shadow-xl active:scale-95"
+              className="flex-1 flex items-center justify-center gap-2.5 px-5 py-3.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold rounded-xl hover:opacity-90 transition-all shadow-lg active:scale-95 text-sm"
             >
-              <FaGithub size={22} />
+              <FaGithub size={20} />
               GitHub
             </button>
-            <button 
+            <button
               onClick={handleGoogleLogin}
-              className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white border-2 border-neutral-200 dark:border-neutral-700 font-bold rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all shadow-xl active:scale-95"
+              className="flex-1 flex items-center justify-center gap-2.5 px-5 py-3.5 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white border-2 border-neutral-200 dark:border-neutral-700 font-bold rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all shadow-lg active:scale-95 text-sm"
             >
-              <FaGoogle size={22} className="text-red-500" />
+              <FaGoogle size={20} className="text-red-500" />
               Google
             </button>
           </div>

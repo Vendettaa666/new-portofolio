@@ -9,10 +9,10 @@ export default function ChatPage() {
   const [messageCount, setMessageCount] = useState(0);
 
   return (
-    <div className="h-screen flex flex-col max-w-9xl transition-colors duration-200 overflow-hidden">
-      <main className="flex flex-col h-full max-w-9xl mx-auto p-4 md:p-6 lg:p-8">
-        
-        {/* Header Ruang Obrolan - Fixed/Sticky */}
+    <div className="min-h-screen w-full transition-colors duration-200">
+      <main className="w-full mx-auto p-4 md:p-6 lg:p-8 flex flex-col min-h-screen">
+
+        {/* Header Ruang Obrolan */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -32,15 +32,15 @@ export default function ChatPage() {
               </p>
             </div>
           </div>
-          
+
           <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
             Jangan ragu untuk berbagi pemikiran, saran, pertanyaan, atau apa pun! Semua pesan akan ditampilkan secara real-time dan tersimpan di database.
           </p>
 
-          {/* Stats Bar - Enhanced */}
+          {/* Stats Bar */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Total Messages */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
@@ -58,7 +58,7 @@ export default function ChatPage() {
             </motion.div>
 
             {/* Online Status */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
@@ -77,7 +77,7 @@ export default function ChatPage() {
             </motion.div>
 
             {/* Activity */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
@@ -94,12 +94,13 @@ export default function ChatPage() {
           </div>
         </motion.div>
 
-        {/* Komponen Utama Chat - Scrollable */}
+        {/* Komponen Utama Chat - Takes remaining height */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="relative flex-1 min-h-0"
+          className="flex-1 w-full"
+          style={{ minHeight: "500px", height: "calc(100vh - 320px)" }}
         >
           <ChatRoom onMessageCountChange={setMessageCount} />
         </motion.section>
