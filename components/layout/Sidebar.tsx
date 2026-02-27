@@ -87,10 +87,10 @@ function SidebarContent({
       >
         {/* Profile Card with Gradient Background */}
         {(mobile || !isCollapsed) && (
-          <div className="w-full relative overflow-hidden rounded-2xl p-6 shadow-lg bg-gradient-to-br from-primary/10 via-primary/5 to-transparent dark:from-primary/20 dark:via-primary/10 dark:to-transparent border border-primary/20 dark:border-primary/30">
+          <div className="w-full relative overflow-hidden rounded-2xl p-6">
             {/* Decorative Elements */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
+            {/* <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div> */}
             
             <div className="relative z-10 flex flex-col items-center">
               {/* Profile Image with Enhanced Styling */}
