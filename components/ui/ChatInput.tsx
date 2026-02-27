@@ -30,13 +30,6 @@ export default function ChatInput({ onSendMessage }: ChatInputProps) {
         />
 
         <button 
-          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
-          title="Emoji"
-        >
-          <Smile size={18} />
-        </button>
-
-        <button 
           onClick={handleSend}
           disabled={!text.trim()}
           className={`p-2.5 rounded-lg transition-all flex items-center justify-center ${
