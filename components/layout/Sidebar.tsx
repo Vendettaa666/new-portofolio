@@ -12,6 +12,7 @@ import {
   X,
   Trophy,
   MessageCircle,
+  Activity,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,6 +22,7 @@ const navItems = [
   { icon: User, label: "About", href: "/about" },
   { icon: Layers, label: "Projects", href: "/projects" },
   { icon: Trophy, label: "Achivement", href: "/achivement" },
+  { icon: Activity, label: "Dashboard", href: "/dashboard" },
   { icon: MessageCircle, label: "Chat", href: "/chat"},
   { icon: Mail, label: "Contact", href: "/contact" },
 ];
