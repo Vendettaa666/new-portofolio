@@ -83,7 +83,7 @@ function StatCard({
 }) {
   return (
     <Link href={href}>
-      <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+      <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 30%, transparent)"
         className="flex flex-col items-center justify-center p-6 bg-white dark:bg-neutral-800/50 border-2 border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-lg hover:shadow-xl hover:border-primary dark:hover:border-primary transition-all cursor-pointer"
       >
       {/* <div className="group p-6 bg-white dark:bg-neutral-800/50 border-2 border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-lg hover:shadow-xl hover:border-primary dark:hover:border-primary transition-all cursor-pointer"> */}

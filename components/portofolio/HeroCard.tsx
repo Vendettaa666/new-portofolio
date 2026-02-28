@@ -212,7 +212,7 @@ export default function HeroCard() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.1 * (i + 1) }}
                      >
-            <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+            <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 30%, transparent)"
                className="flex flex-1 flex-col justify-center gap-3 rounded-3xl p-5 shadow-sm transition-all duration-200 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 hover:border-neutral-300 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:shadow-md"
 
             >

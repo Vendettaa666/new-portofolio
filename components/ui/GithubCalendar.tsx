@@ -77,7 +77,7 @@ export default async function GithubCalendar() {
 // Komponen kecil untuk Card Statistik
 function StatCard({ title, value }: { title: string; value: string | number }) {
   return (
-    <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+    <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 30%, transparent)"
       className="flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800/50 dark:to-neutral-800/30 border-2 border-neutral-200 dark:border-neutral-700 shadow-md hover:shadow-lg transition-shadow"
     >
       <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">{title}</span>

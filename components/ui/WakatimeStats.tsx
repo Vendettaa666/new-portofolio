@@ -87,7 +87,7 @@ function StatCard({
 }) {
   return (
     // SpotlightCard dijadikan kontainer terluar agar efek mouse meng-cover seluruh area card
-    <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+    <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 30%, transparent)"
       className={`flex flex-col gap-1 rounded-2xl p-4 border transition-all duration-200 ${
         highlight
           ? "border-primary/30 bg-primary/5 dark:bg-primary/10 hover:border-primary/50"
@@ -186,7 +186,7 @@ export default async function WakatimeStats() {
 
         {/* ── All-time row ── */}
         <SpotlightCard
-          spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)" // Fallback color yang lebih aman
+          spotlightColor="color-mix(in srgb, var(--theme-primary) 30%, transparent)" // Fallback color yang lebih aman
           className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 hover:border-neutral-300 dark:border-neutral-700 dark:hover:border-neutral-600"
         >
           <div className="flex items-center gap-3">
@@ -204,7 +204,7 @@ export default async function WakatimeStats() {
 
         {/* ── Top Languages ── */}
         <SpotlightCard
-          spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+          spotlightColor="color-mix(in srgb, var(--theme-primary) 30%, transparent)"
           className="w-full flex flex-col gap-5 rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 hover:border-neutral-300 dark:border-neutral-700 dark:hover:border-neutral-600"
         >
           <div className="flex items-center justify-between">
