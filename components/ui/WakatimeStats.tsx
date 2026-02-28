@@ -1,8 +1,5 @@
 // components/portofolio/WakatimeStats.tsx
-//
-// ✅ Server Component — fetches data internally, no props needed.
-// Usage: just drop <WakatimeStats /> anywhere on a page.
-// Requires: WAKATIME_API_KEY in your .env.local
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 import { Clock, Activity, BarChart2, ShieldCheck } from "lucide-react";
 
@@ -36,11 +33,13 @@ async function getWakatimeData(): Promise<WakaTimeData | null> {
           Authorization: `Basic ${Buffer.from(apiKey).toString("base64")}`,
         },
         next: { revalidate: 3600 }, // ISR: revalidate every 1 hour
-      }
+      },
     );
 
     if (!res.ok) {
-      console.error(`[WakatimeStats] API error: ${res.status} ${res.statusText}`);
+      console.error(
+        `[WakatimeStats] API error: ${res.status} ${res.statusText}`,
+      );
       return null;
     }
 
@@ -53,17 +52,45 @@ async function getWakatimeData(): Promise<WakaTimeData | null> {
 
 // ─── Language color map ───────────────────────────────────────────────────────
 const LANG_META: Record<string, { bar: string; dot: string; label: string }> = {
-  TypeScript:  { bar: "bg-blue-500",    dot: "bg-blue-400",    label: "text-blue-400"    },
-  JavaScript:  { bar: "bg-yellow-400",  dot: "bg-yellow-400",  label: "text-yellow-400"  },
-  Python:      { bar: "bg-emerald-500", dot: "bg-emerald-400", label: "text-emerald-400" },
-  CSS:         { bar: "bg-purple-500",  dot: "bg-purple-400",  label: "text-purple-400"  },
-  JSON:        { bar: "bg-neutral-500", dot: "bg-neutral-400", label: "text-neutral-400" },
-  Kotlin:      { bar: "bg-violet-500",  dot: "bg-violet-400",  label: "text-violet-400"  },
-  Bash:        { bar: "bg-neutral-600", dot: "bg-neutral-500", label: "text-neutral-500" },
-  HTML:        { bar: "bg-orange-500",  dot: "bg-orange-400",  label: "text-orange-400"  },
-  Rust:        { bar: "bg-red-500",     dot: "bg-red-400",     label: "text-red-400"     },
-  Go:          { bar: "bg-cyan-500",    dot: "bg-cyan-400",    label: "text-cyan-400"    },
-  Default:     { bar: "bg-blue-500",    dot: "bg-blue-400",    label: "text-blue-400"    },
+  TypeScript: {
+    bar: "bg-blue-500",
+    dot: "bg-blue-400",
+    label: "text-blue-400",
+  },
+  JavaScript: {
+    bar: "bg-yellow-400",
+    dot: "bg-yellow-400",
+    label: "text-yellow-400",
+  },
+  Python: {
+    bar: "bg-emerald-500",
+    dot: "bg-emerald-400",
+    label: "text-emerald-400",
+  },
+  CSS: { bar: "bg-purple-500", dot: "bg-purple-400", label: "text-purple-400" },
+  JSON: {
+    bar: "bg-neutral-500",
+    dot: "bg-neutral-400",
+    label: "text-neutral-400",
+  },
+  Kotlin: {
+    bar: "bg-violet-500",
+    dot: "bg-violet-400",
+    label: "text-violet-400",
+  },
+  Bash: {
+    bar: "bg-neutral-600",
+    dot: "bg-neutral-500",
+    label: "text-neutral-500",
+  },
+  HTML: {
+    bar: "bg-orange-500",
+    dot: "bg-orange-400",
+    label: "text-orange-400",
+  },
+  Rust: { bar: "bg-red-500", dot: "bg-red-400", label: "text-red-400" },
+  Go: { bar: "bg-cyan-500", dot: "bg-cyan-400", label: "text-cyan-400" },
+  Default: { bar: "bg-blue-500", dot: "bg-blue-400", label: "text-blue-400" },
 };
 function getMeta(name: string) {
   return LANG_META[name] ?? LANG_META.Default;
@@ -87,37 +114,42 @@ function StatCard({
   highlight?: boolean;
 }) {
   return (
-    <div
-      className={`flex flex-col gap-1 rounded-2xl p-4 border transition-all duration-200 ${
-        highlight
-          ? "border-primary/30 bg-primary/5 dark:bg-primary/10 hover:border-primary/50"
-          : "border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 hover:border-neutral-300 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800"
-      }`}
+    <SpotlightCard
+      spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+      className="w-full group flex flex-col sm:flex-row gap-4 sm:gap-5 rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 bg-white! dark:bg-neutral-800/50! border border-neutral-200! hover:border-neutral-300! dark:border-neutral-700! dark:hover:border-neutral-600!"
     >
-      <p
-        className={`text-[10px] uppercase tracking-widest font-semibold ${
+      <div
+        className={`flex flex-col gap-1 rounded-2xl p-4 border transition-all duration-200 ${
           highlight
-            ? "text-primary/70"
-            : "text-neutral-500 dark:text-neutral-400"
+            ? "border-primary/30 bg-primary/5 dark:bg-primary/10 hover:border-primary/50"
+            : "border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 hover:border-neutral-300 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800"
         }`}
       >
-        {label}
-      </p>
-      <p
-        className={`text-sm font-bold font-mono leading-tight ${
-          highlight
-            ? "text-primary dark:text-white"
-            : "text-neutral-900 dark:text-white"
-        }`}
-      >
-        {value}
-      </p>
-      {sub && (
-        <p className="text-[11px] text-neutral-500 dark:text-neutral-500">
-          {sub}
+        <p
+          className={`text-[10px] uppercase tracking-widest font-semibold ${
+            highlight
+              ? "text-primary/70"
+              : "text-neutral-500 dark:text-neutral-400"
+          }`}
+        >
+          {label}
         </p>
-      )}
-    </div>
+        <p
+          className={`text-sm font-bold font-mono leading-tight ${
+            highlight
+              ? "text-primary dark:text-white"
+              : "text-neutral-900 dark:text-white"
+          }`}
+        >
+          {value}
+        </p>
+        {sub && (
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-500">
+            {sub}
+          </p>
+        )}
+      </div>
+    </SpotlightCard>
   );
 }
 
@@ -149,11 +181,7 @@ export default async function WakatimeStats() {
 
   return (
     <div className="relative overflow-hidden rounded-3xl shadow-sm border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 transition-all duration-200">
-      
-     
-
       <div className="relative p-6 md:p-8 flex flex-col gap-6">
-
         {/* ── Header ── */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -171,8 +199,6 @@ export default async function WakatimeStats() {
               </p>
             </div>
           </div>
-
-         
         </div>
 
         {/* ── 4 Stat Cards ── */}
@@ -182,15 +208,8 @@ export default async function WakatimeStats() {
             value={fmt(start, { month: "short", day: "numeric" })}
             sub={String(new Date(start).getFullYear())}
           />
-          <StatCard
-            label="Week Total"
-            value={human_readable_total}
-            highlight
-          />
-          <StatCard
-            label="Daily Avg"
-            value={human_readable_daily_average}
-          />
+          <StatCard label="Week Total" value={human_readable_total} />
+          <StatCard label="Daily Avg" value={human_readable_daily_average} />
           <StatCard
             label="Best Day"
             value={
@@ -203,7 +222,11 @@ export default async function WakatimeStats() {
         </div>
 
         {/* ── All-time row ── */}
-        <div className="flex items-center justify-between rounded-2xl px-5 py-3.5 border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition-all duration-200">
+        <SpotlightCard
+          spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+          className="w-full justify-between items-center group flex flex-col sm:flex-row gap-4 sm:gap-5 rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 bg-white! dark:bg-neutral-800/50! border border-neutral-200! hover:border-neutral-300! dark:border-neutral-700! dark:hover:border-neutral-600!"
+        >
+          {/* <div className="flex items-center justify-between rounded-2xl px-5 py-3.5 border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition-all duration-200"> */}
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-500/10">
               <Activity className="h-4 w-4 text-purple-400" />
@@ -215,11 +238,14 @@ export default async function WakatimeStats() {
           <span className="text-sm font-bold font-mono text-neutral-900 dark:text-white">
             1,045 hrs 28 mins
           </span>
-        </div>
+          {/* </div> */}
+        </SpotlightCard>
 
-        {/* ── Top Languages ── */}
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 p-5 transition-all duration-200">
-          <div className="flex items-center justify-between mb-4">
+        <SpotlightCard
+          spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+          className="w-full group flex flex-col gap-4 rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 bg-white! dark:bg-neutral-800/50! border border-neutral-200! hover:border-neutral-300! dark:border-neutral-700! dark:hover:border-neutral-600!"
+        >
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-green-500/10">
                 <BarChart2 className="h-3.5 w-3.5 text-green-400" />
@@ -238,8 +264,8 @@ export default async function WakatimeStats() {
               const m = getMeta(lang.name);
               return (
                 <div key={lang.name} className="flex items-center gap-3">
-                  <span className={`h-2 w-2 rounded-full flex-shrink-0 ${m.dot}`} />
-                  <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 w-20 flex-shrink-0">
+                  <span className={`h-2 w-2 rounded-full shrink-0 ${m.dot}`} />
+                  <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 w-20 shrink-0">
                     {lang.name}
                   </span>
                   <div className="flex-1 h-1.5 rounded-full bg-neutral-200 dark:bg-neutral-700 overflow-hidden">
@@ -250,7 +276,7 @@ export default async function WakatimeStats() {
                     />
                   </div>
                   <span
-                    className={`text-xs font-semibold font-mono w-8 text-right flex-shrink-0 ${m.label}`}
+                    className={`text-xs font-semibold font-mono w-8 text-right shrink-0 ${m.label}`}
                   >
                     {Math.round(lang.percent)}%
                   </span>
@@ -258,7 +284,7 @@ export default async function WakatimeStats() {
               );
             })}
           </div>
-        </div>
+        </SpotlightCard>
 
         {/* ── Footer ── */}
         <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-700/50">
@@ -270,7 +296,6 @@ export default async function WakatimeStats() {
             {fmt(end, { month: "short", day: "numeric", year: "numeric" })}
           </span>
         </div>
-
       </div>
     </div>
   );

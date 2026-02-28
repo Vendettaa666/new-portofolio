@@ -181,14 +181,6 @@ export default function DiscordStatus() {
   return (
     <div className="relative overflow-hidden rounded-3xl shadow-sm border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 transition-all duration-200">
 
-      {/* Dot pattern — same as HeroCard */}
-      <div
-        className="absolute inset-0 opacity-[0.08] dark:opacity-[0.15] pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
-          backgroundSize: "24px 24px",
-        }}
-      />
 
       <div className="relative p-6 flex flex-col gap-5">
 
