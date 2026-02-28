@@ -1,13 +1,27 @@
 "use client";
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 
-const SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 255, 255, 0.25)' }) => {
-  const divRef = useRef(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [opacity, setOpacity] = useState(0);
+// 1. Definisikan tipe untuk Props komponen
+interface SpotlightCardProps {
+  children: React.ReactNode;
+  className?: string;
+  spotlightColor?: string;
+}
 
-  const handleMouseMove = e => {
+const SpotlightCard = ({
+  children,
+  className = "",
+  spotlightColor = "rgba(255, 255, 255, 0.25)",
+}: SpotlightCardProps) => {
+  // 2. Beri tahu TypeScript bahwa ref ini untuk elemen <div>
+  const divRef = useRef<HTMLDivElement>(null);
+  
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState<number>(0);
+
+  // 3. Beri tahu TypeScript bahwa 'e' adalah event Mouse dari React yang terjadi pada <div>
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!divRef.current || isFocused) return;
 
     const rect = divRef.current.getBoundingClientRect();
@@ -45,10 +59,10 @@ const SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 2
     >
       {children}
       <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out z-10"
+        className="pointer-events-none absolute inset-0 transition-opacity duration-500 ease-in-out z-10"
         style={{
           opacity,
-          background: `radial-gradient(circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 80%)`
+          background: `radial-gradient(circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 80%)`,
         }}
       />
     </div>
