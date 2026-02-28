@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import HeroCard from "@/components/portofolio/HeroCard";
 import ToolStack from "@/components/portofolio/ToolsStack";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 import { ArrowRight, Briefcase, Code, Award } from "lucide-react";
 import Link from "next/link";
 
@@ -82,7 +83,10 @@ function StatCard({
 }) {
   return (
     <Link href={href}>
-      <div className="group p-6 bg-white dark:bg-neutral-800/50 border-2 border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-lg hover:shadow-xl hover:border-primary dark:hover:border-primary transition-all cursor-pointer">
+      <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+        className="flex flex-col items-center justify-center p-6 bg-white dark:bg-neutral-800/50 border-2 border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-lg hover:shadow-xl hover:border-primary dark:hover:border-primary transition-all cursor-pointer"
+      >
+      {/* <div className="group p-6 bg-white dark:bg-neutral-800/50 border-2 border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-lg hover:shadow-xl hover:border-primary dark:hover:border-primary transition-all cursor-pointer"> */}
         <div className="flex items-center gap-3 mb-3">
           <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-primary">
             {icon}
@@ -97,7 +101,8 @@ function StatCard({
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {description}
         </p>
-      </div>
+      {/* </div> */}
+      </SpotlightCard>
     </Link>
   );
 }

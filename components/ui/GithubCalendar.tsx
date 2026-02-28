@@ -1,10 +1,9 @@
-// components/GithubCalendar.tsx
-// ⚠️ JANGAN tambahkan "use client" di sini — ini adalah Server Component
-// Fungsi getGitHubContributions() menggunakan token server-side dan harus dijalankan di server
+
 
 import { getGitHubContributions, ContributionDay } from "@/lib/github";
 
-// Fungsi untuk menentukan warna berdasarkan jumlah kontribusi
+import SpotlightCard from "@/components/ui/SpotlightCard";
+
 function getContributionColor(count: number) {
   if (count === 0) return "bg-neutral-200 dark:bg-neutral-700";
   if (count >= 1 && count <= 3) return "bg-primary/50 dark:bg-primary/40";
@@ -78,9 +77,12 @@ export default async function GithubCalendar() {
 // Komponen kecil untuk Card Statistik
 function StatCard({ title, value }: { title: string; value: string | number }) {
   return (
-    <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800/50 dark:to-neutral-800/30 border-2 border-neutral-200 dark:border-neutral-700 shadow-md hover:shadow-lg transition-shadow">
+    <SpotlightCard spotlightColor="color-mix(in srgb, var(--theme-primary) 15%, transparent)"
+      className="flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800/50 dark:to-neutral-800/30 border-2 border-neutral-200 dark:border-neutral-700 shadow-md hover:shadow-lg transition-shadow"
+    >
       <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">{title}</span>
       <span className="text-2xl font-bold text-primary mt-1">{value}</span>
-    </div>
+    </SpotlightCard>
+
   );
 }
