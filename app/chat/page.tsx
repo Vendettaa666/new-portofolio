@@ -57,40 +57,6 @@ export default function ChatPage() {
               </div>
             </motion.div>
 
-            {/* Online Status */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800/50 dark:to-neutral-800/30 border-2 border-neutral-200 dark:border-neutral-700 shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/20">
-                <Users size={18} className="text-green-600 dark:text-green-500" />
-              </div>
-              <div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400 font-medium">Status</p>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <p className="text-sm font-bold text-neutral-900 dark:text-white">Online</p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Activity */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800/50 dark:to-neutral-800/30 border-2 border-neutral-200 dark:border-neutral-700 shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                <TrendingUp size={18} className="text-blue-600 dark:text-blue-500" />
-              </div>
-              <div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400 font-medium">Aktivitas</p>
-                <p className="text-sm font-bold text-neutral-900 dark:text-white">Real-time</p>
-              </div>
-            </motion.div>
           </div>
         </motion.div>
 

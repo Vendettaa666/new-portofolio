@@ -1,13 +1,15 @@
 import GithubCalendar from "@/components/ui/GithubCalendar";
 import SpotifyNowPlaying from "@/components/ui/SpotifyNowPlaying";
 import SpotifyHistory from "@/components/ui/SpotifyHistory";
-import { Activity, Github, Music, Cable } from "lucide-react";
+import { Activity, Music } from "lucide-react";
 import WakatimeStats from "@/components/ui/WakatimeStats";
 import DiscordStatus from "@/components/ui/DiscordStatus";
+import DashboardClient from "./DashboardClient";
+import { Github } from "lucide-react";
 
-export default function DashboardPage() { 
+export default async function DashboardPage() { 
   return (
-    <div className="flex flex-col gap-10 p-6 max-w-7xl mx-auto w-full">
+    <DashboardClient>
       {/* Spotify Section */}
       <section>
         <div className="flex items-center gap-2 mb-4">
@@ -46,9 +48,8 @@ export default function DashboardPage() {
         <WakatimeStats />
       </section>
 
-<section>
+      <section>
         <div className="flex items-center gap-2 mb-4">
-          {/* <Cable className="w-5 h-5 text-neutral-900 dark:text-white" /> */}
           <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
             Discord
           </h2>
@@ -56,6 +57,6 @@ export default function DashboardPage() {
 
         <DiscordStatus />
       </section>
-    </div>
+    </DashboardClient>
   );
 }

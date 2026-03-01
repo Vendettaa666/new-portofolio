@@ -1,155 +1,85 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Eye, Briefcase, Calendar, Code2 } from "lucide-react";
-import { useMemo } from "react";
+import { Eye, Briefcase, Calendar, Code2, Pin, ArrowUpDown } from "lucide-react";
+import { useMemo, useState } from "react";
 import GlareHover from "@/components/ui/GlareHover";
+import { listProyek } from "@/lib/data";
 
-import Proyek1 from "@/public/assets/projects/bukutahunansiswa.png";
-import Proyek2 from "@/public/assets/projects/simpadwebsite.png";
-import Proyek3 from "@/public/assets/projects/smestawebsite.png";
-import Proyek4 from "@/public/assets/projects/misiwebsite.png";
-import Proyek5 from "@/public/assets/projects/websitesagti.png";
-import Proyek6 from "@/public/assets/projects/empowerin.png";
-import Proyek7 from "@/public/assets/projects/cvalpanagrojaya.png";
-import Proyek8 from "@/public/assets/projects/blessingstore.png";
-import Proyek9 from "@/public/assets/projects/webujian.png";
-
-export const listProyek = [
-  {
-    id: 1,
-    gambar: Proyek1,
-    nama: "Buku Tahunan Siswa",
-    desk: "Buku Tahunan Siswa SMKN 1 LUMAJANG",
-    tools: ["HTML", "CSS", "Javascript", "PHP"],
-    url: "https://jurnalistik.smkn1lmj.sch.id/bts-smk/",
-    github: "#",
-    role: "Fullstack Dev",
-    year: "2025",
-  },
-  {
-    id: 2,
-    gambar: Proyek2,
-    nama: "Website Simpad",
-    desk: "Website Pajak Daerah Kabupaten Kudus",
-    tools: ["Laravel", "Bootstrap", "Javascript", "PHP"],
-    url: "https://staging-simpadkuduskab.nusantaratama.com/",
-    github: "#",
-    role: "Frontend Dev",
-    year: "2025",
-  },
-  {
-    id: 3,
-    gambar: Proyek3,
-    nama: "Smesta Website",
-    desk: "E-Catalog UKM",
-    tools: ["Laravel", "Tailwind", "Javascript", "PHP"],
-    url: "https://staging-smesta.nusantaratama.com/",
-    github: "#",
-    role: "Frontend Dev",
-    year: "2025",
-  },
-  {
-    id: 4,
-    gambar: Proyek4,
-    nama: "Misi Website",
-    desk: "Aplikasi Manajemen Informasi Peserta Magang Tamara Management",
-    tools: ["Laravel", "Bootstrap", "Javascript", "PHP"],
-    url: "https://dev-misi.nusantaratama.com/",
-    github: "#",
-    role: "Frontend Dev",
-    year: "2025",
-  },
-  {
-    id: 5,
-    gambar: Proyek5,
-    nama: "Website Sagti",
-    desk: "APLIKASI E COMMERCE CV SAGTI",
-    tools: ["Laravel", "Tailwind", "Javascript", "PHP"],
-    url: "https://staging-depo.nusantaratama.com/",
-    github: "#",
-    role: "Frontend Dev",
-    year: "2025",
-  },
-  {
-    id: 6,
-    gambar: Proyek6,
-    nama: "Empowerin",
-    desk: "APLIKASI BAKTI SOSIAL DAN PELATIHAN",
-    tools: ["Laravel", "Tailwind", "Javascript", "PHP"],
-    url: "https://staging-empowerin.tamaramanagement.co.id/",
-    github: "#",
-    role: "Fullstack Dev",
-    year: "2025",
-  },
-  {
-    id: 7,
-    gambar: Proyek7,
-    nama: "Alpan Agro Jaya",
-    desk: "Company Profile Alpan Agro Jaya",
-    tools: ["Next JS", "Tailwind", "Javascript", "Node JS"],
-    url: "https://alpan-agro-jaya.vercel.app",
-    github: "#",
-    role: "Frontend Dev",
-    year: "2026",
-  },
-  {
-    id: 8,
-    gambar: Proyek8,
-    nama: "Blessing Store",
-    desk: "Company Profile Blessing Store",
-    tools: ["Next JS", "Tailwind", "Javascript", "Node JS"],
-    url: "https://praktikum-sizie.vercel.app/",
-    github: "#",
-    role: "Frontend Dev",
-    year: "2026",
-  },
-  {
-    id: 9,
-    gambar: Proyek9,
-    nama: "Value Academy",
-    desk: "Website Ujian Value Academy",
-    tools: ["Laravel", "Tailwind", "Javascript", "Node JS"],
-    url: "https://ourvalueacademy.com/",
-    github: "#",
-    role: "Fullstack Dev",
-    year: "2026",
-  },
-];
+type SortOrder = "newest" | "oldest";
 
 export default function ProjectsPage() {
+  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+
+  // 1. LOGIKA SORTING & PINNED
+  const sortedProjects = useMemo(() => {
+    return [...listProyek].sort((a, b) => {
+      // Prioritaskan pinned: true
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      
+      // Jika sama-sama pinned atau sama-sama tidak, urutkan berdasarkan ID
+      if (sortOrder === "newest") {
+        return b.id - a.id; // ID besar dulu (terbaru)
+      } else {
+        return a.id - b.id; // ID kecil dulu (terlama)
+      }
+    });
+  }, [sortOrder]);
+
   // Calculate stats
   const stats = useMemo(() => {
-    const totalProjects = listProyek.length;
-    const uniqueTools = new Set(listProyek.flatMap((p) => p.tools)).size;
-    const latestYear = Math.max(...listProyek.map((p) => parseInt(p.year)));
+    const totalProjects = sortedProjects.length;
+    const uniqueTools = new Set(sortedProjects.flatMap((p) => p.tools)).size;
+    const latestYear = Math.max(...sortedProjects.map((p) => parseInt(p.year)));
 
-    return {
-      totalProjects,
-      uniqueTools,
-      latestYear,
-    };
-  }, []);
+    return { totalProjects, uniqueTools, latestYear };
+  }, [sortedProjects]);
 
   return (
     <div className="min-h-screen max-w-9xl mx-auto flex flex-col gap-10 p-4 md:p-6 lg:p-8 transition-colors duration-200">
-      {/* Enhanced Header Section */}
+      
+      {/* HEADER SECTION */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="space-y-8"
       >
-        {/* Title Section with Badge */}
-        <div className="space-y-4">
-          <div>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="space-y-4 flex-1">
             <h1 className="text-2xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-200 dark:to-white bg-clip-text text-transparent">
               My Projects
             </h1>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
-              Explore my collection of web development projects, from full-stack
-              applications to modern frontend solutions
+              Explore my collection of web development projects, sorted by latest work and featured highlights.
             </p>
+          </div>
+
+          {/* Sort Button */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSortOrder("newest")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+                sortOrder === "newest"
+                  ? "bg-primary text-white shadow-lg"
+                  : "bg-white dark:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 border-2 border-neutral-200 dark:border-neutral-700 hover:border-primary dark:hover:border-primary"
+              }`}
+            >
+              <ArrowUpDown size={16} />
+              Terbaru
+            </button>
+            <button
+              onClick={() => setSortOrder("oldest")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+                sortOrder === "oldest"
+                  ? "bg-primary text-white shadow-lg"
+                  : "bg-white dark:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 border-2 border-neutral-200 dark:border-neutral-700 hover:border-primary dark:hover:border-primary"
+              }`}
+            >
+              <ArrowUpDown size={16} />
+              Terlama
+            </button>
           </div>
         </div>
 
@@ -239,7 +169,7 @@ export default function ProjectsPage() {
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {listProyek.map((project, index) => (
+        {sortedProjects.map((project, index) => (
           <GlareHover
             key={project.id}
             width="100%"
@@ -251,70 +181,48 @@ export default function ProjectsPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 + index * 0.05 }}
+              transition={{ duration: 0.5, delay: 0.1 + index * 0.05 }}
               className="w-full h-full"
             >
               <div className="relative w-full h-full overflow-hidden rounded-[1.5rem]">
-                <div className="relative h-full flex flex-col bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-[1.5rem] overflow-hidden group hover:border-neutral-300 dark:hover:border-neutral-600 transition-all duration-300">
+                <div className="relative h-full flex flex-col bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-[1.5rem] overflow-hidden group hover:border-primary/50 transition-all duration-300">
+                  
                   {/* IMAGE CONTAINER */}
                   <div className="relative h-52 overflow-hidden bg-neutral-900">
+                    {/* LABEL PINNED */}
+                    {project.pinned && (
+                      <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg animate-pulse">
+                        <Pin size={12} className="fill-current" />
+                        Featured
+                      </div>
+                    )}
+
                     <img
-                      src={
-                        typeof project.gambar === "string"
-                          ? project.gambar
-                          : project.gambar.src
-                      }
+                      src={typeof project.gambar === "string" ? project.gambar : project.gambar.src}
                       alt={project.nama}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    {/* OVERLAY */}
+                    
+                    {/* OVERLAY & BUTTON */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-10">
-                      <a
-                        href={project.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-white text-neutral-900 px-6 py-3 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-primary hover:text-white shadow-xl"
-                      >
-                        <Eye size={18} />
-                        View Project
+                      <a href={project.url} target="_blank" className="flex items-center gap-2 bg-white text-neutral-900 px-6 py-3 rounded-full font-semibold text-sm hover:bg-primary hover:text-white transition-all">
+                        <Eye size={18} /> View Project
                       </a>
                     </div>
-                    {/* GitHub Badge */}
-                    {project.github !== "#" && (
-                      <div className="absolute top-4 right-4 z-20">
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2.5 bg-black/60 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white hover:text-black transition-all shadow-lg"
-                        >
-                          <Github size={18} />
-                        </a>
-                      </div>
-                    )}
                   </div>
 
                   {/* CONTENT AREA */}
                   <div className="p-6 flex flex-col flex-grow">
                     <div className="flex-grow space-y-4">
-                      <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors line-clamp-2">
+                      <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-primary transition-colors line-clamp-2">
                         {project.nama}
                       </h3>
-
                       <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed line-clamp-2">
                         {project.desk}
                       </p>
-
-                      {/* Tools - Show All */}
                       <div className="flex flex-wrap gap-2">
                         {project.tools.map((tag, i) => (
-                          <span
-                            key={i}
-                            className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1.5 rounded-lg
-                              bg-primary/10 text-primary
-                              border border-primary/20
-                              hover:bg-primary/20 transition-colors"
-                          >
+                          <span key={i} className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
                             {tag}
                           </span>
                         ))}

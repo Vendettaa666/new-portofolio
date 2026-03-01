@@ -5,23 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Award, Calendar, ExternalLink, ShieldCheck, X, Search, ChevronDown } from "lucide-react";
 import GlareHover from "@/components/ui/GlareHover";
 
-export const listSertifikat = [
-  {
-    id: 1,
-    kode: "002/NT/PKL/XII/2025",
-    gambar: "/assets/sertifikat/sertifikat-1.jpg",
-    judul: "Praktek Kerja Lapangan",
-    penerbit: "CV NUSANTARA TAMA",
-    tanggal: "JULY 2025",
-    link: "#",
-    tipe: ["Pendidikan", "Profesional"],
-    kategori: ["Backend"],
-  },
-];
-
-const categories = [
-  "Frontend", "Backend", "Fullstack", "Mobile", "Cloud Computing", "Pendidikan", "Profesional",
-];
+import { listSertifikat, categories } from "@/lib/data";
 
 export default function AchievementPage() {
   const [selectedCert, setSelectedCert] = useState<typeof listSertifikat[0] | null>(null);

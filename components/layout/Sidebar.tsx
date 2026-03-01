@@ -16,11 +16,11 @@ import {
   Activity,
   RefreshCw,
 } from "lucide-react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// ─── Lanyard types (minimal) ──────────────────────────────────────────────────
 type DiscordData = {
   discord_status: "online" | "idle" | "dnd" | "offline";
   discord_user: {
@@ -38,20 +38,33 @@ type DiscordData = {
 const DISCORD_ID = "770242596945395712";
 
 const STATUS_CONFIG = {
-  online:  { color: "bg-green-500",  label: "Online",         glow: "shadow-[0_0_6px_rgba(34,197,94,.6)]"  },
-  idle:    { color: "bg-yellow-500", label: "Idle",           glow: "shadow-[0_0_6px_rgba(234,179,8,.6)]"  },
-  dnd:     { color: "bg-red-500",    label: "Do Not Disturb", glow: "shadow-[0_0_6px_rgba(239,68,68,.6)]"   },
-  offline: { color: "bg-neutral-500",label: "Offline",        glow: ""                                       },
+  online: {
+    color: "bg-green-500",
+    label: "Online",
+    glow: "shadow-[0_0_6px_rgba(34,197,94,.6)]",
+  },
+  idle: {
+    color: "bg-yellow-500",
+    label: "Idle",
+    glow: "shadow-[0_0_6px_rgba(234,179,8,.6)]",
+  },
+  dnd: {
+    color: "bg-red-500",
+    label: "Do Not Disturb",
+    glow: "shadow-[0_0_6px_rgba(239,68,68,.6)]",
+  },
+  offline: { color: "bg-neutral-500", label: "Offline", glow: "" },
 };
 
-// ─── Hook: fetch Discord status ───────────────────────────────────────────────
 function useDiscordStatus() {
   const [data, setData] = useState<DiscordData | null>(null);
 
   useEffect(() => {
     const fetch_ = async () => {
       try {
-        const res  = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        const res = await fetch(
+          `https://api.lanyard.rest/v1/users/${DISCORD_ID}`,
+        );
         const json = await res.json();
         if (json.success) setData(json.data);
       } catch {}
@@ -64,18 +77,16 @@ function useDiscordStatus() {
   return data;
 }
 
-// ─── Nav items ────────────────────────────────────────────────────────────────
 const navItems = [
-  { icon: Home,         label: "Home",       href: "/"          },
-  { icon: User,         label: "About",      href: "/about"     },
-  { icon: Layers,       label: "Projects",   href: "/projects"  },
-  { icon: Trophy,       label: "Achivement", href: "/achivement"},
-  { icon: Activity,     label: "Dashboard",  href: "/dashboard" },
-  { icon: MessageCircle,label: "Chat",       href: "/chat"      },
-  { icon: Mail,         label: "Contact",    href: "/contact"   },
+  { icon: Home, label: "Home", href: "/" },
+  { icon: User, label: "About", href: "/about" },
+  { icon: Layers, label: "Projects", href: "/projects" },
+  { icon: Trophy, label: "Achivement", href: "/achivement" },
+  { icon: Activity, label: "Dashboard", href: "/dashboard" },
+  { icon: MessageCircle, label: "Chat", href: "/chat" },
+  { icon: Mail, label: "Contact", href: "/contact" },
 ];
 
-// ─── Props ────────────────────────────────────────────────────────────────────
 interface SidebarProps {
   isCollapsed: boolean;
   toggleSidebar: () => void;
@@ -167,18 +178,16 @@ function SidebarContent({
           !mobile && isCollapsed
             ? "mx-2 mt-4 mb-6 p-2 bg-transparent border-transparent"
             : mobile
-            ? "mx-3 mt-16 mb-6"
-            : "mx-3 mt-4 mb-6"
+              ? "mx-3 mt-16 mb-6"
+              : "mx-3 mt-4 mb-6"
         }`}
       >
         {/* ── Expanded state ── */}
         {(mobile || !isCollapsed) && (
           <div className="w-full relative overflow-visible rounded-2xl p-6">
             <div className="relative z-10 flex flex-col items-center overflow-visible">
-
               {/* ── Avatar area — avatar stays centered, bubble is absolute ── */}
               <div className="relative mb-4 flex justify-center overflow-visible">
-
                 {/* ── DEFAULT view ── */}
                 {!showDiscord && (
                   <div className="relative w-24 h-24">
@@ -222,13 +231,20 @@ function SidebarContent({
                         alt=""
                         aria-hidden
                         className="absolute inset-0 pointer-events-none select-none"
-                        style={{ width: "100%", height: "100%", transform: "scale(1.18)", objectFit: "contain" }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          transform: "scale(1.18)",
+                          objectFit: "contain",
+                        }}
                       />
                     )}
 
                     {/* Status dot */}
                     {status && (
-                      <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-neutral-800 ${status.color} ${status.glow}`} />
+                      <div
+                        className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-neutral-800 ${status.color} ${status.glow}`}
+                      />
                     )}
 
                     {/* ── Speech bubble — absolute, floats right, above ALL layers ── */}
@@ -236,8 +252,10 @@ function SidebarContent({
                       <div
                         className="absolute w-max max-w-[130px]"
                         style={{
-                          top: mobile ? "40%" : "50%",                    // raise a bit on mobile
-                          left: mobile ? "calc(100% + 8px)" : "calc(100% + 12px)",
+                          top: mobile ? "40%" : "50%", // raise a bit on mobile
+                          left: mobile
+                            ? "calc(100% + 8px)"
+                            : "calc(100% + 12px)",
                           transform: mobile
                             ? "translateY(-40%)"
                             : "translateY(-50%)",
@@ -274,10 +292,17 @@ function SidebarContent({
                         />
                         {/* Bubble body */}
                         <div className="bg-neutral-800 border border-neutral-700 rounded-xl rounded-tl-sm px-3 py-2.5 shadow-2xl">
-                          <p className={`text-[9px] font-bold uppercase tracking-wide mb-1 ${
-                            activityBubble.icon === "🎵" ? "text-green-400" : "text-blue-400"
-                          }`}>
-                            {activityBubble.icon} {activityBubble.icon === "🎵" ? "Listening" : "Playing"}
+                          <p
+                            className={`text-[9px] font-bold uppercase tracking-wide mb-1 ${
+                              activityBubble.icon === "🎵"
+                                ? "text-green-400"
+                                : "text-blue-400"
+                            }`}
+                          >
+                            {activityBubble.icon}{" "}
+                            {activityBubble.icon === "🎵"
+                              ? "Listening"
+                              : "Playing"}
                           </p>
                           <p className="text-[11px] font-semibold text-white leading-tight line-clamp-2">
                             {activityBubble.line1}
@@ -292,7 +317,6 @@ function SidebarContent({
                     )}
                   </div>
                 )}
-
               </div>
 
               {/* Name & Title — UNCHANGED structure, content swaps */}
@@ -309,8 +333,6 @@ function SidebarContent({
                     : "Web Developer"}
                   <span className="w-1 h-1 rounded-full bg-primary" />
                 </p>
-
-
               </div>
 
               {/* Buttons row */}
@@ -318,7 +340,10 @@ function SidebarContent({
                 {/* Download CV — UNCHANGED, hidden in Discord mode */}
                 {!showDiscord && (
                   <button className="group w-full py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-sm font-semibold shadow-md hover:shadow-xl bg-primary hover:bg-primary/90 text-white border border-primary/20">
-                    <Download size={16} className="transition-transform group-hover:translate-y-0.5" />
+                    <Download
+                      size={16}
+                      className="transition-transform group-hover:translate-y-0.5"
+                    />
                     <span>Download CV</span>
                   </button>
                 )}
@@ -333,11 +358,13 @@ function SidebarContent({
                     hover:bg-neutral-100 dark:hover:bg-neutral-700
                     hover:text-neutral-900 dark:hover:text-white"
                 >
-                  <RefreshCw size={13} className="transition-transform group-hover:rotate-180 duration-300" />
+                  <RefreshCw
+                    size={13}
+                    className="transition-transform group-hover:rotate-180 duration-300"
+                  />
                   {showDiscord ? "Show Profile" : "Show Discord"}
                 </button>
               </div>
-
             </div>
           </div>
         )}
@@ -347,7 +374,11 @@ function SidebarContent({
           <div className="relative">
             <div className="relative w-12 h-12 rounded-xl overflow-hidden border-2 border-primary/30 shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
               <img
-                src={showDiscord && discordAvatarUrl ? discordAvatarUrl : "/assets/profile.png"}
+                src={
+                  showDiscord && discordAvatarUrl
+                    ? discordAvatarUrl
+                    : "/assets/profile.png"
+                }
                 alt="User"
                 className="w-full h-full object-cover"
               />
@@ -429,24 +460,21 @@ function SidebarContent({
 
       {/* ── Footer — COMPLETELY UNCHANGED ── */}
       <div
-        className={`p-4 border-t border-neutral-200 dark:border-neutral-700 ${
+        className={`p-5 border-t border-neutral-200 dark:border-neutral-700/50 ${
           !mobile && isCollapsed ? "flex justify-center" : ""
         }`}
       >
         {!mobile && isCollapsed ? (
-          <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors cursor-pointer">
+          <div className="text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 transition-colors">
             <Copyright size={18} />
           </div>
         ) : (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white text-[10px] font-bold">
-                LS
-              </div>
-              <span>Leo Satria</span>
-            </div>
-            <p className="text-[10px] text-neutral-500 dark:text-neutral-500 flex items-center gap-1">
-              <Copyright size={10} /> 2024 • Built with Next.js
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-neutral-800 dark:text-neutral-200">
+              © 2024 Leo Satria
+            </p>
+            <p className="text-[10px] text-neutral-500 dark:text-neutral-500 leading-relaxed">
+              Built with Next.js & Tailwind CSS
             </p>
           </div>
         )}
