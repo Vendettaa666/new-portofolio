@@ -19,24 +19,17 @@ export default function ChatPage() {
           transition={{ duration: 0.6 }}
           className="mb-6 space-y-4 flex-shrink-0"
         >
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20 shadow-lg">
-              <MessageCircle className="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-200 dark:to-white bg-clip-text text-transparent">
-                Ruang Obrolan
-              </h1>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                Real-time messaging
-              </p>
-            </div>
-          </div>
-
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
-            Jangan ragu untuk berbagi pemikiran, saran, pertanyaan, atau apa pun! Semua pesan akan ditampilkan secara real-time dan tersimpan di database.
+                  <div className="space-y-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">
+            Ruang Obrolan
+          </h1>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm md:text-base">
+            Ruang obrolan terbuka untuk semua pengguna. Semua pesan akan ditampilkan secara real-time dan tersimpan di database.
           </p>
+        </div>
 
+        <div className="border-b border-dashed border-neutral-300 dark:border-neutral-700 w-full" />
+        
           {/* Stats Bar */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Total Messages */}

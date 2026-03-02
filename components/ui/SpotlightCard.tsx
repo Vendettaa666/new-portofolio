@@ -56,7 +56,7 @@ const SpotlightCard = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       // default styles now respect both light and dark mode
-      className={`relative rounded-3xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 overflow-hidden p-8 ${className}`}
+      className={`relative rounded-3xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800 overflow-hidden p-8 ${className}`}
     >
       {children}
       <div
