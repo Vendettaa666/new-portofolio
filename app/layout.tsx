@@ -14,7 +14,6 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-// 2. Font Khusus (Bento/Dashboard)
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
@@ -26,14 +25,12 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
 });
 
-// ── SEO METADATA ───────────────────────────────────────────────────────────
 export const metadata: Metadata = generateSEO({
   title: "Leo Satria | Full-Stack Developer Portfolio",
   description:
     "Portfolio Leo Satria – Siswa SMKN 1 Lumajang jurusan Rekayasa Perangkat Lunak. Full-Stack Developer yang fokus di React, Next.js, Laravel, dan desain UI modern. Lihat projek, skill, dan cara menghubungi saya.",
 });
 
-// ── VIEWPORT CONFIGURATION ─────────────────────────────────────────────────
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -66,7 +63,7 @@ export default function RootLayout({
         
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
       </head>
       <body 
         className={`${inter.variable} ${jakarta.variable} ${jetbrainsMono.variable} font-sans overflow-x-hidden antialiased`}
