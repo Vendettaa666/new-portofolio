@@ -31,6 +31,9 @@ export const metadata: Metadata = generateSEO({
     "Portfolio Leo Satria – Siswa SMKN 1 Lumajang jurusan Rekayasa Perangkat Lunak. Full-Stack Developer yang fokus di React, Next.js, Laravel, dan desain UI modern. Lihat projek, skill, dan cara menghubungi saya.",
 });
 
+// Google Site Verification
+export const googleSiteVerification = "GdlvQh4VoPEHz3NtCe7Tdan1T0bX3M6f_qY6yeEQe3k";
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -53,6 +56,9 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
+        {/* Google Site Verification */}
+        <meta name="google-site-verification" content="GdlvQh4VoPEHz3NtCe7Tdan1T0bX3M6f_qY6yeEQe3k" />
+        
         {/* Structured Data */}
         <StructuredData data={personSchema} />
         <StructuredData data={websiteSchema} />
