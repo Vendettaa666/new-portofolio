@@ -22,7 +22,7 @@ export default function SpotifyHistory() {
       </div>
       
       <div className="flex flex-col gap-2">
-        {tracks.slice(0, 5).map((track, i) => (
+        {tracks.slice(0, 10).map((track, i) => (
           <a 
             key={i} 
             href={track.songUrl} 

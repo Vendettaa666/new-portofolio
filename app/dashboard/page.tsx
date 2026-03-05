@@ -5,6 +5,7 @@ import { Activity, Music } from "lucide-react";
 import WakatimeStats from "@/components/ui/WakatimeStats";
 import MonkeytypeStats from "@/components/ui/MonkeytypeStats";
 import DiscordStatus from "@/components/ui/DiscordStatus";
+import SpotifyStats from "@/components/ui/SpotifyStats";
 import DashboardClient from "./DashboardClient";
 import { Github } from "lucide-react";
 
@@ -20,10 +21,9 @@ export default async function DashboardPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SpotifyNowPlaying />
-          <SpotifyHistory />
-        </div>
+       
+          <SpotifyStats />
+        
       </section>
 
       {/* GitHub Section */}
