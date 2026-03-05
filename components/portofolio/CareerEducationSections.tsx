@@ -19,7 +19,7 @@ export const careers = [
   {
     role: "FullStack Developer Intern",
     company: "CV. Nusantara Tama",
-    location: "Jemeber, Jawa Timur",
+    location: "Jember, Jawa Timur",
     startDate: "Juli 2025",
     endDate: "Desember 2025",
     duration: "6 bulan",
