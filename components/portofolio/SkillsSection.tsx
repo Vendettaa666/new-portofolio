@@ -3,17 +3,18 @@
 import { motion } from "framer-motion";
 
 export const skills = [
-  { name: "React & Next.js", level: 90, color: "bg-blue-500" },
-  { name: "TypeScript", level: 85, color: "bg-cyan-500" },
-  { name: "Tailwind CSS", level: 95, color: "bg-teal-500" },
-  { name: "Node.js", level: 80, color: "bg-green-500" },
-  { name: "UI/UX Design", level: 75, color: "bg-purple-500" },
-  { name: "Golang", level: 70, color: "bg-cyan-600" },
-  { name: "PostgreSQL", level: 85, color: "bg-indigo-500" },
-  { name: "Git & GitHub", level: 90, color: "bg-orange-500" },
-  { name: "Docker", level: 65, color: "bg-blue-600" },
-  { name: "RESTful API", level: 88, color: "bg-emerald-500" },
+  { name: "Laravel", level: 75, color: "bg-[#FF2D20]" },
+  { name: "TypeScript", level: 65, color: "bg-[#3178C6]" },
+  { name: "Tailwind CSS", level: 75, color: "bg-[#06B6D4]" },
+  { name: "Node.js", level: 55, color: "bg-[#339933]" },
+  { name: "UI/UX Design", level: 75, color: "bg-[#FF61F6]" }, // Identik dengan Figma
+  { name: "NEXT JS", level: 70, color: "bg-[#000000]" },
+  { name: "Database", level: 65, color: "bg-[#4479A1]" },    // Identik dengan MySQL/SQL
+  { name: "Git & GitHub", level: 80, color: "bg-[#F05032]" },
+  { name: "Flutter", level: 45, color: "bg-[#02569B]" },
+  { name: "RESTful API", level: 60, color: "bg-[#009688]" },
 ];
+
 
 export default function SkillsSection() {
   return (

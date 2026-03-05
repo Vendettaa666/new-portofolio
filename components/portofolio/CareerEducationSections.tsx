@@ -11,11 +11,24 @@ export const educationData = [
     location: "Lumajang, Jawa Timur",
     startDate: "2023",
     endDate: "2026",
-    logoIcon: "/assets/logo-smk.png", // Path gambar dari folder public
+    logoIcon: "/assets/logo/logo-smk.png", // Path gambar dari folder public
     details: "Mempelajari dasar-dasar pemrograman, pengembangan web, dan teknologi informasi."
   }
 ];
-export const careers = [];
+export const careers = [
+  {
+    role: "FullStack Developer Intern",
+    company: "CV. Nusantara Tama",
+    location: "Jemeber, Jawa Timur",
+    startDate: "Juli 2025",
+    endDate: "Desember 2025",
+    duration: "6 bulan",
+    type: "Magang",
+    workSetup: "",
+    logoIcon: "/assets/logo/nusantaratama.png",
+    details: "Mengerjakan pengembangan UI menggunakan React dan Tailwind CSS, serta berkolaborasi dalam tim kecil untuk fitur dashboard."
+  },
+];
 
 
 export function CareerSection() {
