@@ -7,6 +7,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { generateSEO, generatePersonSchema, generateWebsiteSchema } from "@/lib/seo";
 import StructuredData from "@/components/seo/StructuredData";
+import AiAssistant from "@/components/ui/AiAsistant";
 
 // 1. Font Default
 const inter = Inter({ 
@@ -78,6 +79,8 @@ export default function RootLayout({
         <ThemeProvider>
           <DashboardLayout>{children}</DashboardLayout>
         </ThemeProvider>
+
+        <AiAssistant />
          <Script
     async
     defer
