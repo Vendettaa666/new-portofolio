@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -77,6 +78,12 @@ export default function RootLayout({
         <ThemeProvider>
           <DashboardLayout>{children}</DashboardLayout>
         </ThemeProvider>
+         <Script
+    async
+    defer
+    data-website-id="d3412d96-d9b1-4038-8de0-f288f00a13b7"
+    src="https://analytics.umami.is/script.js"
+  />
       </body>
     </html>
   );

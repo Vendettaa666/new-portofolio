@@ -13,8 +13,8 @@ export const siteConfig = {
   links: {
     twitter: "https://twitter.com/your_twitter",
     github: "https://github.com/vendettaa666",
-    linkedin: "https://linkedin.com/in/your-profile",
-    email: "mailto:your-email@example.com",
+    linkedin: "https://linkedin.com/in/leo-satria-anugrah-12a698373",
+    email: "mailto:leoarkas81@gmail.com",
   },
   keywords: [
     "Leo Satria",
@@ -112,7 +112,7 @@ export function generateSEO({
       title,
       description,
       images: [image],
-      creator: "@your_twitter", // GANTI dengan username Twitter kamu
+      creator: "@", // GANTI dengan username Twitter kamu
     },
   };
 }
