@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import HeaderStatus from "@/components/ui/HeaderStatus";
 import SpotlightCard from "../ui/SpotlightCard";
+import Link from "next/link";
 
 const projectCards = [
   {
@@ -108,16 +109,16 @@ export default function HeroCard() {
               {/* Buttons */}
               <div className="flex flex-wrap gap-3 pt-2">
                 {/* Tombol 1: Primary Solid */}
-                <button className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold shadow-lg active:scale-95 transition-all duration-200 bg-primary text-white hover:bg-primary/90 dark:hover:bg-primary/80">
+                <Link href="/projects" className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold shadow-lg active:scale-95 transition-all duration-200 bg-primary text-white hover:bg-primary/90 dark:hover:bg-primary/80">
                   Lihat Proyek
                   <ArrowRight className="h-4 w-4" />
-                </button>
+                </Link>
 
                 {/* Tombol 2: Primary Tinted / Outline */}
-                <button className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold active:scale-95 transition-all duration-200 border border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 dark:border-primary/40 dark:bg-transparent dark:text-white dark:hover:bg-primary/20">
+                <Link href="/chat" className="flex items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold active:scale-95 transition-all duration-200 border border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 dark:border-primary/40 dark:bg-transparent dark:text-white dark:hover:bg-primary/20">
                   <MessageCircle className="h-4 w-4 text-primary dark:text-white" />
                   Ruang Obrolan
-                </button>
+                </Link>
               </div>
             </div>
 
