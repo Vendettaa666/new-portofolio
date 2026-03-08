@@ -90,7 +90,7 @@ export default function AiAssistant() {
     if (open && chat.length === 0) {
       setChat([{
         role:    "assistant",
-        content: "Halo! 👋 Saya LeoBot, asisten AI Leo Satria Anugrah. Tanya apa saja tentang Leo — skill, proyek, pengalaman, atau cara menghubunginya!",
+        content: "Halo! 👋 Saya Vinux, asisten AI Leo Satria Anugrah. Tanya apa saja tentang Leo — skill, proyek, pengalaman, atau cara menghubunginya!",
       }]);
     }
   }, [open]);
