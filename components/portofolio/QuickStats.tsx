@@ -16,29 +16,30 @@ export default function QuickStats() {
   const currentYear = new Date().getFullYear();
   const experienceYears = currentYear - startYear;
 
-  const stats = [
+const stats = [
     {
       icon: <Code className="w-5 h-5" />,
-      title: "Projects",
+      title: "Proyek",
       value: `${totalProjects}`,
-      description: "Completed projects",
+      description: "Proyek selesai",
       href: "/projects",
     },
     {
       icon: <Briefcase className="w-5 h-5" />,
-      title: "Experience",
-      value: `${experienceYears}+ Years`,
-      description: "Professional work",
+      title: "Pengalaman",
+      value: `${experienceYears}+ Tahun`,
+      description: "Kerja profesional",
       href: "/about",
     },
     {
       icon: <Award className="w-5 h-5" />,
-      title: "Achievements",
+      title: "Pencapaian",
       value: `${totalAchievements}`,
-      description: "Certifications",
+      description: "Sertifikasi",
       href: "/achivement",
     },
   ];
+
 
   return (
     <motion.div
