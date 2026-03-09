@@ -6,7 +6,7 @@ export const siteConfig = {
   name: "Leo Satria",
   title: "Leo Satria | Full-Stack Developer Portfolio",
   description:
-    "Portfolio Leo Satria – Siswa SMKN 1 Lumajang jurusan Rekayasa Perangkat Lunak. Full-Stack Developer yang fokus di React, Next.js, Laravel, dan desain UI modern. Lihat projek, skill, dan cara menghubungi saya.",
+    "Portfolio Leo Satria, Full-Stack Developer dari SMKN 1 Lumajang. Temukan projek, skill, dan cara menghubungi saya.",
   url: "https://leoosatria.my.id", // GANTI dengan domain kamu
   googleVerification: "GdlvQh4VoPEHz3NtCe7Tdan1T0bX3M6f_qY6yeEQe3k",
   ogImage: "/og-image.png", // Ukuran: 1200x630px
