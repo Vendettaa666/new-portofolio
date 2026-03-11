@@ -78,9 +78,10 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <DashboardLayout>{children}</DashboardLayout>
+          <AiAssistant />
         </ThemeProvider>
 
-        <AiAssistant />
+        
          <Script
     async
     defer
