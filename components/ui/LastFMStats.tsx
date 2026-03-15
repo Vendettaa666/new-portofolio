@@ -676,7 +676,7 @@ export default function LastFMStats() {
                     {i + 1}
                   </span>
 
-                  <ArtistAvatar name={artist.name} image={artist.image} />
+                  {/* <ArtistAvatar name={artist.name} image={artist.image} /> */}
 
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold truncate text-neutral-800 dark:text-neutral-200 group-hover:text-primary transition-colors duration-150">
