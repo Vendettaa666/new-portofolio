@@ -186,7 +186,7 @@ function PlaycountBar({ value, max }: { value: number; max: number }) {
 }
 
 // ─── Deterministic gradient colors from artist name ──────────────────────────
-const GRADIENT_PAIRS = [
+const GRADIENT_PAIRS: [string, string][] = [
   ['#ef4444', '#f97316'], // red → orange
   ['#f97316', '#eab308'], // orange → yellow
   ['#22c55e', '#14b8a6'], // green → teal
@@ -230,16 +230,48 @@ function ArtFallback({
   );
 }
 
-// ─── Artist Avatar — real photo from iTunes, gradient initials as fallback ────
-function ArtistAvatar({ name, image, size = 'h-10 w-10' }: { name: string; image?: string | null; size?: string }) {
+// ─── In-memory cache so each artist is only fetched once per session ──────────
+const itunesCache = new Map<string, string | null>();
+
+// ─── Artist Avatar — fetches real photo from iTunes API on the client ─────────
+// iTunes Search API supports CORS, so browser can call it directly.
+// This bypasses server-side network restrictions entirely.
+function ArtistAvatar({ name, image: serverImage, size = 'h-10 w-10' }: { name: string; image?: string | null; size?: string }) {
+  const [photo,    setPhoto]    = useState<string | null>(serverImage ?? null);
   const [imgError, setImgError] = useState(false);
   const [from, to]              = gradientFromString(name);
   const initial                 = name.replace(/^the\s+/i, '').charAt(0).toUpperCase();
 
-  if (image && !imgError) {
+  useEffect(() => {
+    // If server already provided a valid image, use it
+    if (serverImage) { setPhoto(serverImage); return; }
+    // Return cached result if we already fetched this artist
+    if (itunesCache.has(name)) { setPhoto(itunesCache.get(name) ?? null); return; }
+
+    // Fetch from iTunes Search API (CORS-enabled, no API key needed)
+    const controller = new AbortController();
+    fetch(
+      `https://itunes.apple.com/search?term=${encodeURIComponent(name)}&entity=musicArtist&limit=1&media=music`,
+      { signal: controller.signal }
+    )
+      .then((r) => r.json())
+      .then((json) => {
+        const art: string | undefined = json.results?.[0]?.artworkUrl100;
+        const url = art ? art.replace('100x100bb', '500x500bb') : null;
+        itunesCache.set(name, url);
+        setPhoto(url);
+      })
+      .catch(() => {
+        itunesCache.set(name, null);
+      });
+
+    return () => controller.abort();
+  }, [name, serverImage]);
+
+  if (photo && !imgError) {
     return (
       <img
-        src={image}
+        src={photo}
         alt={name}
         onError={() => setImgError(true)}
         className={`${size} shrink-0 rounded-full object-cover ring-2 ring-neutral-100 dark:ring-neutral-700 group-hover:ring-primary/30 group-hover:scale-105 transition-all duration-200`}
