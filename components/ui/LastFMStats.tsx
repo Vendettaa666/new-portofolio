@@ -720,7 +720,7 @@ export default function LastFMStats() {
               {loading && (
                 <div className="flex flex-wrap gap-2">
                   {[80, 120, 60, 100, 70, 90, 50, 110, 75, 95].map((w, i) => (
-                    <Skeleton key={i} className={`h-7 rounded-full`} style={{ width: w }} />
+                    <div key={i} className="h-7 rounded-full bg-neutral-100 dark:bg-neutral-700/60 animate-pulse" style={{ width: w }} />
                   ))}
                 </div>
               )}
