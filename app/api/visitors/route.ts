@@ -7,8 +7,8 @@ const redis = new Redis({
   token: process.env.KV_REST_API_TOKEN!,
 });
 
-const KV_KEY = process.env.NODE_ENV === "development" 
-  ? "visitors:locations:dev" 
+const KV_KEY = process.env.NODE_ENV === "development"
+  ? "visitors:locations:dev"
   : "visitors:locations";
 const MAX_ENTRIES = 500;
 
@@ -19,6 +19,40 @@ const TEST_IPS = [
   "103.28.0.1",
   "114.4.0.1",
 ];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/**
+ * Bulatkan koordinat ke 0 desimal → akurasi ~100 km (level kota/kabupaten).
+ * Cukup untuk pin di pusat kota, tidak bisa dilacak ke desa/kelurahan.
+ */
+function roundCoord(n: number): number {
+  return Math.round(n);
+}
+
+/**
+ * Ambil IP real dari berbagai header.
+ * Urutan: Vercel → Cloudflare → nginx/proxy → x-forwarded-for → fallback.
+ */
+function getRealIp(req: NextRequest): string {
+  return (
+    req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ??   // Vercel
+    req.headers.get("cf-connecting-ip") ??                                  // Cloudflare
+    req.headers.get("x-real-ip") ??                                         // nginx
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??            // generic proxy
+    "127.0.0.1"
+  );
+}
+
+function isLocalIp(ip: string): boolean {
+  return (
+    ip === "127.0.0.1" ||
+    ip === "::1" ||
+    ip.startsWith("192.168.") ||
+    ip.startsWith("10.") ||
+    ip.startsWith("172.")
+  );
+}
 
 // ─── Geo lookup ───────────────────────────────────────────────────────────────
 async function fetchGeo(ip: string): Promise<{
@@ -120,8 +154,8 @@ export async function POST(req: NextRequest) {
             city:         geo.city,
             country:      geo.country,
             country_code: geo.country_code,
-            lat:          Math.round(geo.lat * 10) / 10,
-            lon:          Math.round(geo.lon * 10) / 10,
+            lat:          roundCoord(geo.lat),
+            lon:          roundCoord(geo.lon),
             timestamp:    Date.now() - Math.floor(Math.random() * 3600000),
             flag:         geo.flag,
           });
@@ -138,22 +172,20 @@ export async function POST(req: NextRequest) {
       return Response.json({ ok: true, cleared: true });
     }
 
-    // Normal flow
+    // Normal flow — ambil IP dengan helper yang lebih lengkap
     const testIpParam = isDev ? params.get("testip") : null;
+    const ip = testIpParam ?? getRealIp(req);
 
-    const ip = testIpParam
-      ?? req.headers.get("x-real-ip")
-      ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
-      ?? "127.0.0.1";
+    // Debug log di production untuk diagnosa (hapus setelah confirmed working)
+    console.log("[Visitors POST] detected ip:", ip, "| headers:", {
+      "x-vercel-forwarded-for": req.headers.get("x-vercel-forwarded-for"),
+      "cf-connecting-ip":       req.headers.get("cf-connecting-ip"),
+      "x-real-ip":              req.headers.get("x-real-ip"),
+      "x-forwarded-for":        req.headers.get("x-forwarded-for"),
+    });
 
     // Skip local IP
-    if (!testIpParam && (
-      ip === "127.0.0.1" ||
-      ip === "::1" ||
-      ip.startsWith("192.168.") ||
-      ip.startsWith("10.") ||
-      ip.startsWith("172.")
-    )) {
+    if (!testIpParam && isLocalIp(ip)) {
       return Response.json({ ok: true, skipped: true, reason: "local IP" });
     }
 
@@ -165,8 +197,8 @@ export async function POST(req: NextRequest) {
       city:         geo.city,
       country:      geo.country,
       country_code: geo.country_code,
-      lat:          Math.round(geo.lat * 10) / 10,
-      lon:          Math.round(geo.lon * 10) / 10,
+      lat:          roundCoord(geo.lat),   // ← rounded ke level kota, bukan desa
+      lon:          roundCoord(geo.lon),
       timestamp:    Date.now(),
       flag:         geo.flag,
     };
