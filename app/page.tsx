@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import HeroCard from "@/components/portofolio/HeroCard";
 import QuickStats from "@/components/portofolio/QuickStats"; // Import komponen baru
 import ToolStack from "@/components/portofolio/ToolsStack";
+import VisitorMap from "@/components/ui/Visitormap";
 
 export default function Home() {
   return (
@@ -27,6 +28,8 @@ export default function Home() {
       >
         <ToolStack />
       </motion.div>
+
+      <VisitorMap />
 
     </div>
   );
