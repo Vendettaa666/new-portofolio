@@ -1,8 +1,22 @@
-// app/api/visitors/route.ts — data dari Umami Analytics
+// app/api/visitors/route.ts
+//
+// Sumber data: Umami Analytics
+// Country code diambil dari Nominatim (bukan dari Umami) supaya selalu akurat.
+//
+// ENV:
+//   UMAMI_API_KEY=uk_xxx          ← Cloud
+//   UMAMI_WEBSITE_ID=d3412d96-...
+//   — atau —
+//   UMAMI_URL=https://umami.yourdomain.com
+//   UMAMI_USERNAME=admin
+//   UMAMI_PASSWORD=yourpassword
+//   UMAMI_WEBSITE_ID=d3412d96-...
+
 import { NextResponse } from "next/server";
 
-export const revalidate = 300; // cache 5 menit
+export const revalidate = 300;
 
+// ─── Types ────────────────────────────────────────────────────────────────────
 export interface VisitorEntry {
   id:           string;
   city:         string;
@@ -15,6 +29,13 @@ export interface VisitorEntry {
 }
 
 interface UmamiMetric { x: string; y: number }
+
+interface GeoResult {
+  lat:          number;
+  lon:          number;
+  country_code: string; // ISO 3166-1 alpha-2, uppercase — dari Nominatim addressdetails
+  country_name: string;
+}
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 async function getAuth(): Promise<{ baseUrl: string; headers: Record<string, string> } | null> {
@@ -30,10 +51,10 @@ async function getAuth(): Promise<{ baseUrl: string; headers: Record<string, str
   if (selfUrl && username && password) {
     try {
       const res = await fetch(`${selfUrl}/api/auth/login`, {
-        method: "POST",
+        method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-        cache: "no-store",
+        body:    JSON.stringify({ username, password }),
+        cache:   "no-store",
       });
       if (!res.ok) return null;
       const { token } = await res.json();
@@ -43,7 +64,7 @@ async function getAuth(): Promise<{ baseUrl: string; headers: Record<string, str
   return null;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Flag emoji ───────────────────────────────────────────────────────────────
 function getFlagEmoji(code: string): string {
   if (!code || code.length !== 2 || code === "XX") return "🌐";
   return code.toUpperCase().split("").map((c) =>
@@ -51,50 +72,86 @@ function getFlagEmoji(code: string): string {
   ).join("");
 }
 
-function resolveCountryCode(raw: string): string {
-  if (!raw) return "XX";
-  const t = raw.trim();
-  if (/^[A-Za-z]{2}$/.test(t)) return t.toUpperCase();
-  return nameToCode.get(t.toLowerCase()) ?? "XX";
-}
+// ─── Geocode — ambil lat/lon + country_code langsung dari Nominatim ───────────
+// Pakai addressdetails=1 supaya Nominatim return address.country_code
+// Cache in-memory per cold start (per server instance)
+const geoCache = new Map<string, GeoResult | null>();
 
-// In-memory geocode cache (per cold start)
-const geoCache = new Map<string, { lat: number; lon: number } | null>();
-
-async function geocodeCity(city: string, countryCode: string): Promise<{ lat: number; lon: number } | null> {
-  const key = `${city},${countryCode}`;
-  if (geoCache.has(key)) return geoCache.get(key)!;
+async function geocodeCity(city: string, hintCode?: string): Promise<GeoResult | null> {
+  // Kalau Umami sudah kasih hint country code (misal dari format "Lumajang, ID"),
+  // gunakan sebagai konteks pencarian supaya lebih akurat
+  const cacheKey = `${city},${hintCode ?? ""}`;
+  if (geoCache.has(cacheKey)) return geoCache.get(cacheKey)!;
 
   try {
-    const q = encodeURIComponent(countryCode !== "XX" ? `${city}, ${countryCode}` : city);
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`,
-      { headers: { "User-Agent": "portfolio-visitor-map/1.0" }, next: { revalidate: 86400 } }
-    );
-    if (!res.ok) { geoCache.set(key, null); return null; }
-    const data = await res.json();
-    if (!data?.[0]) { geoCache.set(key, null); return null; }
+    const query = hintCode && hintCode !== "XX"
+      ? `${city}, ${hintCode}`
+      : city;
 
-    // Bulatkan ke 1 desimal (~11km) — cukup untuk level kota
-    const result = {
-      lat: Math.round(parseFloat(data[0].lat) * 10) / 10,
-      lon: Math.round(parseFloat(data[0].lon) * 10) / 10,
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=1`,
+      {
+        headers: { "User-Agent": "portfolio-visitor-map/1.0" },
+        next:    { revalidate: 86400 }, // cache koordinat 1 hari
+      }
+    );
+
+    if (!res.ok) { geoCache.set(cacheKey, null); return null; }
+    const data = await res.json();
+    if (!data?.[0]) { geoCache.set(cacheKey, null); return null; }
+
+    const item        = data[0];
+    // Nominatim return country_code dalam lowercase (mis. "id", "us")
+    const rawCode     = item.address?.country_code ?? "";
+    const countryCode = rawCode.toUpperCase() || "XX";
+    const countryName = item.address?.country ?? codeToName.get(countryCode) ?? "Unknown";
+
+    const result: GeoResult = {
+      // 1 desimal (~10km) — level kota, tidak sampai desa
+      lat:          Math.round(parseFloat(item.lat) * 10) / 10,
+      lon:          Math.round(parseFloat(item.lon) * 10) / 10,
+      country_code: countryCode,
+      country_name: countryName,
     };
-    geoCache.set(key, result);
+
+    geoCache.set(cacheKey, result);
     return result;
   } catch {
-    geoCache.set(key, null);
+    geoCache.set(cacheKey, null);
     return null;
   }
+}
+
+// ─── Parse format city dari Umami ────────────────────────────────────────────
+// Umami bisa return: "Lumajang" | "Lumajang, ID" | "Lumajang, Indonesia"
+function parseMetricX(raw: string): { city: string; hintCode?: string } {
+  const parts = raw.split(",").map((s) => s.trim());
+  const city  = parts[0] ?? "";
+  const part2 = parts[1] ?? "";
+
+  if (!part2) return { city };
+
+  // Sudah ISO 2-huruf → pakai langsung sebagai hint
+  if (/^[A-Za-z]{2}$/.test(part2)) {
+    return { city, hintCode: part2.toUpperCase() };
+  }
+
+  // Nama panjang → resolve ke code
+  const code = nameToCode.get(part2.toLowerCase());
+  return { city, hintCode: code };
 }
 
 // ─── GET ──────────────────────────────────────────────────────────────────────
 export async function GET() {
   const websiteId = process.env.UMAMI_WEBSITE_ID;
-  if (!websiteId) return NextResponse.json({ visitors: [], error: "UMAMI_WEBSITE_ID not set" });
+  if (!websiteId) {
+    return NextResponse.json({ visitors: [], error: "UMAMI_WEBSITE_ID not set" });
+  }
 
   const auth = await getAuth();
-  if (!auth) return NextResponse.json({ visitors: [], error: "Umami auth failed" });
+  if (!auth) {
+    return NextResponse.json({ visitors: [], error: "Umami auth failed" });
+  }
 
   const { baseUrl, headers } = auth;
   const now      = Date.now();
@@ -121,24 +178,22 @@ export async function GET() {
       cityMetrics.slice(0, 30).map(async (metric) => {
         if (!metric.x) return;
 
-        const parts       = metric.x.split(",").map((s) => s.trim());
-        const city        = parts[0] ?? "";
-        const rawCountry  = parts[1] ?? "";
+        const { city, hintCode } = parseMetricX(metric.x);
         if (!city) return;
 
-        const countryCode = resolveCountryCode(rawCountry);
-        const countryName = codeToName.get(countryCode) ?? (rawCountry || "Unknown");
-        const geo         = await geocodeCity(city, countryCode);
+        // geocodeCity sekarang return country_code langsung dari Nominatim
+        // → tidak bergantung pada Umami untuk info negara
+        const geo = await geocodeCity(city, hintCode);
         if (!geo) return;
 
         entries.push({
-          id:           `${city}-${countryCode}`.toLowerCase().replace(/\s+/g, "-"),
+          id:           `${city}-${geo.country_code}`.toLowerCase().replace(/\s+/g, "-"),
           city,
-          country:      countryName,
-          country_code: countryCode,
+          country:      geo.country_name,
+          country_code: geo.country_code,
           lat:          geo.lat,
           lon:          geo.lon,
-          flag:         getFlagEmoji(countryCode),
+          flag:         getFlagEmoji(geo.country_code),
           visits:       metric.y,
         });
       })
@@ -147,9 +202,9 @@ export async function GET() {
     entries.sort((a, b) => b.visits - a.visits);
 
     return NextResponse.json({
-      visitors: entries,
+      visitors:       entries,
       totalCountries: countryMetrics.length,
-      totalVisits: entries.reduce((s, e) => s + e.visits, 0),
+      totalVisits:    entries.reduce((s, e) => s + e.visits, 0),
     });
   } catch (err) {
     console.error("[VisitorMap] error:", err);
@@ -171,6 +226,7 @@ const COUNTRIES: [string, string][] = [
   ["NZ","New Zealand"],["TW","Taiwan"],["HK","Hong Kong"],["IL","Israel"],
   ["UA","Ukraine"],["CZ","Czech Republic"],["RO","Romania"],["HU","Hungary"],
   ["GR","Greece"],["IR","Iran"],["KH","Cambodia"],["MM","Myanmar"],["NP","Nepal"],
+  ["LK","Sri Lanka"],["KZ","Kazakhstan"],["CO","Colombia"],["CL","Chile"],
 ];
 
 const codeToName = new Map(COUNTRIES.map(([c, n]) => [c, n]));
