@@ -449,7 +449,7 @@ function SidebarContent({
                     collapsed ? "" : "w-8 h-8 rounded-lg"
                   } ${
                     isActive
-                      ? "bg-white/20"
+                      ? "bg-transparent text-white"
                       : "bg-transparent group-hover:bg-neutral-200 dark:group-hover:bg-neutral-600/30"
                   }`}
                 >
