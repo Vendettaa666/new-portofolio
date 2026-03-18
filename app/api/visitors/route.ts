@@ -20,45 +20,47 @@ const TEST_IPS = [
   "114.4.0.1",
 ];
 
-// ─── Geo lookup dengan fallback provider ──────────────────────────────────────
+// ─── Geo lookup ───────────────────────────────────────────────────────────────
 async function fetchGeo(ip: string): Promise<{
   city: string; country: string; country_code: string;
   lat: number; lon: number; flag: string;
 } | null> {
-  // Provider 1: ip-api.com (no key needed, reliable)
+  // Provider 1: ipapi.co (HTTPS, reliable)
   try {
-    const res = await fetch(
-      `http://ip-api.com/json/${ip}?fields=status,city,country,countryCode,lat,lon`,
-      { next: { revalidate: 0 } }
-    );
+    const res = await fetch(`https://ipapi.co/${ip}/json/`, {
+      headers: { "User-Agent": "Mozilla/5.0" },
+      next: { revalidate: 0 },
+    });
     if (res.ok) {
       const d = await res.json();
-      if (d.status === "success" && d.lat && d.lon) {
+      if (d.latitude && d.longitude && !d.error) {
         return {
-          city:         d.city        ?? "Unknown",
-          country:      d.country     ?? "Unknown",
-          country_code: d.countryCode ?? "XX",
-          lat:          d.lat,
-          lon:          d.lon,
-          flag:         getFlagEmoji(d.countryCode ?? ""),
-        };
-      }
-    }
-  } catch { /* try next */ }
-
-  // Provider 2: ipapi.co
-  try {
-    const res = await fetch(`https://ipapi.co/${ip}/json/`, { next: { revalidate: 0 } });
-    if (res.ok) {
-      const d = await res.json();
-      if (d.latitude && d.longitude) {
-        return {
-          city:         d.city         ?? "Unknown",
+          city:         d.city ?? d.region ?? "Unknown",
           country:      d.country_name ?? "Unknown",
           country_code: d.country_code ?? "XX",
           lat:          d.latitude,
           lon:          d.longitude,
           flag:         getFlagEmoji(d.country_code ?? ""),
+        };
+      }
+    }
+  } catch { /* try next */ }
+
+  // Provider 2: freeipapi.com (HTTPS, no key)
+  try {
+    const res = await fetch(`https://freeipapi.com/api/json/${ip}`, {
+      next: { revalidate: 0 },
+    });
+    if (res.ok) {
+      const d = await res.json();
+      if (d.latitude && d.longitude) {
+        return {
+          city:         d.cityName    ?? d.regionName ?? "Unknown",
+          country:      d.countryName ?? "Unknown",
+          country_code: d.countryCode ?? "XX",
+          lat:          d.latitude,
+          lon:          d.longitude,
+          flag:         getFlagEmoji(d.countryCode ?? ""),
         };
       }
     }
@@ -115,13 +117,13 @@ export async function POST(req: NextRequest) {
           if (!geo) continue;
           added.push({
             ip:           testIp,
-            city:         geo.city         ?? "Unknown",
-            country:      geo.country      ?? "Unknown",
-            country_code: geo.country_code ?? "XX",
-            lat:          geo.lat,
-            lon:          geo.lon,
+            city:         geo.city,
+            country:      geo.country,
+            country_code: geo.country_code,
+            lat:          Math.round(geo.lat * 10) / 10,
+            lon:          Math.round(geo.lon * 10) / 10,
             timestamp:    Date.now() - Math.floor(Math.random() * 3600000),
-            flag:         geo.flag         ?? "",
+            flag:         geo.flag,
           });
         } catch { /* skip */ }
       }
@@ -163,8 +165,8 @@ export async function POST(req: NextRequest) {
       city:         geo.city,
       country:      geo.country,
       country_code: geo.country_code,
-      lat:          geo.lat,
-      lon:          geo.lon,
+      lat:          Math.round(geo.lat * 10) / 10,
+      lon:          Math.round(geo.lon * 10) / 10,
       timestamp:    Date.now(),
       flag:         geo.flag,
     };
