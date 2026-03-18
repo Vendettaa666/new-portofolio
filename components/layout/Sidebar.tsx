@@ -127,6 +127,22 @@ function SidebarContent({
 
   const status = discord ? STATUS_CONFIG[discord.discord_status] : null;
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  useEffect(() => {
+    const updateMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+
+    updateMode();
+    const observer = new MutationObserver(updateMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   // Current activity for speech bubble
   const activityBubble = (() => {
     // hide bubble if we're on mobile and the drawer is closed
@@ -252,7 +268,7 @@ function SidebarContent({
                       <div
                         className="absolute w-max max-w-[130px]"
                         style={{
-                          top: mobile ? "40%" : "50%", // raise a bit on mobile
+                          top: mobile ? "40%" : "50%",
                           left: mobile
                             ? "calc(100% + 8px)"
                             : "calc(100% + 12px)",
@@ -262,9 +278,10 @@ function SidebarContent({
                           zIndex: 9999,
                         }}
                       >
+                        {/* Tail border — menggunakan CSS variable agar ikut theme */}
                         {/* Tail border */}
                         <div
-                          className="absolute w-0 h-0"
+                          className="absolute w-0 h-0 border-r-neutral-300 dark:border-r-neutral-600"
                           style={{
                             left: "-9px",
                             top: mobile ? "40%" : "50%",
@@ -273,12 +290,13 @@ function SidebarContent({
                               : "translateY(-50%)",
                             borderTop: "6px solid transparent",
                             borderBottom: "6px solid transparent",
-                            borderRight: "9px solid #404040",
+                            borderRightWidth: "9px",
+                            borderRightStyle: "solid",
                           }}
                         />
                         {/* Tail fill */}
                         <div
-                          className="absolute w-0 h-0"
+                          className="absolute w-0 h-0 border-r-white dark:border-r-neutral-800"
                           style={{
                             left: "-7px",
                             top: mobile ? "40%" : "50%",
@@ -287,16 +305,18 @@ function SidebarContent({
                               : "translateY(-50%)",
                             borderTop: "5px solid transparent",
                             borderBottom: "5px solid transparent",
-                            borderRight: "8px solid #262626",
+                            borderRightWidth: "8px",
+                            borderRightStyle: "solid",
                           }}
                         />
+
                         {/* Bubble body */}
-                        <div className="bg-neutral-800 border border-neutral-700 rounded-xl rounded-tl-sm px-3 py-2.5 shadow-2xl">
+                        <div className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl rounded-tl-sm px-3 py-2.5 shadow-lg">
                           <p
                             className={`text-[9px] font-bold uppercase tracking-wide mb-1 ${
                               activityBubble.icon === "🎵"
-                                ? "text-green-400"
-                                : "text-blue-400"
+                                ? "text-green-500 dark:text-green-400"
+                                : "text-blue-500 dark:text-blue-400"
                             }`}
                           >
                             {activityBubble.icon}{" "}
@@ -304,11 +324,11 @@ function SidebarContent({
                               ? "Listening"
                               : "Playing"}
                           </p>
-                          <p className="text-[11px] font-semibold text-white leading-tight line-clamp-2">
+                          <p className="text-[11px] font-semibold text-neutral-800 dark:text-neutral-200 leading-tight line-clamp-2">
                             {activityBubble.line1}
                           </p>
                           {activityBubble.line2 && (
-                            <p className="text-[10px] text-neutral-400 leading-tight truncate mt-0.5">
+                            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 leading-tight truncate mt-0.5">
                               {activityBubble.line2}
                             </p>
                           )}
