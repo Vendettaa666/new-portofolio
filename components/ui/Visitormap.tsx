@@ -1,48 +1,56 @@
 "use client";
 
+// components/portfolio/VisitorMap.tsx
+// Sumber data: Umami Analytics via /api/visitors
+
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { Globe, Users, MapPin, RefreshCw } from "lucide-react";
+import { Globe, MapPin, TrendingUp, RefreshCw, Navigation } from "lucide-react";
 
+// ─── Types ────────────────────────────────────────────────────────────────────
 interface VisitorEntry {
-  id:           string;
-  city:         string;
-  country:      string;
+  id: string;
+  city: string;
+  country: string;
   country_code: string;
-  lat:          number;
-  lon:          number;
-  flag:         string;
-  visits:       number;
+  lat: number;
+  lon: number;
+  flag: string;
+  visits: number;
 }
 
 interface ApiResponse {
-  visitors:       VisitorEntry[];
+  visitors: VisitorEntry[];
   totalCountries: number;
-  totalVisits:    number;
+  totalVisits: number;
 }
 
+// ─── Dynamic import Leaflet (SSR-safe) ────────────────────────────────────────
 const LeafletMap = dynamic(() => import("@/components/ui/Leafletmap"), {
-  ssr:     false,
+  ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800/60 rounded-2xl">
-      <Globe className="h-6 w-6 text-primary animate-pulse" />
+    <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800/60">
+      <Globe className="h-5 w-5 text-primary animate-pulse" />
     </div>
   ),
 });
 
+// ─── Main Component ───────────────────────────────────────────────────────────
 export default function VisitorMap() {
-  const [data,       setData]       = useState<ApiResponse | null>(null);
-  const [loading,    setLoading]    = useState(true);
+  const [data, setData] = useState<ApiResponse | null>(null);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [mounted,    setMounted]    = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const fetchData = async (spinner = false) => {
     if (spinner) setRefreshing(true);
     try {
-      const res  = await fetch("/api/visitors");
-      const json = await res.json();
+      const res = await fetch("/api/visitors");
+      const json: ApiResponse = await res.json();
       setData(json);
     } catch (e) {
       console.error("[VisitorMap]", e);
@@ -54,94 +62,187 @@ export default function VisitorMap() {
 
   useEffect(() => {
     fetchData();
-    const id = setInterval(() => fetchData(), 5 * 60 * 1000);
+    const id = setInterval(() => fetchData(), 5 * 60_000);
     return () => clearInterval(id);
   }, []);
 
   if (!mounted) return null;
 
-  const visitors       = data?.visitors ?? [];
-  const totalCountries = data?.totalCountries ?? 0;
-  const totalVisits    = data?.totalVisits ?? 0;
-  const topCities      = visitors.slice(0, 5);
+  const visitors = data?.visitors ?? [];
+  const topCities = [...visitors]
+    .sort((a, b) => b.visits - a.visits)
+    .slice(0, 5);
+  const maxVisits = topCities[0]?.visits ?? 1;
+  const visits = loading ? "…" : (data?.totalVisits ?? 0).toLocaleString();
+  const countries = loading ? "…" : (data?.totalCountries ?? 0).toString();
+  const cities = loading ? "…" : visitors.length.toString();
+
+  // Bar colors — fade dari primary ke teal seiring rank
+  const barColor = (i: number) =>
+    i <= 1 ? "bg-primary" : i === 2 ? "bg-primary/70" : "bg-primary/40";
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50">
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary opacity-80" />
-
-      <div className="p-5 md:p-6 flex flex-col gap-4">
-
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
-              <Globe className="h-4.5 w-4.5 text-primary" />
+    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+      <div className="p-5 flex flex-col gap-4">
+        {/* ── Header ── */}
+        <div className="flex items-start justify-between mb-8">
+          <div className="flex gap-4">
+            {/* Ikon Utama dengan Glow Effect */}
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-blue-500/20 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 shadow-sm">
+                <Globe className="h-6 w-6" strokeWidth={2.2} />
+              </div>
             </div>
+
             <div>
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Visitor Map</h3>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">30 hari terakhir</p>
+              <div className="flex items-center gap-2.5">
+                <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-white">
+                  Jejak Pengunjung
+                </h3>
+                {/* Live Indicator yang lebih halus */}
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                    Live
+                  </span>
+                </div>
+              </div>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+                Analisis sebaran audiens dari berbagai penjuru wilayah
+              </p>
             </div>
           </div>
+
           <button
             onClick={() => fetchData(true)}
-            className="flex h-8 w-8 items-center justify-center rounded-xl border border-neutral-200 dark:border-neutral-700 text-neutral-400 hover:text-primary hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-all"
+            disabled={refreshing}
+            className="group flex h-9 w-9 items-center justify-center rounded-xl
+      border border-neutral-200 dark:border-neutral-800
+      bg-white dark:bg-neutral-900 text-neutral-400
+      hover:text-blue-600 dark:hover:text-blue-400
+      hover:border-blue-200 dark:hover:border-blue-900/50
+      shadow-sm active:scale-90 transition-all duration-200"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`h-4 w-4 ${refreshing ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500"}`}
+            />
           </button>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { icon: <Users className="h-3.5 w-3.5 text-primary" />,   label: "Kunjungan", value: loading ? "…" : totalVisits.toLocaleString(),    hl: true  },
-            { icon: <Globe className="h-3.5 w-3.5 text-neutral-400" />, label: "Negara",    value: loading ? "…" : totalCountries.toString(),        hl: false },
-            { icon: <MapPin className="h-3.5 w-3.5 text-neutral-400" />, label: "Kota",    value: loading ? "…" : visitors.length.toString(),        hl: false },
-          ].map(({ icon, label, value, hl }) => (
-            <div key={label} className={`flex flex-col gap-1 rounded-2xl p-3 border ${
-              hl ? "border-primary/30 bg-primary/5 dark:bg-primary/10"
-                 : "border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50"
-            }`}>
-              <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${
-                hl ? "bg-primary/15" : "bg-neutral-100 dark:bg-neutral-700/50"
-              }`}>{icon}</div>
-              <span className="text-[10px] uppercase tracking-widest font-semibold text-neutral-400 dark:text-neutral-500">{label}</span>
-              <span className={`text-lg font-black font-mono leading-tight ${hl ? "text-primary" : "text-neutral-900 dark:text-white"}`}>{value}</span>
-            </div>
-          ))}
-        </div>
+        {/* ── Stats Section ── */}
+        <div className="flex items-center justify-between pb-6 border-b border-neutral-100 dark:border-neutral-800/50">
+          <div className="flex items-center gap-10">
+            {[
+              {
+                value: visits,
+                label: "Kunjungan",
+                icon: <TrendingUp className="h-3.5 w-3.5" />,
+              },
+              {
+                value: countries,
+                label: "Negara",
+                icon: <Globe className="h-3.5 w-3.5" />,
+              },
+              {
+                value: cities,
+                label: "Kota",
+                icon: <MapPin className="h-3.5 w-3.5" />,
+              },
+            ].map(({ value, label, icon }, i) => (
+              <div key={label} className="flex items-center gap-10">
+                {i > 0 && (
+                  <div className="w-px h-8 bg-neutral-200 dark:bg-neutral-800/60" />
+                )}
+                <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-neutral-400 dark:text-neutral-500">
+                      {icon}
+                    </span>
+                    <span className="text-2xl font-bold tabular-nums text-neutral-900 dark:text-white tracking-tight">
+                      {value.toLocaleString()}
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.05em] text-neutral-400 dark:text-neutral-500">
+                    {label}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
 
-        {/* Map */}
-        <div className="relative h-[240px] overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700">
+          <div className="px-3 py-1.5 rounded-lg bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+              30 Hari Terakhir
+            </p>
+          </div>
+        </div>
+        {/* ── Map ── */}
+        <div className="relative h-[200px] overflow-hidden rounded-xl border border-neutral-100 dark:border-neutral-800">
           {loading ? (
-            <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800/60">
-              <Globe className="h-7 w-7 text-primary animate-pulse" />
+            <div className="w-full h-full flex items-center justify-center bg-neutral-50 dark:bg-neutral-800/60">
+              <Globe className="h-6 w-6 text-primary animate-pulse" />
             </div>
           ) : (
             <LeafletMap visitors={visitors} />
           )}
         </div>
 
-        {/* Top cities */}
+        {/* ── Top Cities — flat list ── */}
         {topCities.length > 0 && (
-          <div className="flex flex-col gap-1">
-            <p className="text-[10px] uppercase tracking-widest font-semibold text-neutral-400 dark:text-neutral-500 px-1">
-              Kota Teratas
+          <div>
+            <p className="text-[10px] uppercase tracking-widest font-medium text-neutral-400 dark:text-neutral-500 mb-2">
+              Kota teratas
             </p>
-            {topCities.map((v) => (
-              <div key={v.id} className="flex items-center gap-3 px-2 py-1.5 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-700/40 transition-colors">
-                <span className="text-base w-6 text-center shrink-0">{v.flag || "🌐"}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200 truncate">{v.city}</p>
-                  <p className="text-xs text-neutral-400 truncate">{v.country}</p>
+
+            <div className="flex flex-col">
+              {topCities.map((v, i) => (
+                <div
+                  key={v.id}
+                  className="flex items-center gap-3 py-2 border-b border-neutral-100 dark:border-neutral-800 last:border-0"
+                >
+                  {/* Flag */}
+                  <span
+                    className="text-base w-5 text-center shrink-0 leading-none"
+                    aria-label={v.country}
+                  >
+                    {v.flag}
+                  </span>
+
+                  {/* City name + country + bar */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline justify-between mb-1.5">
+                      <span className="text-[13px] text-neutral-700 dark:text-neutral-300 truncate">
+                        {v.city}
+                        <span className="text-neutral-400 dark:text-neutral-500 ml-1.5 text-[11px]">
+                          {v.country}
+                        </span>
+                      </span>
+                      <span className="text-[11px] font-mono text-neutral-400 dark:text-neutral-500 ml-3 shrink-0">
+                        {v.visits.toLocaleString()}
+                      </span>
+                    </div>
+                    {/* Thin 2px progress bar */}
+                    <div className="h-[2px] w-full rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-700 ${barColor(i)}`}
+                        style={{ width: `${(v.visits / maxVisits) * 100}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <span className="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">
-                  {v.visits.toLocaleString()} views
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
 
+        {/* ── Footer ── */}
+        <p className="text-[10px] text-center text-neutral-300 dark:text-neutral-700 -mt-1">
+          sumber: umami analytics
+        </p>
       </div>
     </div>
   );

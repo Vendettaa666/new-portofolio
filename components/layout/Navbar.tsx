@@ -10,7 +10,7 @@ interface NavbarProps {
 
 export default function Navbar({ openMobile }: NavbarProps) {
   const pathname = usePathname();
-  const pageName = pathname === "/" ? "Dashboard" : pathname.replace("/", "");
+  const pageName = pathname === "/" ? "Home" : pathname.replace("/", "");
   const formattedTitle = pageName.charAt(0).toUpperCase() + pageName.slice(1);
 
   return (
