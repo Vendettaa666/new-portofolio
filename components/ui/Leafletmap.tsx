@@ -1,7 +1,4 @@
-// components/portofolio/LeafletMap.tsx
-// Komponen Leaflet map (diimport secara dynamic dari VisitorMap)
-// Jangan import langsung — selalu lewat dynamic() untuk menghindari SSR error
-
+// components/portfolio/LeafletMap.tsx
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -23,47 +20,71 @@ interface Props {
   visitors: VisitorEntry[];
 }
 
-// ─── Custom pin icon ──────────────────────────────────────────────────────────
-function createPinIcon(flag: string, isRecent: boolean) {
-  // Get CSS variable --theme-primary at runtime
+// ─── Pin icon dengan bendera di dalam ────────────────────────────────────────
+// Bentuk: lingkaran besar + ekor segitiga di bawah (GPS pin shape)
+// Bendera: <img> dari flagcdn.com supaya tampil di Windows
+function createPinIcon(countryCode: string, isTop: boolean) {
   const primary = typeof window !== "undefined"
-    ? getComputedStyle(document.documentElement).getPropertyValue("--theme-primary").trim() || "#3b82f6"
+    ? getComputedStyle(document.documentElement).getPropertyValue("--color-primary").trim() || "#3b82f6"
     : "#3b82f6";
 
-  const size    = isRecent ? 36 : 28;
-  const pulse   = isRecent
-    ? `<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 2}" fill="${primary}" opacity="0.25">
-        <animate attributeName="r" from="${size / 2 - 4}" to="${size / 2 + 4}" dur="1.5s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" from="0.4" to="0" dur="1.5s" repeatCount="indefinite"/>
-       </circle>`
+  // Seluruh pin pakai SVG murni — lebih reliable di Leaflet divIcon
+  // CSS border-trick untuk segitiga sering gagal karena clipping / overflow di divIcon
+  const W      = isTop ? 44 : 36;
+  const R      = W / 2;
+  const tailH  = Math.round(W * 0.45);
+  const totalH = W + tailH;
+  const cx     = R;
+  const cy     = R;
+
+  const triLeft  = Math.round(cx - W * 0.18);
+  const triRight = Math.round(cx + W * 0.18);
+  const triTip   = totalH;
+
+  const flagCode = countryCode && countryCode !== "XX" ? countryCode.toLowerCase() : null;
+
+  // Tampilkan ISO code sebagai teks di dalam lingkaran (misal "ID", "SG", "MY")
+  // foreignObject + img tidak reliable di Leaflet divIcon — teks SVG selalu muncul
+  const label    = flagCode ? flagCode.toUpperCase() : "?";
+  const fontSize = W <= 36 ? 11 : 13;
+  const flagEl   = `<text
+    x="${cx}" y="${cy + Math.round(fontSize * 0.38)}"
+    text-anchor="middle"
+    font-family="system-ui,sans-serif"
+    font-size="${fontSize}"
+    font-weight="700"
+    fill="white"
+    letter-spacing="0.5"
+  >${label}</text>`;
+
+  const pulse = isTop
+    ? `<circle cx="${cx}" cy="${cy}" r="${R + 5}" fill="none"
+         stroke="${primary}" stroke-width="2" opacity="0.35"
+         style="animation:vpulse 2s ease-out infinite;transform-origin:${cx}px ${cy}px;"/>`
     : "";
 
-  const html = `
-    <div style="position:relative;width:${size}px;height:${size}px;">
-      <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;">
-        ${pulse}
-        <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - (isRecent ? 6 : 5)}"
-          fill="${primary}" stroke="white" stroke-width="2" opacity="${isRecent ? 1 : 0.85}"/>
-      </svg>
-      <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:${isRecent ? 14 : 11}px;line-height:1;">
-        ${flag || "📍"}
-      </span>
-    </div>
-  `;
+  const html = `<svg width="${W}" height="${totalH}" viewBox="0 0 ${W} ${totalH}"
+    xmlns="http://www.w3.org/2000/svg" overflow="visible" style="display:block;">
+    <defs><style>@keyframes vpulse{0%{transform:scale(1);opacity:.35}70%{transform:scale(1.7);opacity:0}100%{transform:scale(1.7);opacity:0}}</style></defs>
+    ${pulse}
+    <circle cx="${cx}" cy="${cy}" r="${R - 1.5}" fill="${primary}" stroke="white" stroke-width="2.5"/>
+    <polygon points="${triLeft},${W - 4} ${triRight},${W - 4} ${cx},${triTip}" fill="${primary}"/>
+    ${flagEl}
+  </svg>`;
 
   return L.divIcon({
     html,
     className:   "leaflet-visitor-pin",
-    iconSize:    [size, size],
-    iconAnchor:  [size / 2, size / 2],
-    popupAnchor: [0, -(size / 2 + 4)],
+    iconSize:    [W, totalH],
+    iconAnchor:  [cx, totalH],
+    popupAnchor: [0, -(totalH + 4)],
   });
 }
 
-// ─── Map tile style — CartoDB Positron (clean, no label clutter) ──────────────
-const TILE_URL_LIGHT = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-const TILE_URL_DARK  = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
-const TILE_ATTR      = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+// ─── Tile URLs ────────────────────────────────────────────────────────────────
+const TILE_LIGHT = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+const TILE_DARK  = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+const TILE_ATTR  = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function LeafletMap({ visitors }: Props) {
@@ -72,16 +93,14 @@ export default function LeafletMap({ visitors }: Props) {
   const layerRef     = useRef<L.LayerGroup | null>(null);
   const tileRef      = useRef<L.TileLayer | null>(null);
 
-  // Detect dark mode
   const isDark = () =>
     typeof window !== "undefined" &&
     document.documentElement.classList.contains("dark");
 
-  // ── Init map once ──────────────────────────────────────────────────────────
+  // ── Init map ──────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    // Fix default marker icon path (common Leaflet issue with bundlers)
     delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
@@ -90,18 +109,16 @@ export default function LeafletMap({ visitors }: Props) {
     });
 
     const map = L.map(containerRef.current, {
-      // Focus Indonesia by default
-      center:          [-2.5, 118],
-      zoom:            5,
-      zoomControl:     true,
+      center:             [-2.5, 118],
+      zoom:               5,
+      zoomControl:        true,
       attributionControl: true,
-      scrollWheelZoom: true,
-      minZoom:         2,
-      maxZoom:         18,
+      scrollWheelZoom:    true,
+      minZoom:            2,
+      maxZoom:            18,
     });
 
-    // Tile layer
-    const tile = L.tileLayer(isDark() ? TILE_URL_DARK : TILE_URL_LIGHT, {
+    const tile = L.tileLayer(isDark() ? TILE_DARK : TILE_LIGHT, {
       attribution: TILE_ATTR,
       subdomains:  "abcd",
       maxZoom:     19,
@@ -111,10 +128,8 @@ export default function LeafletMap({ visitors }: Props) {
     layerRef.current = L.layerGroup().addTo(map);
     mapRef.current   = map;
 
-    // Watch dark mode changes
     const observer = new MutationObserver(() => {
-      const url = isDark() ? TILE_URL_DARK : TILE_URL_LIGHT;
-      tileRef.current?.setUrl(url);
+      tileRef.current?.setUrl(isDark() ? TILE_DARK : TILE_LIGHT);
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
@@ -125,34 +140,53 @@ export default function LeafletMap({ visitors }: Props) {
     };
   }, []);
 
-  // ── Update markers when visitors change ────────────────────────────────────
+  // ── Update markers ────────────────────────────────────────────────────────
   useEffect(() => {
     if (!layerRef.current || !mapRef.current) return;
-
     layerRef.current.clearLayers();
     if (!visitors.length) return;
 
-    // Sort by visits — paling banyak di atas
-    const sorted = [...visitors].sort((a, b) => a.visits - b.visits);
+    const maxVisits = Math.max(...visitors.map((v) => v.visits));
+    const sorted    = [...visitors].sort((a, b) => a.visits - b.visits);
 
     sorted.forEach((v) => {
-      const isTop = v.visits === visitors[0]?.visits;
-      const icon  = createPinIcon(v.flag ?? "", isTop);
+      const isTop = v.visits === maxVisits;
+      const icon  = createPinIcon(v.country_code ?? "", isTop);
+
+      const flagCode = v.country_code && v.country_code !== "XX"
+        ? v.country_code.toLowerCase()
+        : null;
+
+      const flagLabel = (v.country_code && v.country_code !== "XX")
+        ? v.country_code.toUpperCase()
+        : "?";
+      const flagHtml = `<span style="
+        display:inline-flex;align-items:center;justify-content:center;
+        width:28px;height:20px;border-radius:3px;
+        background:#3b82f6;color:white;
+        font-size:9px;font-weight:700;font-family:system-ui,sans-serif;
+        letter-spacing:0.5px;margin-right:8px;flex-shrink:0;
+      ">${flagLabel}</span>`;
 
       const popup = L.popup({
         closeButton: false,
         className:   "visitor-popup",
-        offset:      [0, -8],
+        offset:      [0, -4],
       }).setContent(`
-        <div style="font-family:system-ui,sans-serif;padding:10px 14px;min-width:150px;border-radius:12px;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <span style="font-size:20px;">${v.flag || "🌐"}</span>
+        <div style="
+          font-family:system-ui,sans-serif;
+          padding:10px 14px;min-width:155px;
+          border-radius:12px;background:white;
+          box-shadow:0 4px 20px rgba(0,0,0,0.12);
+        ">
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+            ${flagHtml}
             <div>
-              <div style="font-weight:700;font-size:13px;color:#111;">${v.city}</div>
+              <div style="font-weight:700;font-size:13px;color:#111;line-height:1.2;">${v.city}</div>
               <div style="font-size:11px;color:#888;">${v.country}</div>
             </div>
           </div>
-          <div style="font-size:10px;color:#aaa;border-top:1px solid #f0f0f0;padding-top:6px;">
+          <div style="font-size:10px;color:#bbb;border-top:1px solid #f0f0f0;padding-top:6px;">
             ${v.visits.toLocaleString()} kunjungan
           </div>
         </div>
@@ -163,22 +197,27 @@ export default function LeafletMap({ visitors }: Props) {
         .addTo(layerRef.current!);
     });
 
-    // Auto-fit bounds
     const latLngs = visitors.map((v) => [v.lat, v.lon] as [number, number]);
-    if (latLngs.length > 0) {
-      mapRef.current.fitBounds(L.latLngBounds(latLngs), { padding: [40, 40], maxZoom: 8 });
-    }
+    mapRef.current.fitBounds(L.latLngBounds(latLngs), { padding: [40, 40], maxZoom: 8 });
   }, [visitors]);
 
   return (
     <>
       <style>{`
+        @keyframes visitorPulse {
+          0%   { transform: scale(1);   opacity: 0.4; }
+          70%  { transform: scale(1.6); opacity: 0;   }
+          100% { transform: scale(1.6); opacity: 0;   }
+        }
         .leaflet-visitor-pin { background: none !important; border: none !important; }
-        .visitor-popup .leaflet-popup-content-wrapper { padding: 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+        .visitor-popup .leaflet-popup-content-wrapper {
+          padding: 0; border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
         .visitor-popup .leaflet-popup-content { margin: 0; }
-        .visitor-popup .leaflet-popup-tip { display: none; }
-        .leaflet-control-attribution { font-size: 9px !important; }
-        .leaflet-control-zoom a { border-radius: 8px !important; }
+        .visitor-popup .leaflet-popup-tip     { display: none; }
+        .leaflet-control-attribution          { font-size: 9px !important; }
+        .leaflet-control-zoom a               { border-radius: 8px !important; }
       `}</style>
       <div ref={containerRef} className="w-full h-full z-0" />
     </>
