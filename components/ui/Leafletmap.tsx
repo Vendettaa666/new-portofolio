@@ -9,29 +9,18 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 interface VisitorEntry {
-  ip:           string;
+  id:           string;
   city:         string;
   country:      string;
   country_code: string;
   lat:          number;
   lon:          number;
-  timestamp:    number;
   flag?:        string;
+  visits:       number;
 }
 
 interface Props {
   visitors: VisitorEntry[];
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function timeAgo(ts: number): string {
-  const d = Date.now() - ts;
-  const m = Math.floor(d / 60000);
-  if (m < 1)  return "baru saja";
-  if (m < 60) return `${m} mnt lalu`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h} jam lalu`;
-  return `${Math.floor(h / 24)} hari lalu`;
 }
 
 // ─── Custom pin icon ──────────────────────────────────────────────────────────
@@ -141,32 +130,21 @@ export default function LeafletMap({ visitors }: Props) {
     if (!layerRef.current || !mapRef.current) return;
 
     layerRef.current.clearLayers();
-
     if (!visitors.length) return;
 
-    const now     = Date.now();
-    const oneHour = 60 * 60 * 1000;
-
-    // Sort by timestamp — most recent on top (higher z-index)
-    const sorted = [...visitors].sort((a, b) => a.timestamp - b.timestamp);
+    // Sort by visits — paling banyak di atas
+    const sorted = [...visitors].sort((a, b) => a.visits - b.visits);
 
     sorted.forEach((v) => {
-      const isRecent = now - v.timestamp < oneHour;
-      const icon     = createPinIcon(v.flag ?? "", isRecent);
+      const isTop = v.visits === visitors[0]?.visits;
+      const icon  = createPinIcon(v.flag ?? "", isTop);
 
       const popup = L.popup({
         closeButton: false,
         className:   "visitor-popup",
         offset:      [0, -8],
       }).setContent(`
-        <div style="
-          font-family: system-ui, sans-serif;
-          padding: 10px 14px;
-          min-width: 160px;
-          border-radius: 12px;
-          background: white;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-        ">
+        <div style="font-family:system-ui,sans-serif;padding:10px 14px;min-width:150px;border-radius:12px;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
             <span style="font-size:20px;">${v.flag || "🌐"}</span>
             <div>
@@ -174,8 +152,8 @@ export default function LeafletMap({ visitors }: Props) {
               <div style="font-size:11px;color:#888;">${v.country}</div>
             </div>
           </div>
-          <div style="font-size:10px;color:#aaa;margin-top:4px;border-top:1px solid #f0f0f0;padding-top:6px;">
-            ${timeAgo(v.timestamp)}
+          <div style="font-size:10px;color:#aaa;border-top:1px solid #f0f0f0;padding-top:6px;">
+            ${v.visits.toLocaleString()} kunjungan
           </div>
         </div>
       `);
@@ -185,11 +163,10 @@ export default function LeafletMap({ visitors }: Props) {
         .addTo(layerRef.current!);
     });
 
-    // Auto-fit bounds to all markers
+    // Auto-fit bounds
     const latLngs = visitors.map((v) => [v.lat, v.lon] as [number, number]);
     if (latLngs.length > 0) {
-      const bounds = L.latLngBounds(latLngs);
-      mapRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 8 });
+      mapRef.current.fitBounds(L.latLngBounds(latLngs), { padding: [40, 40], maxZoom: 8 });
     }
   }, [visitors]);
 

@@ -8,7 +8,6 @@ import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { generateSEO, generatePersonSchema, generateWebsiteSchema } from "@/lib/seo";
 import StructuredData from "@/components/seo/StructuredData";
 import AiAssistant from "@/components/ui/AiAsistant";
-import TrackerProvider from "@/components/ui/TrackerProvider";
 
 // 1. Font Default
 const inter = Inter({ 
@@ -78,7 +77,6 @@ export default function RootLayout({
         className={`${inter.variable} ${jakarta.variable} ${jetbrainsMono.variable} font-sans overflow-x-hidden antialiased`}
       >
         <ThemeProvider>
-          <TrackerProvider />
           <DashboardLayout>{children}</DashboardLayout>
           <AiAssistant />
         </ThemeProvider>

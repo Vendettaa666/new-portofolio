@@ -1,216 +1,177 @@
-// app/api/visitors/route.ts
-import { Redis } from "@upstash/redis";
-import { NextRequest } from "next/server";
+// app/api/visitors/route.ts — data dari Umami Analytics
+import { NextResponse } from "next/server";
 
-const redis = new Redis({
-  url: process.env.KV_REST_API_URL!,
-  token: process.env.KV_REST_API_TOKEN!,
-});
-
-const KV_KEY = process.env.NODE_ENV === "development"
-  ? "visitors:locations:dev"
-  : "visitors:locations";
-const MAX_ENTRIES = 500;
-
-const TEST_IPS = [
-  "114.125.0.1",
-  "36.82.0.1",
-  "180.244.0.1",
-  "103.28.0.1",
-  "114.4.0.1",
-];
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-/**
- * Bulatkan koordinat ke 0 desimal → akurasi ~100 km (level kota/kabupaten).
- * Cukup untuk pin di pusat kota, tidak bisa dilacak ke desa/kelurahan.
- */
-function roundCoord(n: number): number {
-  return Math.round(n);
-}
-
-/**
- * Ambil IP real dari berbagai header.
- * Urutan: Vercel → Cloudflare → nginx/proxy → x-forwarded-for → fallback.
- */
-function getRealIp(req: NextRequest): string {
-  return (
-    req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ??   // Vercel
-    req.headers.get("cf-connecting-ip") ??                                  // Cloudflare
-    req.headers.get("x-real-ip") ??                                         // nginx
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??            // generic proxy
-    "127.0.0.1"
-  );
-}
-
-function isLocalIp(ip: string): boolean {
-  return (
-    ip === "127.0.0.1" ||
-    ip === "::1" ||
-    ip.startsWith("192.168.") ||
-    ip.startsWith("10.") ||
-    ip.startsWith("172.")
-  );
-}
-
-// ─── Geo lookup ───────────────────────────────────────────────────────────────
-async function fetchGeo(ip: string): Promise<{
-  city: string; country: string; country_code: string;
-  lat: number; lon: number; flag: string;
-} | null> {
-  // Provider 1: ipapi.co (HTTPS, reliable)
-  try {
-    const res = await fetch(`https://ipapi.co/${ip}/json/`, {
-      headers: { "User-Agent": "Mozilla/5.0" },
-      next: { revalidate: 0 },
-    });
-    if (res.ok) {
-      const d = await res.json();
-      if (d.latitude && d.longitude && !d.error) {
-        return {
-          city:         d.city ?? d.region ?? "Unknown",
-          country:      d.country_name ?? "Unknown",
-          country_code: d.country_code ?? "XX",
-          lat:          d.latitude,
-          lon:          d.longitude,
-          flag:         getFlagEmoji(d.country_code ?? ""),
-        };
-      }
-    }
-  } catch { /* try next */ }
-
-  // Provider 2: freeipapi.com (HTTPS, no key)
-  try {
-    const res = await fetch(`https://freeipapi.com/api/json/${ip}`, {
-      next: { revalidate: 0 },
-    });
-    if (res.ok) {
-      const d = await res.json();
-      if (d.latitude && d.longitude) {
-        return {
-          city:         d.cityName    ?? d.regionName ?? "Unknown",
-          country:      d.countryName ?? "Unknown",
-          country_code: d.countryCode ?? "XX",
-          lat:          d.latitude,
-          lon:          d.longitude,
-          flag:         getFlagEmoji(d.countryCode ?? ""),
-        };
-      }
-    }
-  } catch { /* fail */ }
-
-  return null;
-}
-
-function getFlagEmoji(countryCode: string): string {
-  if (!countryCode || countryCode.length !== 2) return "🌐";
-  return countryCode
-    .toUpperCase()
-    .split("")
-    .map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
-    .join("");
-}
+export const revalidate = 300; // cache 5 menit
 
 export interface VisitorEntry {
-  ip:           string;
+  id:           string;
   city:         string;
   country:      string;
   country_code: string;
   lat:          number;
   lon:          number;
-  timestamp:    number;
-  flag?:        string;
+  flag:         string;
+  visits:       number;
+}
+
+interface UmamiMetric { x: string; y: number }
+
+// ─── Auth ─────────────────────────────────────────────────────────────────────
+async function getAuth(): Promise<{ baseUrl: string; headers: Record<string, string> } | null> {
+  const apiKey   = process.env.UMAMI_API_KEY;
+  const selfUrl  = process.env.UMAMI_URL;
+  const username = process.env.UMAMI_USERNAME;
+  const password = process.env.UMAMI_PASSWORD;
+
+  if (apiKey) {
+    return { baseUrl: "https://api.umami.is", headers: { "x-umami-api-key": apiKey } };
+  }
+
+  if (selfUrl && username && password) {
+    try {
+      const res = await fetch(`${selfUrl}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+        cache: "no-store",
+      });
+      if (!res.ok) return null;
+      const { token } = await res.json();
+      return { baseUrl: selfUrl, headers: { Authorization: `Bearer ${token}` } };
+    } catch { return null; }
+  }
+  return null;
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function getFlagEmoji(code: string): string {
+  if (!code || code.length !== 2 || code === "XX") return "🌐";
+  return code.toUpperCase().split("").map((c) =>
+    String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65)
+  ).join("");
+}
+
+function resolveCountryCode(raw: string): string {
+  if (!raw) return "XX";
+  const t = raw.trim();
+  if (/^[A-Za-z]{2}$/.test(t)) return t.toUpperCase();
+  return nameToCode.get(t.toLowerCase()) ?? "XX";
+}
+
+// In-memory geocode cache (per cold start)
+const geoCache = new Map<string, { lat: number; lon: number } | null>();
+
+async function geocodeCity(city: string, countryCode: string): Promise<{ lat: number; lon: number } | null> {
+  const key = `${city},${countryCode}`;
+  if (geoCache.has(key)) return geoCache.get(key)!;
+
+  try {
+    const q = encodeURIComponent(countryCode !== "XX" ? `${city}, ${countryCode}` : city);
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`,
+      { headers: { "User-Agent": "portfolio-visitor-map/1.0" }, next: { revalidate: 86400 } }
+    );
+    if (!res.ok) { geoCache.set(key, null); return null; }
+    const data = await res.json();
+    if (!data?.[0]) { geoCache.set(key, null); return null; }
+
+    // Bulatkan ke 1 desimal (~11km) — cukup untuk level kota
+    const result = {
+      lat: Math.round(parseFloat(data[0].lat) * 10) / 10,
+      lon: Math.round(parseFloat(data[0].lon) * 10) / 10,
+    };
+    geoCache.set(key, result);
+    return result;
+  } catch {
+    geoCache.set(key, null);
+    return null;
+  }
 }
 
 // ─── GET ──────────────────────────────────────────────────────────────────────
 export async function GET() {
+  const websiteId = process.env.UMAMI_WEBSITE_ID;
+  if (!websiteId) return NextResponse.json({ visitors: [], error: "UMAMI_WEBSITE_ID not set" });
+
+  const auth = await getAuth();
+  if (!auth) return NextResponse.json({ visitors: [], error: "Umami auth failed" });
+
+  const { baseUrl, headers } = auth;
+  const now      = Date.now();
+  const day30ago = now - 30 * 24 * 60 * 60 * 1000;
+  const q        = `startAt=${day30ago}&endAt=${now}&limit=50`;
+
   try {
-    const raw      = await redis.get<VisitorEntry[]>(KV_KEY);
-    const visitors = raw ?? [];
-    return Response.json({ visitors });
-  } catch (err) {
-    console.error("[Visitors GET]", err);
-    return Response.json({ visitors: [] });
-  }
-}
+    const [cityRes, countryRes] = await Promise.all([
+      fetch(`${baseUrl}/v1/websites/${websiteId}/metrics?${q}&type=city`,    { headers, next: { revalidate: 300 } }),
+      fetch(`${baseUrl}/v1/websites/${websiteId}/metrics?${q}&type=country`, { headers, next: { revalidate: 300 } }),
+    ]);
 
-// ─── POST ─────────────────────────────────────────────────────────────────────
-export async function POST(req: NextRequest) {
-  try {
-    const isDev  = process.env.NODE_ENV === "development";
-    const params = req.nextUrl.searchParams;
-
-    // Seed mode (dev only)
-    if (isDev && params.get("seed") === "1") {
-      const added: VisitorEntry[] = [];
-
-      for (const testIp of TEST_IPS) {
-        try {
-          const geo = await fetchGeo(testIp);
-          if (!geo) continue;
-          added.push({
-            ip:           testIp,
-            city:         geo.city,
-            country:      geo.country,
-            country_code: geo.country_code,
-            lat:          roundCoord(geo.lat),
-            lon:          roundCoord(geo.lon),
-            timestamp:    Date.now() - Math.floor(Math.random() * 3600000),
-            flag:         geo.flag,
-          });
-        } catch { /* skip */ }
-      }
-
-      await redis.set(KV_KEY, added);
-      return Response.json({ ok: true, seeded: added.length, entries: added });
+    if (!cityRes.ok) {
+      console.error("[VisitorMap] city metrics failed:", cityRes.status);
+      return NextResponse.json({ visitors: [], error: "city metrics failed" });
     }
 
-    // Clear mode (dev only)
-    if (isDev && params.get("clear") === "1") {
-      await redis.del(KV_KEY);
-      return Response.json({ ok: true, cleared: true });
-    }
+    const cityMetrics:    UmamiMetric[] = await cityRes.json();
+    const countryMetrics: UmamiMetric[] = countryRes.ok ? await countryRes.json() : [];
 
-    // Normal flow — ambil IP dengan helper yang lebih lengkap
-    const testIpParam = isDev ? params.get("testip") : null;
-    const ip = testIpParam ?? getRealIp(req);
+    const entries: VisitorEntry[] = [];
 
-    // Debug log di production untuk diagnosa (hapus setelah confirmed working)
-    console.log("[Visitors POST] detected ip:", ip, "| headers:", {
-      "x-vercel-forwarded-for": req.headers.get("x-vercel-forwarded-for"),
-      "cf-connecting-ip":       req.headers.get("cf-connecting-ip"),
-      "x-real-ip":              req.headers.get("x-real-ip"),
-      "x-forwarded-for":        req.headers.get("x-forwarded-for"),
+    await Promise.all(
+      cityMetrics.slice(0, 30).map(async (metric) => {
+        if (!metric.x) return;
+
+        const parts       = metric.x.split(",").map((s) => s.trim());
+        const city        = parts[0] ?? "";
+        const rawCountry  = parts[1] ?? "";
+        if (!city) return;
+
+        const countryCode = resolveCountryCode(rawCountry);
+        const countryName = codeToName.get(countryCode) ?? (rawCountry || "Unknown");
+        const geo         = await geocodeCity(city, countryCode);
+        if (!geo) return;
+
+        entries.push({
+          id:           `${city}-${countryCode}`.toLowerCase().replace(/\s+/g, "-"),
+          city,
+          country:      countryName,
+          country_code: countryCode,
+          lat:          geo.lat,
+          lon:          geo.lon,
+          flag:         getFlagEmoji(countryCode),
+          visits:       metric.y,
+        });
+      })
+    );
+
+    entries.sort((a, b) => b.visits - a.visits);
+
+    return NextResponse.json({
+      visitors: entries,
+      totalCountries: countryMetrics.length,
+      totalVisits: entries.reduce((s, e) => s + e.visits, 0),
     });
-
-    // Skip local IP
-    if (!testIpParam && isLocalIp(ip)) {
-      return Response.json({ ok: true, skipped: true, reason: "local IP" });
-    }
-
-    const geo = await fetchGeo(ip);
-    if (!geo) return Response.json({ ok: false, error: "geo lookup failed" });
-
-    const entry: VisitorEntry = {
-      ip,
-      city:         geo.city,
-      country:      geo.country,
-      country_code: geo.country_code,
-      lat:          roundCoord(geo.lat),   // ← rounded ke level kota, bukan desa
-      lon:          roundCoord(geo.lon),
-      timestamp:    Date.now(),
-      flag:         geo.flag,
-    };
-
-    const existing = (await redis.get<VisitorEntry[]>(KV_KEY)) ?? [];
-    const filtered = existing.filter((v) => v.ip !== ip);
-    const updated  = [entry, ...filtered].slice(0, MAX_ENTRIES);
-    await redis.set(KV_KEY, updated);
-
-    return Response.json({ ok: true, entry });
   } catch (err) {
-    console.error("[Visitors POST]", err);
-    return Response.json({ ok: false, error: String(err) }, { status: 500 });
+    console.error("[VisitorMap] error:", err);
+    return NextResponse.json({ visitors: [], error: String(err) });
   }
 }
+
+// ─── Country maps ─────────────────────────────────────────────────────────────
+const COUNTRIES: [string, string][] = [
+  ["ID","Indonesia"],["US","United States"],["GB","United Kingdom"],["DE","Germany"],
+  ["FR","France"],["JP","Japan"],["CN","China"],["IN","India"],["AU","Australia"],
+  ["CA","Canada"],["BR","Brazil"],["RU","Russia"],["KR","South Korea"],["NL","Netherlands"],
+  ["SG","Singapore"],["MY","Malaysia"],["TH","Thailand"],["PH","Philippines"],
+  ["VN","Vietnam"],["PK","Pakistan"],["BD","Bangladesh"],["IT","Italy"],["ES","Spain"],
+  ["MX","Mexico"],["TR","Turkey"],["SA","Saudi Arabia"],["AE","United Arab Emirates"],
+  ["ZA","South Africa"],["NG","Nigeria"],["EG","Egypt"],["AR","Argentina"],
+  ["PL","Poland"],["SE","Sweden"],["NO","Norway"],["DK","Denmark"],["FI","Finland"],
+  ["CH","Switzerland"],["AT","Austria"],["BE","Belgium"],["PT","Portugal"],
+  ["NZ","New Zealand"],["TW","Taiwan"],["HK","Hong Kong"],["IL","Israel"],
+  ["UA","Ukraine"],["CZ","Czech Republic"],["RO","Romania"],["HU","Hungary"],
+  ["GR","Greece"],["IR","Iran"],["KH","Cambodia"],["MM","Myanmar"],["NP","Nepal"],
+];
+
+const codeToName = new Map(COUNTRIES.map(([c, n]) => [c, n]));
+const nameToCode = new Map(COUNTRIES.map(([c, n]) => [n.toLowerCase(), c]));
