@@ -1,30 +1,96 @@
 // app/api/visitors/route.ts
-// Menyimpan dan mengambil data lokasi pengunjung menggunakan Vercel KV (Redis)
-//
-// ENV yang dibutuhkan (otomatis terisi setelah connect Vercel KV di dashboard):
-//   KV_URL, KV_REST_API_URL, KV_REST_API_TOKEN, KV_REST_API_READ_ONLY_TOKEN
-
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 import { NextRequest } from "next/server";
 
-const KV_KEY      = "visitors:locations";
-const MAX_ENTRIES = 500; // simpan maksimal 500 visitor terakhir
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
 
-export interface VisitorEntry {
-  ip:        string;
-  city:      string;
-  country:   string;
-  country_code: string;
-  lat:       number;
-  lon:       number;
-  timestamp: number;
-  flag?:     string;
+const KV_KEY = process.env.NODE_ENV === "development" 
+  ? "visitors:locations:dev" 
+  : "visitors:locations";
+const MAX_ENTRIES = 500;
+
+const TEST_IPS = [
+  "114.125.0.1",
+  "36.82.0.1",
+  "180.244.0.1",
+  "103.28.0.1",
+  "114.4.0.1",
+];
+
+// ─── Geo lookup dengan fallback provider ──────────────────────────────────────
+async function fetchGeo(ip: string): Promise<{
+  city: string; country: string; country_code: string;
+  lat: number; lon: number; flag: string;
+} | null> {
+  // Provider 1: ip-api.com (no key needed, reliable)
+  try {
+    const res = await fetch(
+      `http://ip-api.com/json/${ip}?fields=status,city,country,countryCode,lat,lon`,
+      { next: { revalidate: 0 } }
+    );
+    if (res.ok) {
+      const d = await res.json();
+      if (d.status === "success" && d.lat && d.lon) {
+        return {
+          city:         d.city        ?? "Unknown",
+          country:      d.country     ?? "Unknown",
+          country_code: d.countryCode ?? "XX",
+          lat:          d.lat,
+          lon:          d.lon,
+          flag:         getFlagEmoji(d.countryCode ?? ""),
+        };
+      }
+    }
+  } catch { /* try next */ }
+
+  // Provider 2: ipapi.co
+  try {
+    const res = await fetch(`https://ipapi.co/${ip}/json/`, { next: { revalidate: 0 } });
+    if (res.ok) {
+      const d = await res.json();
+      if (d.latitude && d.longitude) {
+        return {
+          city:         d.city         ?? "Unknown",
+          country:      d.country_name ?? "Unknown",
+          country_code: d.country_code ?? "XX",
+          lat:          d.latitude,
+          lon:          d.longitude,
+          flag:         getFlagEmoji(d.country_code ?? ""),
+        };
+      }
+    }
+  } catch { /* fail */ }
+
+  return null;
 }
 
-// ─── GET — ambil semua visitor ─────────────────────────────────────────────
+function getFlagEmoji(countryCode: string): string {
+  if (!countryCode || countryCode.length !== 2) return "🌐";
+  return countryCode
+    .toUpperCase()
+    .split("")
+    .map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
+    .join("");
+}
+
+export interface VisitorEntry {
+  ip:           string;
+  city:         string;
+  country:      string;
+  country_code: string;
+  lat:          number;
+  lon:          number;
+  timestamp:    number;
+  flag?:        string;
+}
+
+// ─── GET ──────────────────────────────────────────────────────────────────────
 export async function GET() {
   try {
-    const raw = await kv.get<VisitorEntry[]>(KV_KEY);
+    const raw      = await redis.get<VisitorEntry[]>(KV_KEY);
     const visitors = raw ?? [];
     return Response.json({ visitors });
   } catch (err) {
@@ -33,61 +99,80 @@ export async function GET() {
   }
 }
 
-// ─── POST — catat pengunjung baru ──────────────────────────────────────────
+// ─── POST ─────────────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
-    // Ambil IP real dari header (Vercel/proxy)
-    const ip =
-      req.headers.get("x-real-ip") ??
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      "127.0.0.1";
+    const isDev  = process.env.NODE_ENV === "development";
+    const params = req.nextUrl.searchParams;
 
-    // Skip localhost / private IP
-    if (
+    // Seed mode (dev only)
+    if (isDev && params.get("seed") === "1") {
+      const added: VisitorEntry[] = [];
+
+      for (const testIp of TEST_IPS) {
+        try {
+          const geo = await fetchGeo(testIp);
+          if (!geo) continue;
+          added.push({
+            ip:           testIp,
+            city:         geo.city         ?? "Unknown",
+            country:      geo.country      ?? "Unknown",
+            country_code: geo.country_code ?? "XX",
+            lat:          geo.lat,
+            lon:          geo.lon,
+            timestamp:    Date.now() - Math.floor(Math.random() * 3600000),
+            flag:         geo.flag         ?? "",
+          });
+        } catch { /* skip */ }
+      }
+
+      await redis.set(KV_KEY, added);
+      return Response.json({ ok: true, seeded: added.length, entries: added });
+    }
+
+    // Clear mode (dev only)
+    if (isDev && params.get("clear") === "1") {
+      await redis.del(KV_KEY);
+      return Response.json({ ok: true, cleared: true });
+    }
+
+    // Normal flow
+    const testIpParam = isDev ? params.get("testip") : null;
+
+    const ip = testIpParam
+      ?? req.headers.get("x-real-ip")
+      ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+      ?? "127.0.0.1";
+
+    // Skip local IP
+    if (!testIpParam && (
       ip === "127.0.0.1" ||
       ip === "::1" ||
       ip.startsWith("192.168.") ||
       ip.startsWith("10.") ||
       ip.startsWith("172.")
-    ) {
-      return Response.json({ ok: true, skipped: true });
+    )) {
+      return Response.json({ ok: true, skipped: true, reason: "local IP" });
     }
 
-    // Geolocation lookup — ipwho.is (gratis, no key)
-    const geoRes = await fetch(`https://ipwho.is/${ip}`, {
-      cache: "force-cache",
-      next:  { revalidate: 86400 }, // cache 24 jam per IP
-    });
-
-    if (!geoRes.ok) {
-      return Response.json({ ok: false, error: "geo failed" });
-    }
-
-    const geo = await geoRes.json();
-
-    if (!geo.success || !geo.latitude || !geo.longitude) {
-      return Response.json({ ok: false, error: "geo incomplete" });
-    }
+    const geo = await fetchGeo(ip);
+    if (!geo) return Response.json({ ok: false, error: "geo lookup failed" });
 
     const entry: VisitorEntry = {
-      ip:           ip,
-      city:         geo.city         ?? "Unknown",
-      country:      geo.country      ?? "Unknown",
-      country_code: geo.country_code ?? "XX",
-      lat:          geo.latitude,
-      lon:          geo.longitude,
+      ip,
+      city:         geo.city,
+      country:      geo.country,
+      country_code: geo.country_code,
+      lat:          geo.lat,
+      lon:          geo.lon,
       timestamp:    Date.now(),
-      flag:         geo.flag?.emoji  ?? "",
+      flag:         geo.flag,
     };
 
-    // Baca existing, tambah entry baru, simpan (LIFO, capped)
-    const existing = (await kv.get<VisitorEntry[]>(KV_KEY)) ?? [];
-
-    // Deduplicate by IP — update timestamp jika IP sama
+    const existing = (await redis.get<VisitorEntry[]>(KV_KEY)) ?? [];
     const filtered = existing.filter((v) => v.ip !== ip);
     const updated  = [entry, ...filtered].slice(0, MAX_ENTRIES);
-
-    await kv.set(KV_KEY, updated);
+    await redis.set(KV_KEY, updated);
 
     return Response.json({ ok: true, entry });
   } catch (err) {
