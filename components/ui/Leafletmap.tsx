@@ -170,7 +170,7 @@ export default function LeafletMap({ visitors }: Props) {
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
             <span style="font-size:20px;">${v.flag || "🌐"}</span>
             <div>
-              <div style="font-weight:700;font-size:13px;color:#111;">${v.region}</div>
+              <div style="font-weight:700;font-size:13px;color:#111;">${v.city}</div>
               <div style="font-size:11px;color:#888;">${v.country}</div>
             </div>
           </div>
