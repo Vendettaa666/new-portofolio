@@ -491,7 +491,7 @@ function SidebarContent({
         ) : (
           <div className="space-y-1">
             <p className="text-xs font-medium text-neutral-800 dark:text-neutral-200">
-              © 2024 Leo Satria
+              © 2025 Leo Satria
             </p>
             <p className="text-[10px] text-neutral-500 dark:text-neutral-500 leading-relaxed">
               Built with Next.js & Tailwind CSS
