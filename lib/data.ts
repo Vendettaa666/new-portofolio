@@ -113,7 +113,7 @@ export const listProyek = [
   },
   {
     id: 9,
-    pinned: true,
+    pinned: false,
     gambar: Proyek9,
     nama: "Value Academy",
     desk: "Website Ujian Value Academy",
@@ -127,7 +127,7 @@ export const listProyek = [
     id: 10,
     pinned: true,
     gambar: Proyek10,
-    nama: "BTS SMKN1 LMJ UPDATE",
+    nama: "BTS SMKN 1 LMJ UPDATE",
     desk: "Pengembangan antarmuka responsif untuk platform digital SMKN 1 Lumajang.",
     tools: ["Laravel", "Tailwind", "Javascript", "Node JS"],
     url: "https://ourvalueacademy.com/",
@@ -137,7 +137,7 @@ export const listProyek = [
   },
     {
     id: 11,
-    pinned: true,
+    pinned: false,
     gambar: Proyek11,
     nama: "Kiongho Company Profile",
     desk: "Website profil perusahaan interaktif untuk menampilkan layanan dan portofolio bisnis.",
