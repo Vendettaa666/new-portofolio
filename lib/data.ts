@@ -9,6 +9,10 @@ import Proyek6 from "@/public/assets/projects/empowerin.png";
 import Proyek7 from "@/public/assets/projects/cvalpanagrojaya.png";
 import Proyek8 from "@/public/assets/projects/blessingstore.png";
 import Proyek9 from "@/public/assets/projects/webujian.png";
+import Proyek10 from "@/public/assets/projects/bukutahunanupdate.png";
+import Proyek11 from "@/public/assets/projects/kionghocompanyprofile.png";
+
+
 
 export const listProyek = [
   {
@@ -113,6 +117,30 @@ export const listProyek = [
     gambar: Proyek9,
     nama: "Value Academy",
     desk: "Website Ujian Value Academy",
+    tools: ["Laravel", "Tailwind", "Javascript", "Node JS"],
+    url: "https://ourvalueacademy.com/",
+    github: "#",
+    role: "Fullstack Dev",
+    year: "2026",
+  },
+    {
+    id: 10,
+    pinned: true,
+    gambar: Proyek10,
+    nama: "BTS SMKN1 LMJ UPDATE",
+    desk: "Pengembangan antarmuka responsif untuk platform digital SMKN 1 Lumajang.",
+    tools: ["Laravel", "Tailwind", "Javascript", "Node JS"],
+    url: "https://ourvalueacademy.com/",
+    github: "#",
+    role: "Frontend Dev",
+    year: "2026",
+  },
+    {
+    id: 11,
+    pinned: true,
+    gambar: Proyek11,
+    nama: "Kiongho Company Profile",
+    desk: "Website profil perusahaan interaktif untuk menampilkan layanan dan portofolio bisnis.",
     tools: ["Laravel", "Tailwind", "Javascript", "Node JS"],
     url: "https://ourvalueacademy.com/",
     github: "#",
