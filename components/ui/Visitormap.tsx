@@ -180,7 +180,7 @@ export default function VisitorMap() {
         </div>
 
         {/* ── Map ── */}
-        <div className="relative h-[200px] overflow-hidden rounded-xl border border-neutral-100 dark:border-neutral-800">
+        <div className="relative h-[400px] overflow-hidden rounded-xl border border-neutral-100 dark:border-neutral-800">
           {loading ? (
             <div className="w-full h-full flex items-center justify-center bg-neutral-50 dark:bg-neutral-800/60">
               <Globe className="h-6 w-6 text-primary animate-pulse" />
