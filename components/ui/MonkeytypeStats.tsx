@@ -363,7 +363,7 @@ export default async function MonkeytypeStats() {
         <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-700/50">
           <div className="flex items-center gap-1.5 text-[11px] text-neutral-400 dark:text-neutral-500">
             <ShieldCheck className="h-3 w-3" />
-            Powered by Monkeytype API · ISR cache 1h
+            Statistik diperbarui secara otomatis dan tidak berubah secara instan.
           </div>
         </div>
 

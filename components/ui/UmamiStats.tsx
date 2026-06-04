@@ -388,7 +388,7 @@ export default async function UmamiStats() {
         <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-700/50">
           <div className="flex items-center gap-1.5 text-[11px] text-neutral-400 dark:text-neutral-500">
             <ShieldCheck className="h-3 w-3" />
-            Powered by Umami Analytics · ISR cache 1h
+            Statistik diperbarui secara otomatis dan tidak berubah secara instan.
           </div>
           <span className="text-[11px] font-mono text-neutral-400 dark:text-neutral-500">
             {stats.visits.toLocaleString()} visits total

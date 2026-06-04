@@ -231,12 +231,12 @@ export default function DiscordStatus() {
           </div>
 
           {/* Live indicator */}
-          <div className="flex items-center gap-1.5 mt-1">
+          {/* <div className="flex items-center gap-1.5 mt-1">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             <span className="text-[10px] uppercase tracking-widest font-semibold text-neutral-400 dark:text-neutral-500">
               Live
             </span>
-          </div>
+          </div> */}
         </div>
 
         {/* ════════════════════════════════════════
@@ -456,7 +456,7 @@ export default function DiscordStatus() {
         <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-700/50">
           <div className="flex items-center gap-1.5 text-[11px] text-neutral-400 dark:text-neutral-500">
             <ShieldCheck className="h-3 w-3" />
-            Powered by Lanyard API · Updates every 10s
+            Informasi ini tersinkronisasi secara otomatis dengan aktivitas saya saat ini secara real-time.
           </div>
         </div>
 

@@ -179,7 +179,7 @@ export default async function GithubCalendar() {
         <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-700/50">
           <div className="flex items-center gap-1.5 text-[11px] text-neutral-400 dark:text-neutral-500">
             <ShieldCheck className="h-3 w-3" />
-            Powered by GitHub GraphQL API
+            Ini adalah ringkasan seberapa sering saya menulis kode di GitHub dalam satu tahun terakhir.
           </div>
         </div>
 
