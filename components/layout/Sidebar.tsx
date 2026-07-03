@@ -234,10 +234,10 @@ function SidebarContent({
                       <img
                         src={discordAvatarUrl}
                         alt="Discord Avatar"
-                        className="w-24 h-24 rounded-2xl object-cover border-2 border-white dark:border-neutral-700 shadow-xl ring-4 ring-primary/10 dark:ring-primary/20"
+                        className="w-24 h-24 rounded-full object-cover border-2 border-white dark:border-neutral-700 shadow-xl ring-4 ring-primary/10 dark:ring-primary/20"
                       />
                     ) : (
-                      <div className="w-24 h-24 rounded-2xl bg-neutral-200 dark:bg-neutral-700 animate-pulse" />
+                      <div className="w-24 h-24 rounded-full bg-neutral-200 dark:bg-neutral-700 animate-pulse" />
                     )}
 
                     {/* Decoration frame */}
