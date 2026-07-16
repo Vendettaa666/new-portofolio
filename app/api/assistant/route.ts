@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     ];
 
     const completion = await client.chat.completions.create({
-      model:       "meta-llama/llama-3-8b-instruct",
+      model:       "openrouter/free",
       messages,
       max_tokens:  600,
       temperature: 0.75,

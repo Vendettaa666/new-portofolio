@@ -13,7 +13,7 @@ import LastFMStats from "@/components/ui/LastFMStats";
 export default async function DashboardPage() { 
   return (
     <DashboardClient>
-       <section>
+       {/* <section>
         <div className="flex items-center gap-2 mb-4">
           <Activity className="w-5 h-5 text-neutral-900 dark:text-white" />
           <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
@@ -24,7 +24,8 @@ export default async function DashboardPage() {
        
           <UmamiStats />
         
-      </section>
+      </section> */}
+      
       {/* Spotify Section */}
       <section>
         <div className="flex items-center gap-2 mb-4">

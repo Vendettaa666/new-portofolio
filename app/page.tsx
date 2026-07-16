@@ -29,7 +29,7 @@ export default function Home() {
         <ToolStack />
       </motion.div>
 
-      <VisitorMap />
+      {/* <VisitorMap /> */}
 
     </div>
   );
