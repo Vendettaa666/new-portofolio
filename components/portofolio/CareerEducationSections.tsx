@@ -13,6 +13,15 @@ export const educationData = [
     endDate: "2026",
     logoIcon: "/assets/logo/logo-smk.png", // Path gambar dari folder public
     details: "Mempelajari dasar-dasar pemrograman, pengembangan web, dan teknologi informasi."
+  },
+    {
+    degree: "Teknologi Rekayasaa Komputer D4",
+    school: "Politeknik Negeri Jember",
+    location: "Jember, Jawa Timur",
+    startDate: "2026",
+    endDate: "2030",
+    logoIcon: "/assets/logo/logo-polije.png", // Path gambar dari folder public
+    details: "Mempelajari rekayasa sistem komputer berbasis IoT, pengembangan aplikasi web dan mobile, administrasi jaringan, serta implementasi teknologi informasi untuk kebutuhan industri."
   }
 ];
 export const careers = [
