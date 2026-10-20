@@ -23,7 +23,10 @@ const PROFILE = {
     "Tailwind CSS","Node.js","REST API",
     "MySQL","PostgreSQL","Git / GitHub",
   ],
-  education: { school: "SMKN 1 Lumajang", major: "Rekayasa Perangkat Lunak", year: "2022–2025" },
+  education: [
+    { school: "SMKN 1 Lumajang", major: "Rekayasa Perangkat Lunak", year: "2023–2026" },
+    { school: "Politeknik Negeri Jember", major: "D4 Teknologi Rekayasa Komputer", year: "2026–Sekarang" },
+  ],
   experience: [
     {
       role: "Freelance Web Developer",
@@ -94,28 +97,42 @@ function CVTemplate({ primary, dark }: CVProps) {
   const sidebarBg = dark ? "#191919" : "#eeeeee";
   const card      = dark ? "#1c1c1c" : "#ffffff";
   const primBg    = `rgba(${r},${g},${b},0.13)`;
-  const primBdr   = `rgba(${r},${g},${b},0.32)`;
 
   // Shared reusable styles
   const mono = "'JetBrains Mono', 'Courier New', monospace";
   const sans = "Arial, Helvetica, sans-serif";
 
-  // Badge: OPEN TO WORK, role tag — pakai block + padding simetris, no flexbox
-  const badge = (label: string, opts?: { small?: boolean }): React.CSSProperties => ({
-    display: "inline-block",
-    background: primBg,
-    border: `1px solid ${primBdr}`,
-    color: primary,
-    fontFamily: mono,
-    fontSize: opts?.small ? 7 : 7.5,
-    fontWeight: 500,
-    letterSpacing: "0.8px",
-    padding: opts?.small ? "3px 7px 2px" : "4px 10px 3px",
-    borderRadius: 99,
-    textAlign: "center" as const,
-    verticalAlign: "middle",
-    lineHeight: "1",
-  });
+  // html2canvas menggambar teks lebih rendah daripada browser di dalam
+  // pill/chip/tombol. NUDGE menggeser teks ke atas supaya benar-benar di tengah.
+  // Kalau masih turun → naikkan angkanya; kalau terlalu naik → turunkan.
+  const NUDGE = 3.5;
+  const T = ({ children }: { children: React.ReactNode }) => (
+    <span style={{ position: "relative", top: -NUDGE }}>{children}</span>
+  );
+
+  // Badge: OPEN TO WORK, role tag
+  // PENTING: jangan pakai lineHeight:"1" — teks terpotong di html2canvas.
+  // Pakai padding asimetris top+bottom yang sudah dikalkulasi per font-size.
+  // Tanpa border; tinggi tetap + lineHeight (tinggi - 4) agar teks di tengah.
+  const badge = (opts?: { small?: boolean }): React.CSSProperties => {
+    const h = opts?.small ? 16 : 18;
+    return {
+      display: "inline-block",
+      height: h,
+      lineHeight: `${h}px`,
+      background: primBg,
+      color: primary,
+      fontFamily: mono,
+      fontSize: opts?.small ? 7 : 7.5,
+      fontWeight: 500,
+      letterSpacing: "0.8px",
+      padding: opts?.small ? "0 9px" : "0 11px",
+      borderRadius: 99,
+      textAlign: "center" as const,
+      whiteSpace: "nowrap" as const,
+      verticalAlign: "top",
+    };
+  };
 
   // Section title row
   const secTitleWrap: React.CSSProperties = {
@@ -191,7 +208,7 @@ function CVTemplate({ primary, dark }: CVProps) {
 
           {/* Open badge — block, center */}
           <div style={{ margin: "0 auto 7px", textAlign: "center" }}>
-            <span style={badge("OPEN TO WORK")}>&#9679;&nbsp; OPEN TO WORK</span>
+            <span style={badge()}><T>OPEN TO WORK</T></span>
           </div>
 
           <div style={{ fontSize: 14.5, fontWeight: 800, color: text, lineHeight: "1.25" }}>
@@ -229,19 +246,21 @@ function CVTemplate({ primary, dark }: CVProps) {
             <span style={secTitleText}>KEAHLIAN</span>
             <span style={secLine} />
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
             {PROFILE.skills.map((s) => (
               <span key={s} style={{
                 display: "inline-block",
-                border: `1px solid ${border}`,
                 background: surface,
                 borderRadius: 6,
-                padding: "2px 7px 1px",
+                height: 20,
+                lineHeight: "20px",
+                padding: "0 9px",
                 fontSize: 9,
                 color: text,
-                lineHeight: "1.4",
+                whiteSpace: "nowrap",
+                verticalAlign: "top",
               }}>
-                {s}
+                <T>{s}</T>
               </span>
             ))}
           </div>
@@ -253,12 +272,16 @@ function CVTemplate({ primary, dark }: CVProps) {
             <span style={secTitleText}>PENDIDIKAN</span>
             <span style={secLine} />
           </div>
-          <div style={{ fontWeight: 700, fontSize: 10, color: text, lineHeight: "1.35" }}>
-            {PROFILE.education.school}
-          </div>
-          <div style={{ color: muted, fontSize: 9, marginTop: 2, lineHeight: "1.35" }}>
-            {PROFILE.education.major} · {PROFILE.education.year}
-          </div>
+          {PROFILE.education.map((ed, i, arr) => (
+            <div key={ed.school} style={{ marginBottom: i === arr.length - 1 ? 0 : 9 }}>
+              <div style={{ fontWeight: 700, fontSize: 10, color: text, lineHeight: "1.35" }}>
+                {ed.school}
+              </div>
+              <div style={{ color: muted, fontSize: 9, marginTop: 2, lineHeight: "1.35" }}>
+                {ed.major} · {ed.year}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Bahasa */}
@@ -296,43 +319,44 @@ function CVTemplate({ primary, dark }: CVProps) {
         <div style={{
           display: "flex", justifyContent: "space-between",
           fontFamily: mono, fontSize: 7.5,
-          letterSpacing: "1.2px", color: muted, lineHeight: "1",
+          letterSpacing: "1.2px", color: muted,
         }}>
-          <span>&#9679; VENDETTA666 WORKSPACE</span>
+          <span>* VENDETTA666 WORKSPACE</span>
           <span>LUMAJANG, ID · GMT+7</span>
         </div>
 
         {/* Hero */}
         <div style={{ border: `1px solid ${border}`, borderRadius: 14, padding: "16px 18px 14px", background: card }}>
           {/* badge */}
-          <div><span style={badge("OPEN TO WORK")}>&#9679;&nbsp; OPEN TO WORK</span></div>
+          <div><span style={badge()}><T>OPEN TO WORK</T></span></div>
 
-          <div style={{ marginTop: 9, color: muted, fontSize: 9.5, lineHeight: "1" }}>Halo, saya</div>
+          <div style={{ marginTop: 9, color: muted, fontSize: 9.5 }}>Halo, saya</div>
           <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: "1.15", color: text, marginTop: 3 }}>
             {PROFILE.name}
           </div>
           <div style={{ marginTop: 7, color: muted, fontSize: 10, lineHeight: "1.6" }}>{PROFILE.bio}</div>
 
-          {/* Buttons — block spans, no flex */}
-          <div style={{ marginTop: 9, lineHeight: "1" }}>
+          {/* Buttons */}
+          <div style={{ marginTop: 9 }}>
             <span style={{
               display: "inline-block",
               background: primary, color: "#ffffff",
               fontWeight: 700, fontSize: 9,
-              padding: "5px 13px 4px",
+              height: 22, lineHeight: "22px", padding: "0 14px",
               borderRadius: 7, marginRight: 6,
-              lineHeight: "1", verticalAlign: "middle",
+              whiteSpace: "nowrap", verticalAlign: "top",
             }}>
-              {PROFILE.website}
+              <T>{PROFILE.website}</T>
             </span>
             <span style={{
               display: "inline-block",
-              border: `1px solid ${primBdr}`, color: primary,
-              fontSize: 9, padding: "4px 13px 3px",
+              background: primBg, color: primary,
+              fontSize: 9,
+              height: 22, lineHeight: "22px", padding: "0 14px",
               borderRadius: 7,
-              lineHeight: "1", verticalAlign: "middle",
+              whiteSpace: "nowrap", verticalAlign: "top",
             }}>
-              Onsite / Remote
+              <T>Onsite / Remote</T>
             </span>
           </div>
         </div>
@@ -347,16 +371,16 @@ function CVTemplate({ primary, dark }: CVProps) {
             <div key={s.label} style={{
               flex: 1,
               border: `1px solid ${border}`, borderRadius: 10,
-              background: card, padding: "9px 6px",
+              background: card, padding: "11px 6px 10px",
               textAlign: "center",
             }}>
-              <div style={{ fontFamily: mono, fontSize: 7, letterSpacing: "1.1px", color: primary, lineHeight: "1", marginBottom: 5 }}>
+              <div style={{ fontFamily: mono, fontSize: 7, letterSpacing: "1.1px", color: primary, lineHeight: "10px", marginBottom: 6 }}>
                 {s.label}
               </div>
-              <div style={{ fontSize: 19, fontWeight: 800, color: text, lineHeight: "1", marginBottom: 4 }}>
+              <div style={{ fontSize: 19, fontWeight: 800, color: text, lineHeight: "24px", marginBottom: 3 }}>
                 {s.value}
               </div>
-              <div style={{ color: muted, fontSize: 8.5, lineHeight: "1" }}>
+              <div style={{ color: muted, fontSize: 8.5, lineHeight: "12px" }}>
                 {s.sub}
               </div>
             </div>
@@ -374,9 +398,9 @@ function CVTemplate({ primary, dark }: CVProps) {
             <div key={e.role} style={cardBox}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                 <span style={{ fontWeight: 700, fontSize: 11.5, color: text, lineHeight: "1.2" }}>{e.role}</span>
-                <span style={{ fontFamily: mono, fontSize: 8, color: muted, lineHeight: "1" }}>{e.period}</span>
+                <span style={{ fontFamily: mono, fontSize: 8, color: muted, lineHeight: "14px" }}>{e.period}</span>
               </div>
-              <div style={{ color: primary, fontSize: 9.5, marginTop: 2, lineHeight: "1" }}>{e.company}</div>
+              <div style={{ color: primary, fontSize: 9.5, marginTop: 2, lineHeight: "14px" }}>{e.company}</div>
               <div style={{ marginTop: 4, color: muted, fontSize: 9, lineHeight: "1.55" }}>{e.desc}</div>
             </div>
           ))}
@@ -398,8 +422,8 @@ function CVTemplate({ primary, dark }: CVProps) {
               }}>
                 {/* Role badge */}
                 <div style={{ marginBottom: 5 }}>
-                  <span style={badge(p.role.toUpperCase(), { small: true })}>
-                    {p.role.toUpperCase()}
+                  <span style={badge({ small: true })}>
+                    <T>{p.role.toUpperCase()}</T>
                   </span>
                 </div>
                 <div style={{ fontWeight: 700, fontSize: 10.5, color: text, lineHeight: "1.25", marginBottom: 2 }}>
@@ -408,7 +432,7 @@ function CVTemplate({ primary, dark }: CVProps) {
                 <div style={{ color: muted, fontSize: 9, lineHeight: "1.4", marginBottom: 4 }}>
                   {p.desk}
                 </div>
-                <div style={{ fontFamily: mono, fontSize: 8, color: subtle, lineHeight: "1" }}>
+                <div style={{ fontFamily: mono, fontSize: 8, color: subtle, lineHeight: "12px" }}>
                   {p.tools.slice(0, 3).join(", ")}
                 </div>
               </div>
