@@ -40,7 +40,7 @@ const PROFILE = {
   ],
   languages: [
     { lang: "Indonesia", level: "Native" },
-    { lang: "English", level: "Professional" },
+    // { lang: "English", level: "Professional" },
   ],
 };
 
@@ -106,6 +106,7 @@ function CVTemplate({ primary, dark }: CVProps) {
     color: muted,
     marginBottom: 8,
     textTransform: "uppercase" as const,
+    lineHeight: 1,
   };
   const secLine: React.CSSProperties = {
     flex: 1,
@@ -161,9 +162,9 @@ function CVTemplate({ primary, dark }: CVProps) {
             </div>
           </div>
           {/* Open badge */}
-          <div style={{ background: primBg, border: `1px solid ${primBdr}`, color: primary, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: "2px 10px", borderRadius: 99, display: "inline-flex", alignItems: "center", gap: 5 }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: primary, display: "inline-block" }} />
-            OPEN TO WORK
+          <div style={{ background: primBg, border: `1px solid ${primBdr}`, color: primary, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: "4px 10px", borderRadius: 99, display: "inline-flex", alignItems: "center", lineHeight: 1, gap: 5 }}>
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: primary, display: "inline-block", flexShrink: 0 }} />
+            <span>OPEN TO WORK</span>
           </div>
           <div style={{ fontSize: 16, fontWeight: 800, lineHeight: 1.2, color: text }}>{PROFILE.name}</div>
           <div style={{ color: muted, fontSize: 10 }}>
@@ -229,26 +230,26 @@ function CVTemplate({ primary, dark }: CVProps) {
       <div style={{ flex: 1, padding: "28px 24px 20px 22px", display: "flex", flexDirection: "column", gap: 14 }}>
 
         {/* Topbar */}
-        <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'JetBrains Mono',monospace", fontSize: 8, letterSpacing: "1.2px", color: muted }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'JetBrains Mono',monospace", fontSize: 8, letterSpacing: "1.2px", color: muted, lineHeight: 1 }}>
           <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: primary, display: "inline-block" }} />
-            VENDETTA666 WORKSPACE
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: primary, display: "inline-block", flexShrink: 0 }} />
+            <span>VENDETTA666 WORKSPACE</span>
           </span>
           <span>LUMAJANG, ID · GMT+7</span>
         </div>
 
         {/* Hero */}
         <div style={{ border: `1px solid ${border}`, borderRadius: 16, padding: "18px 20px 16px", background: card }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: primBg, border: `1px solid ${primBdr}`, color: primary, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: "2px 9px", borderRadius: 99 }}>
-            <span style={{ width: 4, height: 4, borderRadius: "50%", background: primary, display: "inline-block" }} />
-            OPEN TO WORK
+          <div style={{ display: "inline-flex", alignItems: "center", lineHeight: 1, gap: 6, background: primBg, border: `1px solid ${primBdr}`, color: primary, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: "4px 10px", borderRadius: 99 }}>
+            <span style={{ width: 4, height: 4, borderRadius: "50%", background: primary, display: "inline-block", flexShrink: 0 }} />
+            <span>OPEN TO WORK</span>
           </div>
-          <div style={{ marginTop: 10, color: muted, fontSize: 10 }}>Halo, saya</div>
-          <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: -0.5, lineHeight: 1.15, color: text }}>{PROFILE.name}</div>
+          <div style={{ marginTop: 10, color: muted, fontSize: 10, lineHeight: 1 }}>Halo, saya</div>
+          <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: -0.5, lineHeight: 1.15, color: text, marginTop: 4 }}>{PROFILE.name}</div>
           <div style={{ marginTop: 8, color: muted, fontSize: 10.5, lineHeight: 1.6 }}>{PROFILE.bio}</div>
-          <div style={{ marginTop: 10, display: "flex", gap: 7, flexWrap: "wrap" }}>
-            <div style={{ background: primary, color: "#fff", fontWeight: 700, fontSize: 9.5, padding: "5px 12px", borderRadius: 8 }}>{PROFILE.website}</div>
-            <div style={{ border: `1px solid ${primBdr}`, color: primary, fontSize: 9.5, padding: "5px 12px", borderRadius: 8 }}>Onsite / Remote</div>
+          <div style={{ marginTop: 10, display: "flex", gap: 7, flexWrap: "wrap", alignItems: "center" }}>
+            <div style={{ background: primary, color: "#fff", fontWeight: 700, fontSize: 9.5, padding: "5px 14px", borderRadius: 8, lineHeight: 1, display: "inline-flex", alignItems: "center" }}>{PROFILE.website}</div>
+            <div style={{ border: `1px solid ${primBdr}`, color: primary, fontSize: 9.5, padding: "5px 14px", borderRadius: 8, lineHeight: 1, display: "inline-flex", alignItems: "center" }}>Onsite / Remote</div>
           </div>
         </div>
 
@@ -259,10 +260,10 @@ function CVTemplate({ primary, dark }: CVProps) {
             { label: "PENGALAMAN", value: "2+ Tahun", sub: "Kerja profesional" },
             { label: "SERTIFIKASI", value: listSertifikat.length, sub: "Sertifikat" },
           ].map((s) => (
-            <div key={s.label} style={{ flex: 1, border: `1px solid ${border}`, borderRadius: 12, background: card, padding: "10px 8px", textAlign: "center" }}>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 7.5, letterSpacing: "1.2px", color: primary }}>{s.label}</div>
-              <div style={{ fontSize: 20, fontWeight: 800, lineHeight: 1.2, color: text }}>{s.value}</div>
-              <div style={{ color: muted, fontSize: 9 }}>{s.sub}</div>
+            <div key={s.label} style={{ flex: 1, border: `1px solid ${border}`, borderRadius: 12, background: card, padding: "10px 8px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 7.5, letterSpacing: "1.2px", color: primary, lineHeight: 1 }}>{s.label}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, lineHeight: 1, color: text }}>{s.value}</div>
+              <div style={{ color: muted, fontSize: 9, lineHeight: 1 }}>{s.sub}</div>
             </div>
           ))}
         </div>
@@ -288,7 +289,7 @@ function CVTemplate({ primary, dark }: CVProps) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {FEATURED.map((p) => (
               <div key={p.id} style={{ flex: "1 1 46%", border: `1px solid ${border}`, borderRadius: 12, background: card, padding: "10px 12px" }}>
-                <div style={{ display: "inline-block", fontFamily: "'JetBrains Mono',monospace", fontSize: 7.5, color: primary, background: primBg, border: `1px solid ${primBdr}`, padding: "1px 7px", borderRadius: 99, marginBottom: 5 }}>
+                <div style={{ display: "inline-flex", alignItems: "center", lineHeight: 1, fontFamily: "'JetBrains Mono',monospace", fontSize: 7.5, color: primary, background: primBg, border: `1px solid ${primBdr}`, padding: "3px 8px", borderRadius: 99, marginBottom: 5 }}>
                   {p.role.toUpperCase()}
                 </div>
                 <div style={{ fontWeight: 700, fontSize: 11, color: text, marginBottom: 2 }}>{p.nama}</div>
