@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import { downloadCVAsPDF } from "@/components/ui/CVDownload";
+import { Loader2 } from "lucide-react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -116,6 +117,7 @@ function SidebarContent({
 }: SidebarContentProps) {
   // Discord swap state — lives here so it resets on unmount (fine)
   const [showDiscord, setShowDiscord] = useState(false);
+  const [cvLoading, setCvLoading] = useState(false);
   const discord = useDiscordStatus();
 
   const discordAvatarUrl = discord
@@ -362,14 +364,26 @@ function SidebarContent({
                 {/* Download CV — menggunakan downloadCVAsPDF dengan warna & theme aktif */}
                 {!showDiscord && (
                   <button
-                    onClick={downloadCVAsPDF}
-                    className="group w-full py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-sm font-semibold shadow-md hover:shadow-xl bg-primary hover:bg-primary/90 text-white border border-primary/20"
+                    onClick={async () => {
+                      setCvLoading(true);
+                      try { await downloadCVAsPDF(); }
+                      catch (e) { console.error(e); }
+                      finally { setCvLoading(false); }
+                    }}
+                    disabled={cvLoading}
+                    className="group w-full py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-sm font-semibold shadow-md hover:shadow-xl bg-primary hover:bg-primary/90 text-white border border-primary/20 disabled:opacity-70 disabled:cursor-not-allowed disabled:scale-100"
                   >
-                    <Download
-                      size={16}
-                      className="transition-transform group-hover:translate-y-0.5"
-                    />
-                    <span>Download CV</span>
+                    {cvLoading ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        <span>Generating…</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download size={16} className="transition-transform group-hover:translate-y-0.5" />
+                        <span>Download CV</span>
+                      </>
+                    )}
                   </button>
                 )}
 
