@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
+import { MapPin, Globe, Mail, Terminal } from "lucide-react";
 import { listProyek, listSertifikat } from "@/lib/data";
 
 /* ─── Profil & Data ───────────────────────────────────────────────────── */
@@ -31,13 +32,13 @@ const PROFILE = {
     {
       role: "Freelance Web Developer",
       company: "Self-Employed",
-      period: "2022 – Sekarang",
+      period: "2024 – Sekarang",
       desc: "Membangun website & aplikasi web untuk klien lokal menggunakan Next.js dan Laravel. Fokus pada performa, SEO, UX, dan desain responsif.",
     },
     {
       role: "Frontend Developer (PKL)",
       company: "CV Nusantara Tama",
-      period: "Jul – Des 2024",
+      period: "Jul – Des 2025",
       desc: "Mengembangkan antarmuka sistem internal menggunakan Laravel dan Tailwind CSS.",
     },
   ],
@@ -228,14 +229,20 @@ function CVTemplate({ primary, dark }: CVProps) {
             <span style={secLine} />
           </div>
           {[
-            { icon: ">", val: PROFILE.location },
-            { icon: "@", val: PROFILE.website },
-            { icon: "~", val: PROFILE.email },
-            { icon: "$", val: PROFILE.github },
-          ].map((c) => (
-            <div key={c.val} style={{ display: "flex", gap: 5, alignItems: "flex-start", color: text, fontSize: 9, marginBottom: 5, lineHeight: "1.4" }}>
-              <span style={{ color: primary, fontFamily: mono, flexShrink: 0, marginTop: 1 }}>{c.icon}</span>
-              <span>{c.val}</span>
+            { Icon: MapPin,   val: PROFILE.location },
+            { Icon: Globe,    val: PROFILE.website },
+            { Icon: Mail,     val: PROFILE.email },
+            { Icon: Terminal, val: PROFILE.github },
+          ].map(({ Icon, val }) => (
+            <div key={val} style={{ display: "flex", gap: 7, alignItems: "center", height: 16, color: text, fontSize: 9, marginBottom: 7 }}>
+              {/* color di-set eksplisit (bukan currentColor) agar terbaca html2canvas */}
+              <span style={{ display: "block", flexShrink: 0, width: 12, height: 12 }}>
+                <Icon size={12} strokeWidth={2} color={primary} style={{ display: "block" }} />
+              </span>
+              {/* baris tinggi tetap; teks di-nudge naik agar sejajar dengan ikon */}
+              <span style={{ lineHeight: "12px", whiteSpace: "nowrap" }}>
+                <T>{val}</T>
+              </span>
             </div>
           ))}
         </div>
@@ -374,7 +381,7 @@ function CVTemplate({ primary, dark }: CVProps) {
               background: card, padding: "11px 6px 10px",
               textAlign: "center",
             }}>
-              <div style={{ fontFamily: mono, fontSize: 7, letterSpacing: "1.1px", color: primary, lineHeight: "10px", marginBottom: 6 }}>
+              <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: "1.1px", color: primary, lineHeight: "10px", marginBottom: 3 }}>
                 {s.label}
               </div>
               <div style={{ fontSize: 19, fontWeight: 800, color: text, lineHeight: "24px", marginBottom: 3 }}>
