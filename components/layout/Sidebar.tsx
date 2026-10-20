@@ -17,6 +17,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 
+import { downloadCVAsPDF } from "@/components/ui/CVDownload";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -357,9 +359,12 @@ function SidebarContent({
 
               {/* Buttons row */}
               <div className="w-full flex flex-col gap-2">
-                {/* Download CV — UNCHANGED, hidden in Discord mode */}
+                {/* Download CV — menggunakan downloadCVAsPDF dengan warna & theme aktif */}
                 {!showDiscord && (
-                  <button className="group w-full py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-sm font-semibold shadow-md hover:shadow-xl bg-primary hover:bg-primary/90 text-white border border-primary/20">
+                  <button
+                    onClick={downloadCVAsPDF}
+                    className="group w-full py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 text-sm font-semibold shadow-md hover:shadow-xl bg-primary hover:bg-primary/90 text-white border border-primary/20"
+                  >
                     <Download
                       size={16}
                       className="transition-transform group-hover:translate-y-0.5"
