@@ -4,7 +4,7 @@
 // Render CV ke hidden div → html2canvas → jsPDF → auto-download .pdf
 // Warna mengikuti --theme-primary aktif (ColorSwitcher) + dark/light mode.
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { listProyek, listSertifikat } from "@/lib/data";
 
@@ -325,58 +325,96 @@ function CVTemplate({ primary, dark }: CVProps) {
 
 export async function downloadCVAsPDF(): Promise<void> {
   // Dynamic import — tidak diload saat SSR / halaman pertama kali
-  const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-    import("html2canvas"),
+  const [{ default: jsPDF }] = await Promise.all([
     import("jspdf"),
   ]);
 
   const primary = getPrimary();
   const dark = isDark();
+  const bgColor = dark ? "#141414" : "#ffffff";
 
-  // Buat container tersembunyi di body
-  const container = document.createElement("div");
-  container.style.cssText =
-    "position:fixed;top:-9999px;left:-9999px;width:794px;z-index:-1;";
-  document.body.appendChild(container);
+  // ── Buat iframe tersembunyi dengan document bersih ──
+  // Alasan: html2canvas membaca getComputedStyle dari SELURUH dokumen,
+  // termasuk CSS variables oklch/lab dari Tailwind yang dia tidak support.
+  // Iframe punya document terpisah → bebas dari oklch parent.
+  const iframe = document.createElement("iframe");
+  iframe.style.cssText =
+    "position:fixed;top:-9999px;left:-9999px;width:794px;height:1123px;border:none;visibility:hidden;";
+  document.body.appendChild(iframe);
 
-  // Mount React component ke container
+  const iframeDoc = iframe.contentDocument!;
+
+  // Tulis HTML dasar ke iframe — hanya font Google, tanpa CSS Tailwind
+  iframeDoc.open();
+  iframeDoc.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+  crossorigin="anonymous">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:794px;height:1123px;background:${bgColor};overflow:hidden}
+</style>
+</head>
+<body><div id="cv-mount"></div></body>
+</html>`);
+  iframeDoc.close();
+
+  // Tunggu iframe + font siap
   await new Promise<void>((resolve) => {
-    const root = createRoot(container);
-    root.render(<CVTemplate primary={primary} dark={dark} />);
-    // Beri waktu React + font untuk render
-    setTimeout(resolve, 800);
+    const check = () => {
+      if (iframe.contentDocument?.readyState === "complete") resolve();
+      else setTimeout(check, 50);
+    };
+    check();
   });
 
-  const cvEl = container.querySelector("#cv-root") as HTMLElement;
+  // Mount React CVTemplate ke dalam iframe
+  const mountEl = iframeDoc.getElementById("cv-mount")!;
+  await new Promise<void>((resolve) => {
+    const root = createRoot(mountEl);
+    root.render(<CVTemplate primary={primary} dark={dark} />);
+    // Tunggu render + font Google load
+    setTimeout(resolve, 1200);
+  });
+
+  const cvEl = iframeDoc.getElementById("cv-root") as HTMLElement;
 
   try {
+    // Import html2canvas setelah iframe siap
+    const { default: html2canvas } = await import("html2canvas");
+
     const canvas = await html2canvas(cvEl, {
-      scale: 2,                // resolusi 2x → tajam di A4
+      scale: 2,
       useCORS: true,
       allowTaint: false,
-      backgroundColor: dark ? "#141414" : "#ffffff",
+      backgroundColor: bgColor,
       logging: false,
       width: 794,
       height: 1123,
+      // Penting: pakai window iframe agar getComputedStyle tidak bocor ke parent
+      windowWidth: 794,
+      windowHeight: 1123,
     });
 
     const imgData = canvas.toDataURL("image/png");
 
-    // A4 dalam mm
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
       format: "a4",
     });
 
-    const pdfW = pdf.internal.pageSize.getWidth();   // 210mm
-    const pdfH = pdf.internal.pageSize.getHeight();  // 297mm
+    const pdfW = pdf.internal.pageSize.getWidth();
+    const pdfH = pdf.internal.pageSize.getHeight();
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfW, pdfH);
     pdf.save("CV-Leo-Satria-Anugrah.pdf");
   } finally {
-    // Unmount & bersihkan
-    document.body.removeChild(container);
+    document.body.removeChild(iframe);
   }
 }
 
