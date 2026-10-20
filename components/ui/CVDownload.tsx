@@ -86,39 +86,66 @@ function CVTemplate({ primary, dark }: CVProps) {
 
   // Palette
   const bg        = dark ? "#141414" : "#ffffff";
-  const surface   = dark ? "#1c1c1c" : "#f5f5f5";
-  const border    = dark ? "#2e2e2e" : "#e5e5e5";
-  const text      = dark ? "#f0f0f0" : "#111111";
-  const muted     = dark ? "#9a9a9a" : "#6b6b6b";
-  const subtle    = dark ? "#666666" : "#a0a0a0";
-  const sidebarBg = dark ? "#191919" : "#f0f0f0";
-  const card      = dark ? "#1a1a1a" : "#ffffff";
-  const primBg    = `rgba(${r},${g},${b},0.12)`;
-  const primBdr   = `rgba(${r},${g},${b},0.3)`;
+  const surface   = dark ? "#222222" : "#f3f3f3";
+  const border    = dark ? "#2e2e2e" : "#e2e2e2";
+  const text      = dark ? "#efefef" : "#111111";
+  const muted     = dark ? "#909090" : "#666666";
+  const subtle    = dark ? "#606060" : "#aaaaaa";
+  const sidebarBg = dark ? "#191919" : "#eeeeee";
+  const card      = dark ? "#1c1c1c" : "#ffffff";
+  const primBg    = `rgba(${r},${g},${b},0.13)`;
+  const primBdr   = `rgba(${r},${g},${b},0.32)`;
 
-  const secTitle: React.CSSProperties = {
+  // Shared reusable styles
+  const mono = "'JetBrains Mono', 'Courier New', monospace";
+  const sans = "Arial, Helvetica, sans-serif";
+
+  // Badge: OPEN TO WORK, role tag — pakai block + padding simetris, no flexbox
+  const badge = (label: string, opts?: { small?: boolean }): React.CSSProperties => ({
+    display: "inline-block",
+    background: primBg,
+    border: `1px solid ${primBdr}`,
+    color: primary,
+    fontFamily: mono,
+    fontSize: opts?.small ? 7 : 7.5,
+    fontWeight: 500,
+    letterSpacing: "0.8px",
+    padding: opts?.small ? "3px 7px 2px" : "4px 10px 3px",
+    borderRadius: 99,
+    textAlign: "center" as const,
+    verticalAlign: "middle",
+    lineHeight: "1",
+  });
+
+  // Section title row
+  const secTitleWrap: React.CSSProperties = {
     display: "flex",
     alignItems: "center",
-    gap: 7,
-    fontFamily: "'JetBrains Mono', monospace",
+    gap: 6,
+    marginBottom: 8,
+  };
+  const secTitleText: React.CSSProperties = {
+    fontFamily: mono,
     fontSize: 8,
     letterSpacing: "1.4px",
     color: muted,
-    marginBottom: 8,
     textTransform: "uppercase" as const,
-    lineHeight: 1,
+    lineHeight: "1",
+    whiteSpace: "nowrap" as const,
   };
   const secLine: React.CSSProperties = {
     flex: 1,
     height: 1,
     background: border,
+    alignSelf: "center",
   };
+
   const cardBox: React.CSSProperties = {
     border: `1px solid ${border}`,
-    borderRadius: 12,
+    borderRadius: 10,
     background: card,
-    padding: "10px 14px",
-    marginBottom: 8,
+    padding: "9px 13px",
+    marginBottom: 7,
   };
 
   return (
@@ -128,61 +155,69 @@ function CVTemplate({ primary, dark }: CVProps) {
         width: 794,
         minHeight: 1123,
         display: "flex",
-        fontFamily: "'Plus Jakarta Sans', Arial, sans-serif",
-        fontSize: 11,
+        fontFamily: sans,
+        fontSize: 10.5,
         color: text,
-        lineHeight: 1.55,
+        lineHeight: "1.5",
         background: bg,
+        WebkitFontSmoothing: "antialiased",
       }}
     >
-      {/* ── SIDEBAR ── */}
-      <div
-        style={{
-          width: 240,
-          minHeight: 1123,
-          background: sidebarBg,
-          borderRight: `1px solid ${border}`,
-          padding: "28px 18px 20px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 18,
-        }}
-      >
-        {/* Avatar */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-          <div style={{ position: "relative", width: 96, height: 96 }}>
-            <div style={{ width: 96, height: 96, borderRadius: 18, overflow: "hidden", border: `2px solid ${border}`, boxShadow: "0 4px 16px rgba(0,0,0,.25)" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/assets/profile.png"
-                alt="Leo"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                crossOrigin="anonymous"
-              />
-            </div>
+      {/* ══════════ SIDEBAR ══════════ */}
+      <div style={{
+        width: 234,
+        minHeight: 1123,
+        background: sidebarBg,
+        borderRight: `1px solid ${border}`,
+        padding: "26px 16px 20px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+      }}>
+
+        {/* Avatar + name */}
+        <div style={{ textAlign: "center" }}>
+          <div style={{
+            width: 90, height: 90, borderRadius: 16,
+            overflow: "hidden", border: `2px solid ${border}`,
+            margin: "0 auto 8px",
+            boxShadow: "0 4px 14px rgba(0,0,0,.3)",
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/assets/profile.png" alt="Leo"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              crossOrigin="anonymous" />
           </div>
-          {/* Open badge */}
-          <div style={{ background: primBg, border: `1px solid ${primBdr}`, color: primary, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: "4px 10px", borderRadius: 99, display: "inline-flex", alignItems: "center", lineHeight: 1, gap: 5 }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: primary, display: "inline-block", flexShrink: 0 }} />
-            <span>OPEN TO WORK</span>
+
+          {/* Open badge — block, center */}
+          <div style={{ margin: "0 auto 7px", textAlign: "center" }}>
+            <span style={badge("OPEN TO WORK")}>&#9679;&nbsp; OPEN TO WORK</span>
           </div>
-          <div style={{ fontSize: 16, fontWeight: 800, lineHeight: 1.2, color: text }}>{PROFILE.name}</div>
-          <div style={{ color: muted, fontSize: 10 }}>
-            <span style={{ color: primary }}>•</span> {PROFILE.title} <span style={{ color: primary }}>•</span>
+
+          <div style={{ fontSize: 14.5, fontWeight: 800, color: text, lineHeight: "1.25" }}>
+            {PROFILE.name}
+          </div>
+          <div style={{ marginTop: 3, color: muted, fontSize: 10, lineHeight: "1" }}>
+            <span style={{ color: primary }}>&#8226;</span>
+            {" "}{PROFILE.title}{" "}
+            <span style={{ color: primary }}>&#8226;</span>
           </div>
         </div>
 
         {/* Kontak */}
         <div>
-          <div style={secTitle}>KONTAK<span style={secLine} /></div>
+          <div style={secTitleWrap}>
+            <span style={secTitleText}>KONTAK</span>
+            <span style={secLine} />
+          </div>
           {[
-            { icon: "📍", val: PROFILE.location },
-            { icon: "🌐", val: PROFILE.website },
-            { icon: "✉️", val: PROFILE.email },
-            { icon: "💻", val: PROFILE.github },
+            { icon: ">", val: PROFILE.location },
+            { icon: "@", val: PROFILE.website },
+            { icon: "~", val: PROFILE.email },
+            { icon: "$", val: PROFILE.github },
           ].map((c) => (
-            <div key={c.val} style={{ display: "flex", gap: 6, alignItems: "flex-start", color: text, fontSize: 9.5, marginBottom: 5 }}>
-              <span>{c.icon}</span>
+            <div key={c.val} style={{ display: "flex", gap: 5, alignItems: "flex-start", color: text, fontSize: 9, marginBottom: 5, lineHeight: "1.4" }}>
+              <span style={{ color: primary, fontFamily: mono, flexShrink: 0, marginTop: 1 }}>{c.icon}</span>
               <span>{c.val}</span>
             </div>
           ))}
@@ -190,10 +225,22 @@ function CVTemplate({ primary, dark }: CVProps) {
 
         {/* Keahlian */}
         <div>
-          <div style={secTitle}>KEAHLIAN<span style={secLine} /></div>
+          <div style={secTitleWrap}>
+            <span style={secTitleText}>KEAHLIAN</span>
+            <span style={secLine} />
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
             {PROFILE.skills.map((s) => (
-              <span key={s} style={{ border: `1px solid ${border}`, background: surface, borderRadius: 7, padding: "2px 8px", fontSize: 9.5, color: text }}>
+              <span key={s} style={{
+                display: "inline-block",
+                border: `1px solid ${border}`,
+                background: surface,
+                borderRadius: 6,
+                padding: "2px 7px 1px",
+                fontSize: 9,
+                color: text,
+                lineHeight: "1.4",
+              }}>
                 {s}
               </span>
             ))}
@@ -202,99 +249,166 @@ function CVTemplate({ primary, dark }: CVProps) {
 
         {/* Pendidikan */}
         <div>
-          <div style={secTitle}>PENDIDIKAN<span style={secLine} /></div>
-          <div style={{ fontWeight: 600, fontSize: 10.5, color: text }}>{PROFILE.education.school}</div>
-          <div style={{ color: muted, fontSize: 9.5, marginTop: 2 }}>
+          <div style={secTitleWrap}>
+            <span style={secTitleText}>PENDIDIKAN</span>
+            <span style={secLine} />
+          </div>
+          <div style={{ fontWeight: 700, fontSize: 10, color: text, lineHeight: "1.35" }}>
+            {PROFILE.education.school}
+          </div>
+          <div style={{ color: muted, fontSize: 9, marginTop: 2, lineHeight: "1.35" }}>
             {PROFILE.education.major} · {PROFILE.education.year}
           </div>
         </div>
 
         {/* Bahasa */}
         <div>
-          <div style={secTitle}>BAHASA<span style={secLine} /></div>
+          <div style={secTitleWrap}>
+            <span style={secTitleText}>BAHASA</span>
+            <span style={secLine} />
+          </div>
           {PROFILE.languages.map((l) => (
-            <div key={l.lang} style={{ display: "flex", justifyContent: "space-between", color: text, fontSize: 10, padding: "2px 0" }}>
+            <div key={l.lang} style={{
+              display: "flex", justifyContent: "space-between",
+              color: text, fontSize: 9.5, padding: "2px 0", lineHeight: "1.35",
+            }}>
               <span>{l.lang}</span>
               <span style={{ color: muted }}>{l.level}</span>
             </div>
           ))}
         </div>
 
-        {/* Footer sidebar */}
-        <div style={{ marginTop: "auto", color: subtle, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, borderTop: `1px solid ${border}`, paddingTop: 8 }}>
-          © 2025 Leo Satria Anugrah
+        {/* Footer */}
+        <div style={{
+          marginTop: "auto", color: subtle,
+          fontFamily: mono, fontSize: 7.5,
+          borderTop: `1px solid ${border}`, paddingTop: 8,
+          lineHeight: "1",
+        }}>
+          &#169; 2025 Leo Satria Anugrah
         </div>
       </div>
 
-      {/* ── MAIN ── */}
-      <div style={{ flex: 1, padding: "28px 24px 20px 22px", display: "flex", flexDirection: "column", gap: 14 }}>
+      {/* ══════════ MAIN ══════════ */}
+      <div style={{ flex: 1, padding: "26px 22px 20px 20px", display: "flex", flexDirection: "column", gap: 12 }}>
 
         {/* Topbar */}
-        <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'JetBrains Mono',monospace", fontSize: 8, letterSpacing: "1.2px", color: muted, lineHeight: 1 }}>
-          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: primary, display: "inline-block", flexShrink: 0 }} />
-            <span>VENDETTA666 WORKSPACE</span>
-          </span>
+        <div style={{
+          display: "flex", justifyContent: "space-between",
+          fontFamily: mono, fontSize: 7.5,
+          letterSpacing: "1.2px", color: muted, lineHeight: "1",
+        }}>
+          <span>&#9679; VENDETTA666 WORKSPACE</span>
           <span>LUMAJANG, ID · GMT+7</span>
         </div>
 
         {/* Hero */}
-        <div style={{ border: `1px solid ${border}`, borderRadius: 16, padding: "18px 20px 16px", background: card }}>
-          <div style={{ display: "inline-flex", alignItems: "center", lineHeight: 1, gap: 6, background: primBg, border: `1px solid ${primBdr}`, color: primary, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: "4px 10px", borderRadius: 99 }}>
-            <span style={{ width: 4, height: 4, borderRadius: "50%", background: primary, display: "inline-block", flexShrink: 0 }} />
-            <span>OPEN TO WORK</span>
+        <div style={{ border: `1px solid ${border}`, borderRadius: 14, padding: "16px 18px 14px", background: card }}>
+          {/* badge */}
+          <div><span style={badge("OPEN TO WORK")}>&#9679;&nbsp; OPEN TO WORK</span></div>
+
+          <div style={{ marginTop: 9, color: muted, fontSize: 9.5, lineHeight: "1" }}>Halo, saya</div>
+          <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: "1.15", color: text, marginTop: 3 }}>
+            {PROFILE.name}
           </div>
-          <div style={{ marginTop: 10, color: muted, fontSize: 10, lineHeight: 1 }}>Halo, saya</div>
-          <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: -0.5, lineHeight: 1.15, color: text, marginTop: 4 }}>{PROFILE.name}</div>
-          <div style={{ marginTop: 8, color: muted, fontSize: 10.5, lineHeight: 1.6 }}>{PROFILE.bio}</div>
-          <div style={{ marginTop: 10, display: "flex", gap: 7, flexWrap: "wrap", alignItems: "center" }}>
-            <div style={{ background: primary, color: "#fff", fontWeight: 700, fontSize: 9.5, padding: "5px 14px", borderRadius: 8, lineHeight: 1, display: "inline-flex", alignItems: "center" }}>{PROFILE.website}</div>
-            <div style={{ border: `1px solid ${primBdr}`, color: primary, fontSize: 9.5, padding: "5px 14px", borderRadius: 8, lineHeight: 1, display: "inline-flex", alignItems: "center" }}>Onsite / Remote</div>
+          <div style={{ marginTop: 7, color: muted, fontSize: 10, lineHeight: "1.6" }}>{PROFILE.bio}</div>
+
+          {/* Buttons — block spans, no flex */}
+          <div style={{ marginTop: 9, lineHeight: "1" }}>
+            <span style={{
+              display: "inline-block",
+              background: primary, color: "#ffffff",
+              fontWeight: 700, fontSize: 9,
+              padding: "5px 13px 4px",
+              borderRadius: 7, marginRight: 6,
+              lineHeight: "1", verticalAlign: "middle",
+            }}>
+              {PROFILE.website}
+            </span>
+            <span style={{
+              display: "inline-block",
+              border: `1px solid ${primBdr}`, color: primary,
+              fontSize: 9, padding: "4px 13px 3px",
+              borderRadius: 7,
+              lineHeight: "1", verticalAlign: "middle",
+            }}>
+              Onsite / Remote
+            </span>
           </div>
         </div>
 
         {/* Stats */}
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 7 }}>
           {[
-            { label: "PROYEK", value: listProyek.length, sub: "Proyek selesai" },
-            { label: "PENGALAMAN", value: "2+ Tahun", sub: "Kerja profesional" },
-            { label: "SERTIFIKASI", value: listSertifikat.length, sub: "Sertifikat" },
+            { label: "PROYEK",       value: String(listProyek.length),  sub: "Proyek selesai"   },
+            { label: "PENGALAMAN",   value: "2+ Tahun",                  sub: "Kerja profesional" },
+            { label: "SERTIFIKASI",  value: String(listSertifikat.length), sub: "Sertifikat"    },
           ].map((s) => (
-            <div key={s.label} style={{ flex: 1, border: `1px solid ${border}`, borderRadius: 12, background: card, padding: "10px 8px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 7.5, letterSpacing: "1.2px", color: primary, lineHeight: 1 }}>{s.label}</div>
-              <div style={{ fontSize: 20, fontWeight: 800, lineHeight: 1, color: text }}>{s.value}</div>
-              <div style={{ color: muted, fontSize: 9, lineHeight: 1 }}>{s.sub}</div>
+            <div key={s.label} style={{
+              flex: 1,
+              border: `1px solid ${border}`, borderRadius: 10,
+              background: card, padding: "9px 6px",
+              textAlign: "center",
+            }}>
+              <div style={{ fontFamily: mono, fontSize: 7, letterSpacing: "1.1px", color: primary, lineHeight: "1", marginBottom: 5 }}>
+                {s.label}
+              </div>
+              <div style={{ fontSize: 19, fontWeight: 800, color: text, lineHeight: "1", marginBottom: 4 }}>
+                {s.value}
+              </div>
+              <div style={{ color: muted, fontSize: 8.5, lineHeight: "1" }}>
+                {s.sub}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Pengalaman */}
+        {/* Pengalaman Kerja */}
         <div>
-          <div style={secTitle}><span style={{ color: primary }}>&gt;</span> PENGALAMAN KERJA<span style={secLine} /></div>
+          <div style={secTitleWrap}>
+            <span style={{ ...secTitleText, color: primary }}>&#62;</span>
+            <span style={secTitleText}>PENGALAMAN KERJA</span>
+            <span style={secLine} />
+          </div>
           {PROFILE.experience.map((e) => (
             <div key={e.role} style={cardBox}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                <span style={{ fontWeight: 700, fontSize: 12, color: text }}>{e.role}</span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8.5, color: muted }}>{e.period}</span>
+                <span style={{ fontWeight: 700, fontSize: 11.5, color: text, lineHeight: "1.2" }}>{e.role}</span>
+                <span style={{ fontFamily: mono, fontSize: 8, color: muted, lineHeight: "1" }}>{e.period}</span>
               </div>
-              <div style={{ color: primary, fontSize: 10 }}>{e.company}</div>
-              <div style={{ marginTop: 4, color: muted, fontSize: 9.5, lineHeight: 1.55 }}>{e.desc}</div>
+              <div style={{ color: primary, fontSize: 9.5, marginTop: 2, lineHeight: "1" }}>{e.company}</div>
+              <div style={{ marginTop: 4, color: muted, fontSize: 9, lineHeight: "1.55" }}>{e.desc}</div>
             </div>
           ))}
         </div>
 
-        {/* Proyek */}
+        {/* Proyek Unggulan */}
         <div>
-          <div style={secTitle}><span style={{ color: primary }}>&gt;</span> PROYEK UNGGULAN<span style={secLine} /></div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div style={secTitleWrap}>
+            <span style={{ ...secTitleText, color: primary }}>&#62;</span>
+            <span style={secTitleText}>PROYEK UNGGULAN</span>
+            <span style={secLine} />
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
             {FEATURED.map((p) => (
-              <div key={p.id} style={{ flex: "1 1 46%", border: `1px solid ${border}`, borderRadius: 12, background: card, padding: "10px 12px" }}>
-                <div style={{ display: "inline-flex", alignItems: "center", lineHeight: 1, fontFamily: "'JetBrains Mono',monospace", fontSize: 7.5, color: primary, background: primBg, border: `1px solid ${primBdr}`, padding: "3px 8px", borderRadius: 99, marginBottom: 5 }}>
-                  {p.role.toUpperCase()}
+              <div key={p.id} style={{
+                flex: "1 1 46%", minWidth: 0,
+                border: `1px solid ${border}`, borderRadius: 10,
+                background: card, padding: "9px 11px",
+              }}>
+                {/* Role badge */}
+                <div style={{ marginBottom: 5 }}>
+                  <span style={badge(p.role.toUpperCase(), { small: true })}>
+                    {p.role.toUpperCase()}
+                  </span>
                 </div>
-                <div style={{ fontWeight: 700, fontSize: 11, color: text, marginBottom: 2 }}>{p.nama}</div>
-                <div style={{ color: muted, fontSize: 9.5, lineHeight: 1.4, marginBottom: 4 }}>{p.desk}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8.5, color: subtle }}>
+                <div style={{ fontWeight: 700, fontSize: 10.5, color: text, lineHeight: "1.25", marginBottom: 2 }}>
+                  {p.nama}
+                </div>
+                <div style={{ color: muted, fontSize: 9, lineHeight: "1.4", marginBottom: 4 }}>
+                  {p.desk}
+                </div>
+                <div style={{ fontFamily: mono, fontSize: 8, color: subtle, lineHeight: "1" }}>
                   {p.tools.slice(0, 3).join(", ")}
                 </div>
               </div>
@@ -304,14 +418,25 @@ function CVTemplate({ primary, dark }: CVProps) {
 
         {/* Sertifikasi */}
         <div>
-          <div style={secTitle}><span style={{ color: primary }}>&gt;</span> SERTIFIKASI<span style={secLine} /></div>
+          <div style={secTitleWrap}>
+            <span style={{ ...secTitleText, color: primary }}>&#62;</span>
+            <span style={secTitleText}>SERTIFIKASI</span>
+            <span style={secLine} />
+          </div>
           {listSertifikat.length === 0 ? (
-            <div style={{ color: muted, fontSize: 10 }}>–</div>
+            <div style={{ color: muted, fontSize: 9.5 }}>–</div>
           ) : (
             listSertifikat.map((c) => (
-              <div key={c.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "4px 0", borderBottom: `1px solid ${border}` }}>
-                <span style={{ fontSize: 10, color: text }}>{c.judul} · {c.penerbit}</span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8.5, color: muted }}>{c.tanggal}</span>
+              <div key={c.id} style={{
+                display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                padding: "4px 0", borderBottom: `1px solid ${border}`,
+              }}>
+                <span style={{ fontSize: 9.5, color: text, lineHeight: "1.4" }}>
+                  {c.judul} · {c.penerbit}
+                </span>
+                <span style={{ fontFamily: mono, fontSize: 8, color: muted, lineHeight: "1" }}>
+                  {c.tanggal}
+                </span>
               </div>
             ))
           )}
