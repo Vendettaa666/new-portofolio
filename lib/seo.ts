@@ -3,40 +3,40 @@ import { Metadata } from "next";
 
 // ── KONFIGURASI UTAMA ──────────────────────────────────────────────────────
 export const siteConfig = {
-  name: "Leo Satria",
-  title: "Leo Satria | Full-Stack Developer Portfolio",
+  name: "Leo Satria Anugrah",
+  title: "Leo Satria Anugrah | Full-Stack Web Developer",
   description:
-    "Portfolio Leo Satria, Full-Stack Developer dari SMKN 1 Lumajang. Temukan projek, skill, dan cara menghubungi saya.",
-  url: "https://leoosatria.my.id", // GANTI dengan domain kamu
+    "Portfolio Leo Satria Anugrah, Full-Stack Web Developer dan mahasiswa Teknologi Rekayasa Komputer Polije. Membangun web dengan Laravel, Next.js, dan Tailwind CSS.",
+  url: "https://leoosatria.my.id",
   googleVerification: "GdlvQh4VoPEHz3NtCe7Tdan1T0bX3M6f_qY6yeEQe3k",
   ogImage: "/og-image.png", // Ukuran: 1200x630px
   links: {
-    twitter: "https://twitter.com/your_twitter",
     github: "https://github.com/vendettaa666",
     linkedin: "https://linkedin.com/in/leo-satria-anugrah-12a698373",
     email: "mailto:leoarkas81@gmail.com",
   },
   keywords: [
+    "Leo Satria Anugrah",
     "Leo Satria",
-    "leo satria",
     "portfolio",
     "full stack developer",
+    "web developer",
     "frontend developer",
     "backend developer",
-    "react developer",
-    "next.js developer",
     "laravel developer",
+    "next.js developer",
+    "react developer",
     "javascript",
-    "typescript",
     "tailwind css",
     "web developer Indonesia",
-    "software engineer",
-    "UI/UX developer",
+    "web developer Lumajang",
+    "web developer Jember",
+    "Politeknik Negeri Jember",
+    "Teknologi Rekayasa Komputer",
     "SMKN 1 Lumajang",
-    "rekayasa perangkat lunak",
   ],
   author: {
-    name: "Leo Satria",
+    name: "Leo Satria Anugrah",
     url: "https://leoosatria.my.id",
   },
 };
@@ -55,7 +55,6 @@ export function generateSEO({
   title = siteConfig.title,
   description = siteConfig.description,
   image = siteConfig.ogImage,
-  
   url = "",
   noindex = false,
   keywords = siteConfig.keywords,
@@ -72,12 +71,12 @@ export function generateSEO({
     verification: {
       google: siteConfig.googleVerification,
     },
-    
+
     metadataBase: new URL(siteConfig.url),
     alternates: {
       canonical: url || "/",
     },
-    
+
     robots: {
       index: !noindex,
       follow: !noindex,
@@ -112,7 +111,6 @@ export function generateSEO({
       title,
       description,
       images: [image],
-      creator: "@", // GANTI dengan username Twitter kamu
     },
   };
 }
@@ -125,22 +123,33 @@ export function generatePersonSchema() {
     name: siteConfig.author.name,
     url: siteConfig.url,
     image: `${siteConfig.url}/assets/profile.png`,
-    jobTitle: "Full-Stack Developer",
+    email: "leoarkas81@gmail.com",
+    jobTitle: "Full-Stack Web Developer",
     description: siteConfig.description,
-    sameAs: [
-      siteConfig.links.github,
-      siteConfig.links.linkedin,
-      siteConfig.links.twitter,
-    ],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Lumajang",
+      addressRegion: "Jawa Timur",
+      addressCountry: "ID",
+    },
+    alumniOf: {
+      "@type": "EducationalOrganization",
+      name: "SMK Negeri 1 Lumajang",
+    },
+    affiliation: {
+      "@type": "CollegeOrUniversity",
+      name: "Politeknik Negeri Jember",
+    },
+    sameAs: [siteConfig.links.github, siteConfig.links.linkedin],
     knowsAbout: [
       "Web Development",
-      "React",
-      "Next.js",
       "Laravel",
+      "Next.js",
+      "React",
+      "PHP",
       "JavaScript",
-      "TypeScript",
       "Tailwind CSS",
-      "UI/UX Design",
+      "Node.js",
     ],
   };
 }
@@ -152,6 +161,7 @@ export function generateWebsiteSchema() {
     name: siteConfig.name,
     url: siteConfig.url,
     description: siteConfig.description,
+    inLanguage: "id-ID",
     author: {
       "@type": "Person",
       name: siteConfig.author.name,

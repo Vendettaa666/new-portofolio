@@ -28,9 +28,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = generateSEO({
-  title: "Leo Satria | Full-Stack Developer Portfolio",
+  title: "Leo Satria Anugrah | Full-Stack Web Developer",
   description:
-    "Portfolio Leo Satria – Siswa SMKN 1 Lumajang jurusan Rekayasa Perangkat Lunak. Full-Stack Developer yang fokus di React, Next.js, Laravel, dan desain UI modern. Lihat projek, skill, dan cara menghubungi saya.",
+    "Portfolio Leo Satria Anugrah, Full-Stack Web Developer dan mahasiswa Teknologi Rekayasa Komputer Polije. Membangun web dengan Laravel, Next.js, dan Tailwind CSS.",
 });
 
 // Google Site Verification
