@@ -174,3 +174,39 @@ export const categories = [
   "Pendidikan", 
   "Profesional",
 ];
+
+
+export const educationData = [
+  {
+    degree: "Rekayasa Perangkat Lunak",
+    school: "SMK Negeri 1 Lumajang",
+    location: "Lumajang, Jawa Timur",
+    startDate: "2023",
+    endDate: "2026",
+    logoIcon: "/assets/logo/logo-smk.png", // Path gambar dari folder public
+    details: "Mempelajari dasar-dasar pemrograman, pengembangan web, dan teknologi informasi."
+  },
+    {
+    degree: "Teknologi Rekayasaa Komputer D4",
+    school: "Politeknik Negeri Jember",
+    location: "Jember, Jawa Timur",
+    startDate: "2026",
+    endDate: "2030",
+    logoIcon: "/assets/logo/logo-polije.png", // Path gambar dari folder public
+    details: "Mempelajari rekayasa sistem komputer berbasis IoT, pengembangan aplikasi web dan mobile, administrasi jaringan, serta implementasi teknologi informasi untuk kebutuhan industri."
+  }
+];
+export const careers = [
+  {
+    role: "FullStack Developer Intern",
+    company: "CV. Nusantara Tama",
+    location: "Jember, Jawa Timur",
+    startDate: "Juli 2025",
+    endDate: "Desember 2025",
+    duration: "6 bulan",
+    type: "Magang",
+    workSetup: "",
+    logoIcon: "/assets/logo/nusantaratama.png",
+    details: "Mengerjakan pengembangan UI menggunakan React dan Tailwind CSS, serta berkolaborasi dalam tim kecil untuk fitur dashboard."
+  },
+];
